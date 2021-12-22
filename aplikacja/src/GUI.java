@@ -1,17 +1,19 @@
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 
 public class GUI{
-
     Frame ramka;
     MenuBar menu;
     Menu plikMenu, opcjeMenu, pomocMenu;
     Panel panelGorny, panelSrodkowy, panelDolny;
     Label etykietaObramowaniePrzycisku, etykietaWcisnietyPrzycisk;
-    Button[] przyciski = new Button[3];
+    Button[] przyciski = new Button[10];
+    static String username;
+    static String password;
+    int logginsAttempt = 0;
+    Dimension screenDimension = Toolkit.getDefaultToolkit().getScreenSize();
+    int screenWidth = (int)(screenDimension.width * 0.7);
+    int screenHeight = (int)(screenDimension.height * 0.7);
 
     public GUI() {
         ramka = new Frame("Menu główne");
@@ -32,7 +34,6 @@ public class GUI{
         plikMenu = new Menu("Plik");
         opcjeMenu = new Menu("Opcje");
         pomocMenu = new Menu("Pomoc");
-
     }
 
     private void stworzEtykiety(){
@@ -41,13 +42,26 @@ public class GUI{
     }
 
     private void stworzPrzyciski(){
-        przyciski[0] = new Button("Wczytaj Pacjenta");
+        przyciski[0] = new Button("Wyszukaj pacjenta z bazy danych");
         przyciski[0].setActionCommand("Akcja przycisk1");
-        przyciski[1] = new Button("Przejdź do skrzynki pocztowej");
+        przyciski[1] = new Button("Skrzynka pocztowa");
         przyciski[1].setActionCommand("Akcja przycisk2");
-        przyciski[2] = new Button("Wyjdź z programu");
+        przyciski[2] = new Button("Generuj raport");
         przyciski[2].setActionCommand("Akcja przycisk3");
+        przyciski[3] = new Button("Wyloguj się");
+        przyciski[3].setActionCommand("Akcja przycisk4");
+        przyciski[4] = new Button("Wyjdź z programu");
+        przyciski[4].setActionCommand("Akcja przycisk5");
 
+
+        przyciski[3].addActionListener(e -> {
+            ramka.dispose();
+            ekranLogowania();
+        });
+        przyciski[4].addActionListener(e -> {
+            ramka.dispose();
+            System.exit(0);
+        });
     }
 
     private void stworzPanele(){
@@ -70,8 +84,13 @@ public class GUI{
 
     private void dodajDoBelekMenu(){
         plikMenu.add(new MenuItem("Wczytaj Plik"));
-        plikMenu.add(new MenuItem("Wyjdz"));
-
+        MenuItem defaultItem = new MenuItem("Wyjdź");
+        defaultItem.addActionListener(e -> {
+            ramka.dispose();
+            ramka.setVisible(false);
+            System.exit(0);
+        });
+        plikMenu.add(defaultItem);
         opcjeMenu.add(new MenuItem("Otworz ustawienia"));
         opcjeMenu.add(new MenuItem("Zresetuj interfejs graficzny"));
 
@@ -81,9 +100,14 @@ public class GUI{
     }
 
     private void dodajPanele(){
-        ramka.add(panelGorny,BorderLayout.NORTH);
-        ramka.add(panelSrodkowy,BorderLayout.CENTER);
-        ramka.add(panelDolny,BorderLayout.SOUTH);
+        GridLayout layout = new GridLayout(6,6,10,10);
+        panelGorny.setLayout(layout);
+        panelSrodkowy.setLayout(layout);
+        panelDolny.setLayout(layout);
+        ramka.add(panelGorny, BorderLayout.NORTH);
+        ramka.add(panelSrodkowy, BorderLayout.CENTER);
+        ramka.add(panelDolny, BorderLayout.SOUTH);
+        ramka.setVisible(true);
     }
 
     private void dodajEtykiety(){
@@ -94,35 +118,90 @@ public class GUI{
 
     }
 
-    public void pokazRamke() {
-        ramka.setSize(700,600);
-        ramka.setLayout(new FlowLayout());
-        ramka.setVisible(true);
-        ramka.setBackground(Color.darkGray);
-        ramka.setMenuBar(menu);
-        ramka.setLayout(new BorderLayout());
-        panelGorny.add(przyciski[0]);
-        panelSrodkowy.add(przyciski[1]);
-        panelDolny.add(przyciski[2]);
-        przyciski[2].addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ramka.dispose();
-                System.exit(0);
-            }
-        });
+    public void ekranLogowania() {
+        username = "null";
+        password = "null";
 
+        Frame ramkaLogowanie = new Frame("Menu logowania");
+
+        Panel welcomePanel = new Panel();
+        Panel panelLogowaniaKomunikat = new Panel();
+        Panel panelLogowania = new Panel(new GridBagLayout());
+
+        Label labelUzytkownik = new Label("Nazwa użytkownika: ");
+        Label komunikatLogowania = new Label("Proszę wprowadź swoje dane do logowania");
+        Label welcomeLabel = new Label("System Obsługi Pacjenta - Gabinet ortodontyczny");
+        Label labelHaslo = new Label("Hasło: ");
+        Label gap = new Label("    ");
+
+        TextField poleNazwaUzytkownika = new TextField(20);
+        TextField poleHasloUzytkownika = new TextField(20);
+
+        Button przyciskLogowania = new Button("Login");
+
+        ActionListener action = e -> {
+            username = poleNazwaUzytkownika.getText();
+            password = poleHasloUzytkownika.getText();
+            logginsAttempt++;
+            if (username.equals("admin") && password.equals("admin")) {
+                ramkaLogowanie.setVisible(false);
+                ramkaLogowanie.dispose();
+                uruchomGui();
+            }
+            else {
+                komunikatLogowania.setText("      Twoje dane są błędne (Próba: " + logginsAttempt + ")");
+                System.out.println("Twoje dane są błędne (Próba: " + logginsAttempt + ")");
+            }
+        };
+
+        welcomePanel.add(welcomeLabel);
+
+        poleHasloUzytkownika.addActionListener(action);
+        poleNazwaUzytkownika.addActionListener(action);
+        przyciskLogowania.addActionListener(action);
+
+        panelLogowania.add(labelUzytkownik);
+        panelLogowania.add(poleNazwaUzytkownika);
+        panelLogowania.add(labelHaslo);
+        panelLogowania.add(poleHasloUzytkownika);
+        panelLogowania.add(gap);
+        panelLogowania.add(przyciskLogowania);
+
+        panelLogowaniaKomunikat.add(komunikatLogowania, BorderLayout.NORTH);
+        panelLogowaniaKomunikat.setVisible(true);
+
+        ramkaLogowanie.setBackground(Color.darkGray);
+        ramkaLogowanie.add(panelLogowania, BorderLayout.CENTER);
+        ramkaLogowanie.add(panelLogowaniaKomunikat, BorderLayout.SOUTH);
+        ramkaLogowanie.add(welcomePanel,BorderLayout.NORTH);
+        ramkaLogowanie.setSize((int)(screenWidth/1.7),(screenHeight/3));
+        ramkaLogowanie.setVisible(true);
+        ramkaLogowanie.setResizable(false);
+        ramkaLogowanie.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                super.windowClosing(e);
+                ramkaLogowanie.setVisible(false);
+                ramkaLogowanie.dispose();
+                if (!username.equals("admin") && !password.equals("admin"))
+                    System.exit(0);
+            }
+
+    });
+    }
+
+    public void uruchomGui() {
         obslugaOkno();
         dodajBelkiMenu();
         dodajDoBelekMenu();
         dodajPanele();
         dodajEtykiety();
+
+        ramka.setSize(screenWidth,screenHeight);
+        ramka.setBackground(Color.darkGray);
+        ramka.setMenuBar(menu);
+        ramka.setResizable(false);
+        for(int i=0;i<5;i++)
+            panelSrodkowy.add(przyciski[i]);
     }
-
-    public void zamkniecieProgramu(){
-        ramka.dispose();
-        System.exit(0);
-    }
-
-
 }

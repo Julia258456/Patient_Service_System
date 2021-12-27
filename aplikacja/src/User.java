@@ -10,7 +10,7 @@ public class User {
     private String emailUzytkownika;
     private int poziomUprawnien; // 0 - zwykly uzytkownik, 1 - ortodonta, 2 - deweloper
 
-    public User(){};
+    public User(){}
 
     public User(int idUzytkownika, String nazwaUzytkownika, String hasloUzytkownika, String imieUzytkownika, String nazwiskoUzytkownika,
                 String numerTelefonuUzytkownika, String adresUzytkownika, String emailUzytkownika, int poziomUprawnien){
@@ -23,7 +23,7 @@ public class User {
         this.adresUzytkownika = adresUzytkownika;
         this.emailUzytkownika = emailUzytkownika;
         this.poziomUprawnien = poziomUprawnien;
-    };
+    }
 
     public int getIdUzytkownika() {
         return idUzytkownika;

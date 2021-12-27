@@ -18,6 +18,7 @@ public class JDBC {
         User user = ObslugaBazyDanych.ZalogujUzytkownika(c,"tnowak", "qwerty1");
         System.out.println(null == user);
         List<User> list = ObslugaBazyDanych.WyszukajPacjentowOrtodonty(c, user);
+        List<Wizyta> list1 = ObslugaBazyDanych.WyszukajWizytyPacjenta(c, list.get(0));
 
         System.out.println("ok");
     }

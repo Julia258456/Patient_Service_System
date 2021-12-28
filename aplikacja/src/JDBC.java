@@ -24,6 +24,16 @@ public class JDBC {
         List<User> list2 = DataBaseHandlingClass.SearchForAllOrthodontists(c, user1);
         List<User> list3 = DataBaseHandlingClass.SearchForAllUsers(c, user1);
         List<User> list4 = DataBaseHandlingClass.SearchForAllPatients(c, user1);
+        //User user2 = list4.get(0);
+        //user2.setUserLogin("asdfg");
+        //System.out.println(DataBaseHandlingClass.AddNewPatientToDB(c, user1, user2, user));
+        //System.out.println(DataBaseHandlingClass.RemovePatientFromDB(c, user1, user2));
+
+        //user.setUserLogin("qazwsx");
+        //System.out.println(DataBaseHandlingClass.AddNewOrthodontistToDB(c, user1, user));
+        //User user3 = DataBaseHandlingClass.LogInUser(c,"admin", "admin");
+        //user3.setUserLogin("zaqxsw");
+        //System.out.println(DataBaseHandlingClass.AddNewAdministratorToDB(c, user1, user3));
 
         System.out.println("ok");
     }

@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.Connection;
+import java.util.List;
 
 public class GUI{
     Frame frame;
@@ -33,7 +34,6 @@ public class GUI{
         );
         menu = new MenuBar();
         createPanels();
-        createButtons();
         createMenu();
 
         fileMenu = new Menu("File");
@@ -42,26 +42,66 @@ public class GUI{
     }
 
     /**
-     * The method which creates Buttons in main frame
+     * The method which creates Buttons in main frame for Orthodontist
      */
-    private void createButtons(){
-        buttons[0] = new Button("Search for a patient from the database");
-        buttons[0].setActionCommand("Action button 1");
-        buttons[1] = new Button("Mailbox");
-        buttons[1].setActionCommand("Action button 2");
-        buttons[2] = new Button("Generate a report");
-        buttons[2].setActionCommand("Action button 3");
+    private void createButtonsOrthodontist(){
+        buttons[0] = new Button("My visits");
+        buttons[1] = new Button("My mailbox");
+        buttons[2] = new Button("My profile");
         buttons[3] = new Button("Log out");
-        buttons[3].setActionCommand("Action button 4");
         buttons[4] = new Button("Exit the program");
-        buttons[4].setActionCommand("Action button 5");
-
 
         buttons[3].addActionListener(e -> {
             frame.dispose();
             loginScreen();
         });
         buttons[4].addActionListener(e -> {
+            frame.dispose();
+            System.exit(0);
+        });
+    }
+
+    /**
+     * The method which creates Buttons in main frame for Patient
+     */
+    private void createButtonsPatient(){
+        buttons[0] = new Button("My visits");
+        buttons[1] = new Button("My mailbox");
+        buttons[2] = new Button("My profile");
+        buttons[3] = new Button("Log out");
+        buttons[4] = new Button("Exit the program");
+
+        buttons[3].addActionListener(e -> {
+            frame.dispose();
+            loginScreen();
+        });
+        buttons[4].addActionListener(e -> {
+            frame.dispose();
+            System.exit(0);
+        });
+    }
+
+    /**
+     * The method which creates Buttons in main frame for Developer
+     */
+    private void createButtonsDeveloper(){
+        buttons[0] = new Button("Find user in database");
+        buttons[1] = new Button("Edit users");
+        buttons[2] = new Button("My mailbox");
+        buttons[3] = new Button("My profile");
+        buttons[4] = new Button("Log out");
+        buttons[5] = new Button("Exit the program");
+
+        buttons[0].addActionListener(e -> {
+            frame.dispose();
+            findUserScreen();
+        });
+
+        buttons[4].addActionListener(e -> {
+            frame.dispose();
+            loginScreen();
+        });
+        buttons[5].addActionListener(e -> {
             frame.dispose();
             System.exit(0);
         });
@@ -131,6 +171,96 @@ public class GUI{
     }
 
     /**
+     * The method which is responsible for finding the user by e-mail address
+     */
+    public void findUserScreen(){
+        enteredUsername = "null";
+        Connection connection = DataBaseHandlingClass.StartConnectionWithDB();
+        User user = DataBaseHandlingClass.LogInUser(connection, "admin", "admin");
+        List<User> list = DataBaseHandlingClass.SearchForPatientsOfOrthodontist(connection, user);
+
+        Frame findUserFrame = new Frame("Find user by his email adress");
+
+        Panel welcomePanel = new Panel();
+        Panel findPanelMessage = new Panel();
+        Panel findUserPanel = new Panel(new GridBagLayout());
+
+        Label labelMail = new Label("e-mail address: ");
+        Label emailStatement = new Label("Please enter the user's email address credentials to find the user");
+
+        TextField emailField = new TextField(20);
+
+        Button loginButton = new Button("Find User");
+        ActionListener action = e -> {
+            numberOfAttempts++;
+            try {
+                enteredUsername = emailField.getText();
+                User userToBeFound = new User();
+
+                boolean userFound = false;
+                for(User userToFind: list){
+                    if(userToFind.getUserEmail().equals(enteredUsername)){
+                        System.out.println(userToFind.getUserEmail());
+                        userFound = true;
+                        userToBeFound = userToFind;
+                    }
+                }
+                if(userFound){
+                    emailStatement.setText("You have found user: " + userToBeFound.getUserLogin());
+                    System.out.println("You have found user: " + userToBeFound.getUserLogin());
+                }
+                else {
+                    emailStatement.setText("There is no such user in the database (Attempt: " + numberOfAttempts + ")");
+                    System.out.println("There is no such user in the database (Attempt: " + numberOfAttempts + ")");
+                }
+            }
+            catch(Exception exception){
+                emailStatement.setText("There is no such user in the database (Attempt: " + numberOfAttempts + ")");
+                System.out.println("There is no such user in the database (Attempt: " + numberOfAttempts + ")");
+            }
+        };
+
+        emailField.addActionListener(action);
+        loginButton.addActionListener(action);
+
+        findUserPanel.add(labelMail);
+        findUserPanel.add(emailField);
+        findUserPanel.setLayout(new BoxLayout(findUserPanel, BoxLayout.Y_AXIS));
+        findUserPanel.add(loginButton);
+
+        Button exitButton = new Button("Return to main menu");
+        exitButton.addActionListener(e -> {
+            findUserFrame.setVisible(false);
+            findUserFrame.dispose();
+            numberOfAttempts = 0;
+            runGUIDeveloper();
+        });
+        findPanelMessage.setLayout(new BoxLayout(findPanelMessage, BoxLayout.Y_AXIS));
+        findPanelMessage.add(emailStatement);
+        findPanelMessage.add(exitButton);
+
+        findUserFrame.setLocation((screenWidth/4),(screenHeight/2));
+        findUserFrame.setIconImage(icon);
+        findUserFrame.add(findUserPanel, BorderLayout.CENTER);
+        findUserFrame.add(findPanelMessage, BorderLayout.SOUTH);
+        findUserFrame.add(welcomePanel,BorderLayout.NORTH);
+        findUserFrame.setSize((screenWidth),(screenHeight/2));
+        findUserFrame.setVisible(true);
+        findUserFrame.setResizable(false);
+        findUserFrame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                super.windowClosing(e);
+                findUserFrame.setVisible(false);
+                findUserFrame.dispose();
+                if (user == null)
+                    System.exit(0);
+            }
+
+        });
+    }
+
+    /**
      * The method which is responsible for login screen
      */
     public void loginScreen() {
@@ -147,7 +277,6 @@ public class GUI{
         Label labelPassword = new Label("Password: ");
         Label loginStatement = new Label("Please enter your credentials");
         Label welcomeLabel = new Label("Patient Service System - Orthodontic office");
-        Label gap = new Label("    ");
 
         TextField usernameField = new TextField(20);
         TextField passwordField = new TextField(20);
@@ -167,16 +296,19 @@ public class GUI{
                     System.out.println("Your data is wrong (Attempt: " + numberOfAttempts + ")");
                 }
                 else if (user.getUserPermissionsLevel()==0){
+                    numberOfAttempts = 0;
                     loginFrame.setVisible(false);
                     loginFrame.dispose();
                     runGUIPatient();
                 }
                 else if(user.getUserPermissionsLevel()==1){
+                    numberOfAttempts = 0;
                     loginFrame.setVisible(false);
                     loginFrame.dispose();
                     runGUIOrthodontist();
                 }
                 else if(user.getUserPermissionsLevel()==2){
+                    numberOfAttempts = 0;
                     loginFrame.setVisible(false);
                     loginFrame.dispose();
                     runGUIDeveloper();
@@ -199,7 +331,6 @@ public class GUI{
         loginPanel.add(labelPassword);
         loginPanel.add(passwordField);
         loginPanel.setLayout(new BoxLayout(loginPanel, BoxLayout.Y_AXIS));
-        loginPanel.add(gap);
         loginPanel.add(loginButton);
 
         loginPanelMessage.add(loginStatement, BorderLayout.NORTH);
@@ -227,9 +358,10 @@ public class GUI{
     }
 
     /**
-     * The method which is responsible for running main frame of GUI
+     * The method which is responsible for running main frame of GUI for Orthodontist
      */
     public void runGUIOrthodontist() {
+        createButtonsOrthodontist();
         addMenuBars();
         configureMenuBars();
         addPanels();
@@ -239,11 +371,16 @@ public class GUI{
         frame.setSize(screenWidth,screenHeight);
         frame.setMenuBar(menu);
         frame.setResizable(false);
+        centralPanel.removeAll();
         for(int i=0;i<5;i++)
             centralPanel.add(buttons[i]);
     }
 
+    /**
+     * The method which is responsible for running main frame of GUI for Patient
+     */
     public void runGUIPatient() {
+        createButtonsPatient();
         addMenuBars();
         configureMenuBars();
         addPanels();
@@ -253,11 +390,16 @@ public class GUI{
         frame.setSize(screenWidth,screenHeight);
         frame.setMenuBar(menu);
         frame.setResizable(false);
+        centralPanel.removeAll();
         for(int i=0;i<5;i++)
             centralPanel.add(buttons[i]);
     }
 
+    /**
+     * The method which is responsible for running main frame of GUI for Developer
+     */
     public void runGUIDeveloper() {
+        createButtonsDeveloper();
         addMenuBars();
         configureMenuBars();
         addPanels();
@@ -267,7 +409,8 @@ public class GUI{
         frame.setSize(screenWidth,screenHeight);
         frame.setMenuBar(menu);
         frame.setResizable(false);
-        for(int i=0;i<5;i++)
+        centralPanel.removeAll();
+        for(int i=0;i<6;i++)
             centralPanel.add(buttons[i]);
     }
 }

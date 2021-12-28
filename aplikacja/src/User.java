@@ -14,6 +14,18 @@ public class User {
     public User() {
     }
 
+    public User(int userId, String userLogin, String userName, String userSurname,
+                String userTelephoneNumber, String userAddress, String userEmail, int userPermissionsLevel){
+        this.userId = userId;
+        this.userLogin = userLogin;
+        this.userName = userName;
+        this.userSurname = userSurname;
+        this.userTelephoneNumber = userTelephoneNumber;
+        this.userAddress = userAddress;
+        this.userEmail = userEmail;
+        this.userPermissionsLevel = userPermissionsLevel;
+    };
+
     public User(int userId, String userLogin, String userPassword, String userName, String userSurname,
                 String userTelephoneNumber, String userAddress, String userEmail, int userPermissionsLevel){
         this.userId = userId;

@@ -28,20 +28,22 @@ public class DataBaseHandlingClass {
     public static User LogInUser(Connection connection, String login, String password){
         try {
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM users WHERE nazwaUzytkownika = \"" + login + "\"");
-            while (resultSet.next()) {
-                if (resultSet.getString("hasloUzytkownika").equals(password)){
-                    //System.out.println(resultSet.getString("idUzytkownika"));
-                    User user = new User(resultSet.getInt("idUzytkownika"),
-                            resultSet.getString("nazwaUzytkownika"),
-                            resultSet.getString("hasloUzytkownika"),
-                            resultSet.getString("imieUzytkownika"),
-                            resultSet.getString("nazwiskoUzytkownika"),
-                            resultSet.getString("numerTelefonuUzytkownika"),
-                            resultSet.getString("adresUzytkownika"),
-                            resultSet.getString("emailUzytkownika"),
-                            resultSet.getInt("poziomUprawnien"));
-                    return user;
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM users WHERE nazwaUzytkownika = \"" + login + "\" AND hasloUzytkownika = \"" + password + "\"");
+            if(resultSet.isBeforeFirst()) {
+                System.out.println("result set is not empty");
+                while (resultSet.next()) {
+                    if (resultSet.getString("hasloUzytkownika").equals(password)) {
+                        //System.out.println(resultSet.getString("idUzytkownika"));
+                        return new User(resultSet.getInt("idUzytkownika"),
+                                resultSet.getString("nazwaUzytkownika"),
+                                resultSet.getString("hasloUzytkownika"),
+                                resultSet.getString("imieUzytkownika"),
+                                resultSet.getString("nazwiskoUzytkownika"),
+                                resultSet.getString("numerTelefonuUzytkownika"),
+                                resultSet.getString("adresUzytkownika"),
+                                resultSet.getString("emailUzytkownika"),
+                                resultSet.getInt("poziomUprawnien"));
+                    }
                 }
             }
         } catch(Exception e){
@@ -71,7 +73,6 @@ public class DataBaseHandlingClass {
                 if( resultSet1.next()) {
                     User user = new User(resultSet1.getInt("idUzytkownika"),
                             resultSet1.getString("nazwaUzytkownika"),
-                            resultSet1.getString("hasloUzytkownika"),
                             resultSet1.getString("imieUzytkownika"),
                             resultSet1.getString("nazwiskoUzytkownika"),
                             resultSet1.getString("numerTelefonuUzytkownika"),

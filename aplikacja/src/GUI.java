@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
@@ -168,7 +169,7 @@ public class GUI{
                 runGUI();
             }
             else {
-                loginStatement.setText("      Your data is wrong (Attempt: " + numberOfAttempts + ")");
+                loginStatement.setText("Your data is wrong (Attempt: " + numberOfAttempts + ")");
                 System.out.println("Your data is wrong (Attempt: " + numberOfAttempts + ")");
             }
         };
@@ -183,13 +184,13 @@ public class GUI{
         loginPanel.add(usernameField);
         loginPanel.add(labelPassword);
         loginPanel.add(passwordField);
+        loginPanel.setLayout(new BoxLayout(loginPanel, BoxLayout.Y_AXIS));
         loginPanel.add(gap);
         loginPanel.add(loginButton);
 
         loginPanelMessage.add(loginStatement, BorderLayout.NORTH);
         loginPanelMessage.setVisible(true);
 
-        loginFrame.setBackground(Color.darkGray);
         loginFrame.add(loginPanel, BorderLayout.CENTER);
         loginFrame.add(loginPanelMessage, BorderLayout.SOUTH);
         loginFrame.add(welcomePanel,BorderLayout.NORTH);
@@ -217,8 +218,7 @@ public class GUI{
         addMenuBars();
         configureMenuBars();
         addPanels();
-
-        frame.setBackground(Color.darkGray);
+        
         frame.setSize(screenWidth,screenHeight);
         frame.setMenuBar(menu);
         frame.setResizable(false);

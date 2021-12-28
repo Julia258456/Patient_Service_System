@@ -51,6 +51,18 @@ public class GUI{
         buttons[3] = new Button("Log out");
         buttons[4] = new Button("Exit the program");
 
+        buttons[0].addActionListener(e -> {
+
+        });
+
+        buttons[1].addActionListener(e -> {
+
+        });
+
+        buttons[2].addActionListener(e -> {
+
+        });
+
         buttons[3].addActionListener(e -> {
             frame.dispose();
             loginScreen();
@@ -70,6 +82,18 @@ public class GUI{
         buttons[2] = new Button("My profile");
         buttons[3] = new Button("Log out");
         buttons[4] = new Button("Exit the program");
+
+        buttons[0].addActionListener(e -> {
+
+        });
+
+        buttons[1].addActionListener(e -> {
+
+        });
+
+        buttons[2].addActionListener(e -> {
+
+        });
 
         buttons[3].addActionListener(e -> {
             frame.dispose();
@@ -95,6 +119,18 @@ public class GUI{
         buttons[0].addActionListener(e -> {
             frame.dispose();
             findUserScreen();
+        });
+
+        buttons[1].addActionListener(e -> {
+
+        });
+
+        buttons[2].addActionListener(e -> {
+
+        });
+
+        buttons[3].addActionListener(e -> {
+
         });
 
         buttons[4].addActionListener(e -> {
@@ -177,54 +213,54 @@ public class GUI{
         enteredUsername = "null";
         Connection connection = DataBaseHandlingClass.StartConnectionWithDB();
         User user = DataBaseHandlingClass.LogInUser(connection, "admin", "admin");
-        List<User> list = DataBaseHandlingClass.SearchForPatientsOfOrthodontist(connection, user);
-
-        Frame findUserFrame = new Frame("Find user by his email adress");
+        assert user != null;
+        List<User> list = DataBaseHandlingClass.SearchForAllUsers(connection, user);
+        Frame findUserFrame = new Frame("Find user by his username");
 
         Panel welcomePanel = new Panel();
         Panel findPanelMessage = new Panel();
         Panel findUserPanel = new Panel(new GridBagLayout());
 
-        Label labelMail = new Label("e-mail address: ");
-        Label emailStatement = new Label("Please enter the user's email address credentials to find the user");
+        Label usernameLabel = new Label("Username: ");
+        Label userStatement = new Label("Please enter the username to see user's credentials");
 
-        TextField emailField = new TextField(20);
+        TextField userField = new TextField(20);
 
         Button loginButton = new Button("Find User");
         ActionListener action = e -> {
             numberOfAttempts++;
             try {
-                enteredUsername = emailField.getText();
+                enteredUsername = userField.getText();
                 User userToBeFound = new User();
 
                 boolean userFound = false;
+                assert list != null;
                 for(User userToFind: list){
-                    if(userToFind.getUserEmail().equals(enteredUsername)){
-                        System.out.println(userToFind.getUserEmail());
+                    if(userToFind.getUserLogin().equals(enteredUsername)){
                         userFound = true;
                         userToBeFound = userToFind;
                     }
                 }
                 if(userFound){
-                    emailStatement.setText("You have found user: " + userToBeFound.getUserLogin());
-                    System.out.println("You have found user: " + userToBeFound.getUserLogin());
+                    userStatement.setText("You have found user: " + userToBeFound.getUserName() + " " + userToBeFound.getUserSurname() + ", with id: " + userToBeFound.getUserId());
                 }
                 else {
-                    emailStatement.setText("There is no such user in the database (Attempt: " + numberOfAttempts + ")");
+                    userStatement.setText("There is no such user in the database (Attempt: " + numberOfAttempts + ")");
                     System.out.println("There is no such user in the database (Attempt: " + numberOfAttempts + ")");
                 }
             }
             catch(Exception exception){
-                emailStatement.setText("There is no such user in the database (Attempt: " + numberOfAttempts + ")");
+                System.out.println("Exception caught!" + exception.getMessage());
+                userStatement.setText("There is no such user in the database (Attempt: " + numberOfAttempts + ")");
                 System.out.println("There is no such user in the database (Attempt: " + numberOfAttempts + ")");
             }
         };
 
-        emailField.addActionListener(action);
+        userField.addActionListener(action);
         loginButton.addActionListener(action);
 
-        findUserPanel.add(labelMail);
-        findUserPanel.add(emailField);
+        findUserPanel.add(usernameLabel);
+        findUserPanel.add(userField);
         findUserPanel.setLayout(new BoxLayout(findUserPanel, BoxLayout.Y_AXIS));
         findUserPanel.add(loginButton);
 
@@ -236,7 +272,7 @@ public class GUI{
             runGUIDeveloper();
         });
         findPanelMessage.setLayout(new BoxLayout(findPanelMessage, BoxLayout.Y_AXIS));
-        findPanelMessage.add(emailStatement);
+        findPanelMessage.add(userStatement);
         findPanelMessage.add(exitButton);
 
         findUserFrame.setLocation((screenWidth/4),(screenHeight/2));
@@ -253,8 +289,6 @@ public class GUI{
                 super.windowClosing(e);
                 findUserFrame.setVisible(false);
                 findUserFrame.dispose();
-                if (user == null)
-                    System.exit(0);
             }
 
         });

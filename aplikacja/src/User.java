@@ -1,99 +1,99 @@
 public class User {
 
     // private fields of User containing all of credentials
-    private int idUzytkownika;
-    private String nazwaUzytkownika;
-    private String hasloUzytkownika;
-    private String imieUzytkownika;
-    private String nazwiskoUzytkownika;
-    private String numerTelefonuUzytkownika;
-    private String adresUzytkownika;
-    private String emailUzytkownika;
-    private int poziomUprawnien; // 0 - patient, 1 - orthodontist, 2 - dev
+    private int userId;
+    private String userLogin;
+    private String userPassword;
+    private String userName;
+    private String userSurname;
+    private String userTelephoneNumber;
+    private String userAddress;
+    private String userEmail;
+    private int userPermissionsLevel; // 0 - patient, 1 - orthodontist, 2 - dev
 
-    public User(int idUzytkownika, String nazwaUzytkownika, String hasloUzytkownika, String imieUzytkownika, String nazwiskoUzytkownika,
-                String numerTelefonuUzytkownika, String adresUzytkownika, String emailUzytkownika, int poziomUprawnien){
-        this.idUzytkownika = idUzytkownika;
-        this.nazwaUzytkownika = nazwaUzytkownika;
-        this.hasloUzytkownika = hasloUzytkownika;
-        this.imieUzytkownika = imieUzytkownika;
-        this.nazwiskoUzytkownika = nazwiskoUzytkownika;
-        this.numerTelefonuUzytkownika = numerTelefonuUzytkownika;
-        this.adresUzytkownika = adresUzytkownika;
-        this.emailUzytkownika = emailUzytkownika;
-        this.poziomUprawnien = poziomUprawnien;
+    public User(int userId, String userLogin, String userPassword, String userName, String userSurname,
+                String userTelephoneNumber, String userAddress, String userEmail, int userPermissionsLevel){
+        this.userId = userId;
+        this.userLogin = userLogin;
+        this.userPassword = userPassword;
+        this.userName = userName;
+        this.userSurname = userSurname;
+        this.userTelephoneNumber = userTelephoneNumber;
+        this.userAddress = userAddress;
+        this.userEmail = userEmail;
+        this.userPermissionsLevel = userPermissionsLevel;
     };
 
-    public int getIdUzytkownika() {
-        return idUzytkownika;
+    public int getUserId() {
+        return userId;
     }
 
-    public String getNazwaUzytkownika() {
-        return nazwaUzytkownika;
+    public String getUserLogin() {
+        return userLogin;
     }
 
-    public String getHasloUzytkownika() {
-        return hasloUzytkownika;
+    public String getUserPassword() {
+        return userPassword;
     }
 
-    public String getImieUzytkownika() {
-        return imieUzytkownika;
+    public String getUserName() {
+        return userName;
     }
 
-    public String getNazwiskoUzytkownika() {
-        return nazwiskoUzytkownika;
+    public String getUserSurname() {
+        return userSurname;
     }
 
-    public String getNumerTelefonuUzytkownika() {
-        return numerTelefonuUzytkownika;
+    public String getUserTelephoneNumber() {
+        return userTelephoneNumber;
     }
 
-    public String getAdresUzytkownika() {
-        return adresUzytkownika;
+    public String getUserAddress() {
+        return userAddress;
     }
 
-    public String getEmailUzytkownika() {
-        return emailUzytkownika;
+    public String getUserEmail() {
+        return userEmail;
     }
 
-    public int getPoziomUprawnien() {
-        return poziomUprawnien;
+    public int getUserPermissionsLevel() {
+        return userPermissionsLevel;
     }
 
-    public void setIdUzytkownika(int idUzytkownika) {
-        this.idUzytkownika = idUzytkownika;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
-    public void setNazwaUzytkownika(String nazwaUzytkownika) {
-        this.nazwaUzytkownika = nazwaUzytkownika;
+    public void setUserLogin(String userLogin) {
+        this.userLogin = userLogin;
     }
 
-    public void setHasloUzytkownika(String hasloUzytkownika) {
-        this.hasloUzytkownika = hasloUzytkownika;
+    public void setUserPassword(String userPassword) {
+        this.userPassword = userPassword;
     }
 
-    public void setImieUzytkownika(String imieUzytkownika) {
-        this.imieUzytkownika = imieUzytkownika;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
-    public void setNazwiskoUzytkownika(String nazwiskoUzytkownika) {
-        this.nazwiskoUzytkownika = nazwiskoUzytkownika;
+    public void setUserSurname(String userSurname) {
+        this.userSurname = userSurname;
     }
 
-    public void setNumerTelefonuUzytkownika(String numerTelefonuUzytkownika) {
-        this.numerTelefonuUzytkownika = numerTelefonuUzytkownika;
+    public void setUserTelephoneNumber(String userTelephoneNumber) {
+        this.userTelephoneNumber = userTelephoneNumber;
     }
 
-    public void setAdresUzytkownika(String adresUzytkownika) {
-        this.adresUzytkownika = adresUzytkownika;
+    public void setUserAddress(String userAddress) {
+        this.userAddress = userAddress;
     }
 
-    public void setEmailUzytkownika(String emailUzytkownika) {
-        this.emailUzytkownika = emailUzytkownika;
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
     }
 
-    public void setPoziomUprawnien(int poziomUprawnien) {
-        this.poziomUprawnien = poziomUprawnien;
+    public void setUserPermissionsLevel(int userPermissionsLevel) {
+        this.userPermissionsLevel = userPermissionsLevel;
     }
 
 }

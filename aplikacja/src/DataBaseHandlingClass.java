@@ -31,7 +31,7 @@ public class DataBaseHandlingClass {
             ResultSet resultSet = statement.executeQuery("SELECT * FROM users WHERE nazwaUzytkownika = \"" + login + "\"");
             while (resultSet.next()) {
                 if (resultSet.getString("hasloUzytkownika").equals(password)){
-                    System.out.println(resultSet.getString("idUzytkownika"));
+                    //System.out.println(resultSet.getString("idUzytkownika"));
                     User user = new User(resultSet.getInt("idUzytkownika"),
                             resultSet.getString("nazwaUzytkownika"),
                             resultSet.getString("hasloUzytkownika"),
@@ -86,7 +86,6 @@ public class DataBaseHandlingClass {
             e.printStackTrace();
         }
         return null;
-
     }
 
     /**

@@ -11,6 +11,9 @@ public class User {
     private String userEmail;
     private int userPermissionsLevel; // 0 - patient, 1 - orthodontist, 2 - dev
 
+    public User() {
+    }
+
     public User(int userId, String userLogin, String userPassword, String userName, String userSurname,
                 String userTelephoneNumber, String userAddress, String userEmail, int userPermissionsLevel){
         this.userId = userId;

@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.Connection;
 
 public class GUI{
     Frame frame;
@@ -8,16 +9,17 @@ public class GUI{
     Menu fileMenu, optionsMenu, helpMenu;
     Panel upperPanel, centralPanel, lowerPanel;
     Button[] buttons = new Button[10];
-    static String username;
-    static String password;
+    static String enteredUsername;
+    static String enteredPassword;
     int numberOfAttempts = 0;
     Dimension screenDimension = Toolkit.getDefaultToolkit().getScreenSize();
     int screenWidth = (int)(screenDimension.width * 0.7);
     int screenHeight = (int)(screenDimension.height * 0.7);
+    Image icon = Toolkit.getDefaultToolkit().getImage(".//resources//icon.JPG");
+    User user = new User();
 
     /**
      * The basic Constructor which creates basic frame of Main menu.
-     * @return Null
      */
     public GUI() {
         frame = new Frame("Main menu");
@@ -41,7 +43,6 @@ public class GUI{
 
     /**
      * The method which creates Buttons in main frame
-     * @return Null
      */
     private void createButtons(){
         buttons[0] = new Button("Search for a patient from the database");
@@ -68,7 +69,6 @@ public class GUI{
 
     /**
      * The method which creates Panels in main frame
-     * @return Null
      */
     private void createPanels(){
         upperPanel = new Panel();
@@ -78,7 +78,6 @@ public class GUI{
 
     /**
      * The method which creates Menu in main frame
-     * @return Null
      */
     private void createMenu(){
         fileMenu = new Menu("File");
@@ -88,7 +87,6 @@ public class GUI{
 
     /**
      * The method which adds Menu Bars in main frame
-     * @return Null
      */
     private void addMenuBars(){
         menu.add(fileMenu);
@@ -98,7 +96,6 @@ public class GUI{
 
     /**
      * The method which configures Menu Bars in main frame
-     * @return Null
      */
     private void configureMenuBars(){
         fileMenu.add(new MenuItem("Load file"));
@@ -121,7 +118,6 @@ public class GUI{
 
     /**
      * The method which adds Panels in main frame
-     * @return Null
      */
     private void addPanels(){
         GridLayout layout = new GridLayout(6,6,10,10);
@@ -136,11 +132,10 @@ public class GUI{
 
     /**
      * The method which is responsible for login screen
-     * @return Null
      */
     public void loginScreen() {
-        username = "null";
-        password = "null";
+        enteredUsername = "null";
+        enteredPassword = "null";
 
         Frame loginFrame = new Frame("Login Screen");
 
@@ -160,15 +155,34 @@ public class GUI{
         Button loginButton = new Button("Login");
 
         ActionListener action = e -> {
-            username = usernameField.getText();
-            password = passwordField.getText();
-            numberOfAttempts++;
-            if (username.equals("admin") && password.equals("admin")) {
-                loginFrame.setVisible(false);
-                loginFrame.dispose();
-                runGUI();
+            try {
+                enteredUsername = usernameField.getText();
+                enteredPassword = passwordField.getText();
+                numberOfAttempts++;
+                Connection connection = DataBaseHandlingClass.StartConnectionWithDB();
+                User user = DataBaseHandlingClass.LogInUser(connection, enteredUsername, enteredPassword);
+
+                if(user == null){
+                    loginStatement.setText("Your data is wrong (Attempt: " + numberOfAttempts + ")");
+                    System.out.println("Your data is wrong (Attempt: " + numberOfAttempts + ")");
+                }
+                else if (user.getUserPermissionsLevel()==0){
+                    loginFrame.setVisible(false);
+                    loginFrame.dispose();
+                    runGUIPatient();
+                }
+                else if(user.getUserPermissionsLevel()==1){
+                    loginFrame.setVisible(false);
+                    loginFrame.dispose();
+                    runGUIOrthodontist();
+                }
+                else if(user.getUserPermissionsLevel()==2){
+                    loginFrame.setVisible(false);
+                    loginFrame.dispose();
+                    runGUIDeveloper();
+                }
             }
-            else {
+            catch(Exception exception){
                 loginStatement.setText("Your data is wrong (Attempt: " + numberOfAttempts + ")");
                 System.out.println("Your data is wrong (Attempt: " + numberOfAttempts + ")");
             }
@@ -191,6 +205,8 @@ public class GUI{
         loginPanelMessage.add(loginStatement, BorderLayout.NORTH);
         loginPanelMessage.setVisible(true);
 
+        loginFrame.setLocation((screenWidth/2),(screenHeight/2));
+        loginFrame.setIconImage(icon);
         loginFrame.add(loginPanel, BorderLayout.CENTER);
         loginFrame.add(loginPanelMessage, BorderLayout.SOUTH);
         loginFrame.add(welcomePanel,BorderLayout.NORTH);
@@ -203,22 +219,51 @@ public class GUI{
                 super.windowClosing(e);
                 loginFrame.setVisible(false);
                 loginFrame.dispose();
-                if (!username.equals("admin") && !password.equals("admin"))
+                if (user == null)
                     System.exit(0);
             }
 
-    });
+        });
     }
 
     /**
      * The method which is responsible for running main frame of GUI
-     * @return Null
      */
-    public void runGUI() {
+    public void runGUIOrthodontist() {
         addMenuBars();
         configureMenuBars();
         addPanels();
-        
+
+        frame.setIconImage(icon);
+        frame.setLocation((screenWidth/5),(screenHeight/4));
+        frame.setSize(screenWidth,screenHeight);
+        frame.setMenuBar(menu);
+        frame.setResizable(false);
+        for(int i=0;i<5;i++)
+            centralPanel.add(buttons[i]);
+    }
+
+    public void runGUIPatient() {
+        addMenuBars();
+        configureMenuBars();
+        addPanels();
+
+        frame.setIconImage(icon);
+        frame.setLocation((screenWidth/5),(screenHeight/4));
+        frame.setSize(screenWidth,screenHeight);
+        frame.setMenuBar(menu);
+        frame.setResizable(false);
+        for(int i=0;i<5;i++)
+            centralPanel.add(buttons[i]);
+    }
+
+    public void runGUIDeveloper() {
+        addMenuBars();
+        configureMenuBars();
+        addPanels();
+
+        frame.setIconImage(icon);
+        frame.setLocation((screenWidth/5),(screenHeight/4));
         frame.setSize(screenWidth,screenHeight);
         frame.setMenuBar(menu);
         frame.setResizable(false);

@@ -20,6 +20,11 @@ public class JDBC {
         List<User> list = DataBaseHandlingClass.SearchForPatientsOfOrthodontist(c, user);
         List<Visit> list1 = DataBaseHandlingClass.SearchForVisitsOfPatient(c, list.get(0));
 
+        User user1 = DataBaseHandlingClass.LogInUser(c,"jkowal", "qwerty");
+        List<User> list2 = DataBaseHandlingClass.SearchForAllOrthodontists(c, user1);
+        List<User> list3 = DataBaseHandlingClass.SearchForAllUsers(c, user1);
+        List<User> list4 = DataBaseHandlingClass.SearchForAllPatients(c, user1);
+
         System.out.println("ok");
     }
 }

@@ -53,16 +53,16 @@ public class DataBaseHandlingClass {
     /**
      * The method which allows the orthodontist to get the list of his patients from the database.
      * @param connection Connection class object necessary to access the database
-     * @param otrhodontist User object - the orthodontist whose patients the method is supposed to return
+     * @param orthodontist User object - the orthodontist whose patients the method is supposed to return
      * @return List<User> object (if method was successful) or null (if user provided incorrect input/connection with database failed)
      */
-    public static List<User> SearchForPatientsOfOrthodontist(Connection connection, User otrhodontist){
-        if (otrhodontist.getUserPermissionsLevel() == 0){
+    public static List<User> SearchForPatientsOfOrthodontist(Connection connection, User orthodontist){
+        if (orthodontist.getUserPermissionsLevel() == 0){
             return null;
         }
         try {
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM pacjenci WHERE user_id_ortodonty = " + otrhodontist.getUserId());
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM pacjenci WHERE user_id_ortodonty = " + orthodontist.getUserId());
             List<User> userList = new ArrayList();
             Statement statement1 = connection.createStatement();
             ResultSet resultSet1;
@@ -80,6 +80,105 @@ public class DataBaseHandlingClass {
                             resultSet1.getInt("poziomUprawnien"));
                     userList.add(user);
                 }
+            }
+            return userList;
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * The method which allows the administrator to get the list of all orthodontists from the database.
+     * @param connection Connection class object necessary to access the database
+     * @param admin User object - the administrator's data
+     * @return List<User> object (if method was successful) or null (if user provided incorrect input/connection with database failed)
+     */
+    public static List<User> SearchForAllOrthodontists(Connection connection, User admin){
+        if (admin.getUserPermissionsLevel() != 2){
+            return null;
+        }
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM users WHERE poziomUprawnien = 1 ");
+            List<User> userList = new ArrayList();
+            while (resultSet.next()) {
+                User user = new User(resultSet.getInt("idUzytkownika"),
+                        resultSet.getString("nazwaUzytkownika"),
+                        resultSet.getString("hasloUzytkownika"),
+                        resultSet.getString("imieUzytkownika"),
+                        resultSet.getString("nazwiskoUzytkownika"),
+                        resultSet.getString("numerTelefonuUzytkownika"),
+                        resultSet.getString("adresUzytkownika"),
+                        resultSet.getString("emailUzytkownika"),
+                        resultSet.getInt("poziomUprawnien"));
+                userList.add(user);
+            }
+            return userList;
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * The method which allows the administrator to get the list of all patients from the database.
+     * @param connection Connection class object necessary to access the database
+     * @param admin User object - the administrator's data
+     * @return List<User> object (if method was successful) or null (if user provided incorrect input/connection with database failed)
+     */
+    public static List<User> SearchForAllPatients(Connection connection, User admin){
+        if (admin.getUserPermissionsLevel() != 2){
+            return null;
+        }
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM users WHERE poziomUprawnien = 0 ");
+            List<User> userList = new ArrayList();
+            while (resultSet.next()) {
+                User user = new User(resultSet.getInt("idUzytkownika"),
+                        resultSet.getString("nazwaUzytkownika"),
+                        resultSet.getString("hasloUzytkownika"),
+                        resultSet.getString("imieUzytkownika"),
+                        resultSet.getString("nazwiskoUzytkownika"),
+                        resultSet.getString("numerTelefonuUzytkownika"),
+                        resultSet.getString("adresUzytkownika"),
+                        resultSet.getString("emailUzytkownika"),
+                        resultSet.getInt("poziomUprawnien"));
+                userList.add(user);
+            }
+            return userList;
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * The method which allows the administrator to get the list of all users from the database.
+     * @param connection Connection class object necessary to access the database
+     * @param admin User object - the administrator's data
+     * @return List<User> object (if method was successful) or null (if user provided incorrect input/connection with database failed)
+     */
+    public static List<User> SearchForAllUsers(Connection connection, User admin){
+        if (admin.getUserPermissionsLevel() != 2){
+            return null;
+        }
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM users ");
+            List<User> userList = new ArrayList();
+            while (resultSet.next()) {
+                User user = new User(resultSet.getInt("idUzytkownika"),
+                        resultSet.getString("nazwaUzytkownika"),
+                        resultSet.getString("hasloUzytkownika"),
+                        resultSet.getString("imieUzytkownika"),
+                        resultSet.getString("nazwiskoUzytkownika"),
+                        resultSet.getString("numerTelefonuUzytkownika"),
+                        resultSet.getString("adresUzytkownika"),
+                        resultSet.getString("emailUzytkownika"),
+                        resultSet.getInt("poziomUprawnien"));
+                userList.add(user);
             }
             return userList;
         } catch(Exception e){

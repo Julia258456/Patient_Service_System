@@ -1,5 +1,6 @@
 public class User {
 
+    // private fields of User containing all of credentials
     private int idUzytkownika;
     private String nazwaUzytkownika;
     private String hasloUzytkownika;
@@ -8,9 +9,7 @@ public class User {
     private String numerTelefonuUzytkownika;
     private String adresUzytkownika;
     private String emailUzytkownika;
-    private int poziomUprawnien; // 0 - zwykly uzytkownik, 1 - ortodonta, 2 - deweloper
-
-    public User(){};
+    private int poziomUprawnien; // 0 - patient, 1 - orthodontist, 2 - dev
 
     public User(int idUzytkownika, String nazwaUzytkownika, String hasloUzytkownika, String imieUzytkownika, String nazwiskoUzytkownika,
                 String numerTelefonuUzytkownika, String adresUzytkownika, String emailUzytkownika, int poziomUprawnien){

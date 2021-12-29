@@ -245,9 +245,7 @@ public class GUI{
      * The method which adds Panels in main frame
      */
     private void addPanels(){
-        //frame.add(upperPanel, BorderLayout.NORTH);
         frame.add(centralPanel);
-        //frame.add(lowerPanel, BorderLayout.SOUTH);
         frame.setVisible(true);
     }
 
@@ -255,6 +253,7 @@ public class GUI{
      * The method which is responsible for adding exit button for developer to GUI
      */
     public void addExitButtonDeveloper(){
+        numberOfAttempts = 0;
         Panel editUserPanel = new Panel();
         Button exitButton = new Button("Return to main menu");
         exitButton.setBackground(Color.yellow);
@@ -271,6 +270,7 @@ public class GUI{
      * The method which is responsible for adding exit button for orthodontist to GUI
      */
     public void addExitButtonOrthodontist(){
+        numberOfAttempts = 0;
         Panel editUserPanel = new Panel();
         Button exitButton = new Button("Return to main menu");
         exitButton.setBackground(Color.yellow);
@@ -287,6 +287,7 @@ public class GUI{
      * The method which is responsible for adding exit button for patient to GUI
      */
     public void addExitButtonPatient(){
+        numberOfAttempts = 0;
         Panel editUserPanel = new Panel();
         Button exitButton = new Button("Return to main menu");
         exitButton.setBackground(Color.yellow);
@@ -414,54 +415,59 @@ public class GUI{
 
         editUserButton.addActionListener(e -> {
 
-            // TODO funkcja ktora edytuje dane developera
-            if(!levelTextField.getText().isEmpty() && !mailTextField.getText().isEmpty() && !mobileNumberTextField.getText().isEmpty() && !surnameTextField.getText().isEmpty() &&
-            !nameTextField.getText().isEmpty() && !passwordTextField.getText().isEmpty() && !usernameTextField.getText().isEmpty() )
-            {
-                Connection connection = DataBaseHandlingClass.StartConnectionWithDB();
-                User admin = DataBaseHandlingClass.LogInUser(connection,"admin", "admin");
-                User adminorthodontist = DataBaseHandlingClass.LogInUser(connection,"adminortodonta", "admin");
-                User userToAdd = new User();
-                userToAdd.setUserName(nameTextField.getText());
-                userToAdd.setUserSurname(surnameTextField.getText());
-                userToAdd.setUserLogin(usernameTextField.getText());
-                userToAdd.setUserPassword(passwordTextField.getText());
-                userToAdd.setUserEmail(mailTextField.getText());
-                if (!levelTextField.getText().isEmpty())
-                    userToAdd.setUserPermissionsLevel(Integer.valueOf(levelTextField.getText()));
+            try {
+                if (!levelTextField.getText().isEmpty() && !mailTextField.getText().isEmpty() && !mobileNumberTextField.getText().isEmpty() && !surnameTextField.getText().isEmpty() &&
+                        !nameTextField.getText().isEmpty() && !passwordTextField.getText().isEmpty() && !usernameTextField.getText().isEmpty()) {
 
-
-                userToAdd.setUserTelephoneNumber(mobileNumberTextField.getText());
-
-
-                if(userToEdit.getUserPermissionsLevel() == 0){
-                    //assert admin != null;
-                    //DataBaseHandlingClass.AddNewPatientToDB(connection, admin, userToAdd, adminorthodontist);
-                }
-                else if(userToEdit.getUserPermissionsLevel() == 1) {
-                    try {
-                        if(userToAdd.getUserLogin().equals("adminortodonta"))
+                    Connection connection = DataBaseHandlingClass.StartConnectionWithDB();
+                    User admin = DataBaseHandlingClass.LogInUser(connection, "admin", "admin");
+                    assert admin != null;
+                    List<User> list = DataBaseHandlingClass.SearchForAllUsers(connection, admin);
+                    assert list != null;
+                    for(User userToCheck: list) {
+                        if(usernameTextField.getText().equals(userToCheck.getUserName()))
                             throw new Exception();
-                        //DataBaseHandlingClass.AddNewOrthodontistToDB(connection, admin, userToAdd);
                     }
-                    catch(Exception exception){
-                        System.out.println("Exception caught!");
+
+                    User adminOrthodontist = DataBaseHandlingClass.LogInUser(connection, "adminortodonta", "admin");
+                    User userToAdd = new User();
+                    userToAdd.setUserName(nameTextField.getText());
+                    userToAdd.setUserSurname(surnameTextField.getText());
+                    userToAdd.setUserLogin(usernameTextField.getText());
+                    userToAdd.setUserPassword(passwordTextField.getText());
+                    userToAdd.setUserEmail(mailTextField.getText());
+                    userToAdd.setUserPermissionsLevel(Integer.parseInt(levelTextField.getText()));
+                    userToAdd.setUserTelephoneNumber(mobileNumberTextField.getText());
+
+
+                    if (userToEdit.getUserPermissionsLevel() == 0) {
+                        DataBaseHandlingClass.AddNewPatientToDB(connection, admin, userToAdd, adminOrthodontist);
+                    } else if (userToEdit.getUserPermissionsLevel() == 1) {
+                        try {
+                            if (userToAdd.getUserLogin().equals("adminortodonta")) // double check
+                                throw new Exception();
+                            DataBaseHandlingClass.AddNewOrthodontistToDB(connection, admin, userToAdd);
+                        } catch (Exception exception) {
+                            System.out.println("Exception caught!");
+                        }
+                    } else if (userToEdit.getUserPermissionsLevel() == 2) {
+                        try {
+                            if (userToAdd.getUserLogin().equals("admin"))
+                                throw new Exception();
+                            DataBaseHandlingClass.AddNewAdministratorToDB(connection, admin, userToAdd);
+                        } catch (Exception exception) {
+                            System.out.println("Exception caught!");
+                        }
                     }
-                }
-                else if(userToEdit.getUserPermissionsLevel() == 2) {
-                    try {
-                        if(userToAdd.getUserLogin().equals("admin"))
-                            throw new Exception();
-                        //DataBaseHandlingClass.AddNewAdministratorToDB(connection, admin, userToAdd);
-                    }
-                    catch(Exception exception){
-                        System.out.println("Exception caught!");
-                    }
-                }
-                prompt.setText("The user: " + userToAdd.getUserLogin() + ", has been successfully added to the database");
+                    prompt.setText("The user: " + userToAdd.getUserLogin() + ", has been successfully added to the database");
+                } else
+                    prompt.setText("There was an error adding the user, please check the entered data and try again...");
+
             }
-            else
-                prompt.setText("There was an error adding the user, please check the entered data and try again...");
+            catch (Exception exception){
+                prompt.setText("A problem has arisen while adding a new user to database");
+                System.out.println("A problem has arisen while adding a new user to database");
+            }
         });
 
         frame.add(editUserPanel, BorderLayout.CENTER);
@@ -533,24 +539,27 @@ public class GUI{
         Button deleteButton = new Button("Delete user");
         deleteButton.addActionListener(e -> {
             try {
+                if (userToEdit.getUserLogin().equals("admin") || userToEdit.getUserLogin().equals("adminortodonta"))
+                    throw new Exception();
+
                 if (userToEdit.getUserPermissionsLevel() == 0) {
-                    // TODO funkcja usuwajaca pacjenta
-                    //DataBaseHandlingClass.RemovePatientFromDB(connection, admin, userToEdit);
+                    DataBaseHandlingClass.RemovePatientFromDB(connection, admin, userToEdit);
                     deleteInfo.setText("Deletion of patient: " + userToEdit.getUserLogin() + ", was successful");
+                    userToEdit = null;
                 } else if (userToEdit.getUserPermissionsLevel() == 1) {
-                    // TODO funkcja usuwajaca ortodonte
-                    User adminorthodontist = DataBaseHandlingClass.LogInUser(connection, "adminortodonta", "admin");
+                    User adminOrthodontist = DataBaseHandlingClass.LogInUser(connection, "adminortodonta", "admin");
                     deleteInfo.setText("Deletion of orthodontist: " + userToEdit.getUserLogin() + ", was successful");
-                    //DataBaseHandlingClass.RemoveOrthodontistFromDB(connection, admin, userToEdit, adminorthodontist);
+                    DataBaseHandlingClass.RemoveOrthodontistFromDB(connection, admin, userToEdit, adminOrthodontist);
+                    userToEdit = null;
                 } else if (userToEdit.getUserPermissionsLevel() == 2) {
-                    // TODO funkcja usuwajaca dewelopera
                     try {
                         if (userToEdit.getUserLogin().equals(admin.getUserLogin()))
                             throw new Exception();
-                        //DataBaseHandlingClass.RemoveAdministratorFromDB(connection, admin, userToEdit);
+                        DataBaseHandlingClass.RemoveAdministratorFromDB(connection, admin, userToEdit);
                         deleteInfo.setText("Deletion of developer: " + userToEdit.getUserLogin() + ", was successful");
+                        userToEdit = null;
                     } catch (Exception exception) {
-                        System.out.println("Exception caught!");
+                        System.out.println("Exception caught! a problem has arisen while deleting user from the database");
                     }
                 }
             }
@@ -680,14 +689,25 @@ public class GUI{
         editUserPanel.add(prompt);
 
         editUserButton.addActionListener(e -> {
-
-            // TODO funkcja ktora edytuje dane uzytkownika z bazy danych userToEdit
-            if(userToEdit != null)
-            {
-                prompt.setText("The edition was a success");
+            try {
+                if (userToEdit != null) {
+                    User userToAdd = new User();
+                    userToAdd.setUserName(nameTextField.getText());
+                    userToAdd.setUserSurname(surnameTextField.getText());
+                    userToAdd.setUserLogin(usernameTextField.getText());
+                    userToAdd.setUserPassword(passwordTextField.getText());
+                    userToAdd.setUserEmail(mailTextField.getText());
+                    userToAdd.setUserPermissionsLevel(Integer.parseInt(levelTextField.getText()));
+                    userToAdd.setUserTelephoneNumber(mobileNumberTextField.getText());
+                    userToAdd.setUserId(userToEdit.getUserId());
+                    DataBaseHandlingClass.EditUserInfoInDB(connection, userToEdit, userToAdd);
+                    prompt.setText("The edition was a success");
+                } else
+                    prompt.setText("There is no such user in the database (Editing is forbidden)");
             }
-            else
-                prompt.setText("There is no such user in the database (Editing is forbidden)");
+            catch(Exception exception){
+                System.out.println("Problem has arisen during editing profile");
+            }
         });
 
         frame.add(findUserPanel, BorderLayout.NORTH);
@@ -726,8 +746,8 @@ public class GUI{
         Panel editUserPanel = new Panel();
         Label info = new Label("If u wish to edit your credentials, please change them and enter the button below");
         editUserPanel.add(info);
-        Label username = new Label("Your username: ");
-        TextField usernameTextField = new TextField(loggedUser.getUserLogin());
+        Label address = new Label("Your address: ");
+        TextField addressTextField = new TextField(loggedUser.getUserAddress());
         Label password = new Label("Your password: ");
         TextField passwordTextField = new TextField(loggedUser.getUserPassword());
         Label name = new Label("Your name: ");
@@ -739,10 +759,10 @@ public class GUI{
         Label mail = new Label("Your mail: ");
         TextField mailTextField = new TextField(loggedUser.getUserEmail());
 
-        editUserPanel.add(username);
-        editUserPanel.add(usernameTextField);
         editUserPanel.add(password);
         editUserPanel.add(passwordTextField);
+        editUserPanel.add(address);
+        editUserPanel.add(addressTextField);
         editUserPanel.add(name);
         editUserPanel.add(nameTextField);
         editUserPanel.add(surname);
@@ -760,14 +780,24 @@ public class GUI{
         editUserPanel.add(editUserButton);
 
         editUserButton.addActionListener(e -> {
-
-            // TODO funkcja ktora edytuje dane developera
-            if(userToEdit != null)
-            {
-                prompt.setText("The edition was a success");
+            try {
+                if (userToEdit != null) {
+                    User userToAdd = new User();
+                    userToAdd.setUserName(nameTextField.getText());
+                    userToAdd.setUserSurname(surnameTextField.getText());
+                    userToAdd.setUserPassword(passwordTextField.getText());
+                    userToAdd.setUserEmail(mailTextField.getText());
+                    userToAdd.setUserTelephoneNumber(mobileNumberTextField.getText());
+                    userToAdd.setUserId(userToEdit.getUserId());
+                    Connection connection = DataBaseHandlingClass.StartConnectionWithDB();
+                    DataBaseHandlingClass.EditUserInfoInDB(connection, userToEdit, userToAdd);
+                    prompt.setText("The edition was a success");
+                } else
+                    prompt.setText("There is no such user in the database (Editing is forbidden)");
             }
-            else
-                prompt.setText("There is no such user in the database (Editing is forbidden)");
+            catch(Exception exception){
+                System.out.println("Problem has arisen during editing profile");
+            }
         });
 
         frame.add(editUserPanel, BorderLayout.CENTER);
@@ -785,8 +815,8 @@ public class GUI{
         Panel editUserPanel = new Panel();
         Label info = new Label("If u wish to edit your credentials, please change them and enter the button below");
         editUserPanel.add(info);
-        Label username = new Label("Your username: ");
-        TextField usernameTextField = new TextField(loggedUser.getUserLogin());
+        Label address = new Label("Your address: ");
+        TextField addressTextField = new TextField(loggedUser.getUserAddress());
         Label password = new Label("Your password: ");
         TextField passwordTextField = new TextField(loggedUser.getUserPassword());
         Label name = new Label("Your name: ");
@@ -798,10 +828,10 @@ public class GUI{
         Label mail = new Label("Your mail: ");
         TextField mailTextField = new TextField(loggedUser.getUserEmail());
 
-        editUserPanel.add(username);
-        editUserPanel.add(usernameTextField);
         editUserPanel.add(password);
         editUserPanel.add(passwordTextField);
+        editUserPanel.add(address);
+        editUserPanel.add(addressTextField);
         editUserPanel.add(name);
         editUserPanel.add(nameTextField);
         editUserPanel.add(surname);
@@ -819,14 +849,24 @@ public class GUI{
         editUserPanel.add(prompt);
 
         editUserButton.addActionListener(e -> {
-
-            // TODO funkcja ktora edytuje dane pacjenta
-            if(userToEdit != null)
-            {
-                prompt.setText("The edition was a success");
+            try {
+                if (userToEdit != null) {
+                    User userToAdd = new User();
+                    userToAdd.setUserName(nameTextField.getText());
+                    userToAdd.setUserSurname(surnameTextField.getText());
+                    userToAdd.setUserPassword(passwordTextField.getText());
+                    userToAdd.setUserEmail(mailTextField.getText());
+                    userToAdd.setUserTelephoneNumber(mobileNumberTextField.getText());
+                    userToAdd.setUserId(userToEdit.getUserId());
+                    Connection connection = DataBaseHandlingClass.StartConnectionWithDB();
+                    DataBaseHandlingClass.EditUserInfoInDB(connection, userToEdit, userToAdd);
+                    prompt.setText("The edition was a success");
+                } else
+                    prompt.setText("There is no such user in the database (Editing is forbidden)");
             }
-            else
-                prompt.setText("There is no such user in the database (Editing is forbidden)");
+            catch(Exception exception){
+                System.out.println("Problem has arisen during editing profile");
+            }
         });
 
         frame.add(editUserPanel, BorderLayout.CENTER);
@@ -844,8 +884,8 @@ public class GUI{
         Panel editUserPanel = new Panel();
         Label info = new Label("If u wish to edit your credentials, please change them and enter the button below");
         editUserPanel.add(info);
-        Label username = new Label("Your username: ");
-        TextField usernameTextField = new TextField(loggedUser.getUserLogin());
+        Label address = new Label("Your address: ");
+        TextField addressTextField = new TextField(loggedUser.getUserAddress());
         Label password = new Label("Your password: ");
         TextField passwordTextField = new TextField(loggedUser.getUserPassword());
         Label name = new Label("Your name: ");
@@ -857,10 +897,10 @@ public class GUI{
         Label mail = new Label("Your mail: ");
         TextField mailTextField = new TextField(loggedUser.getUserEmail());
 
-        editUserPanel.add(username);
-        editUserPanel.add(usernameTextField);
         editUserPanel.add(password);
         editUserPanel.add(passwordTextField);
+        editUserPanel.add(address);
+        editUserPanel.add(addressTextField);
         editUserPanel.add(name);
         editUserPanel.add(nameTextField);
         editUserPanel.add(surname);
@@ -878,14 +918,24 @@ public class GUI{
         editUserPanel.add(prompt);
 
         editUserButton.addActionListener(e -> {
-
-            // TODO funkcja ktora edytuje dane ortodonty
-            if(userToEdit != null)
-            {
-                prompt.setText("The edition was a success");
+            try {
+                if (userToEdit != null) {
+                    User userToAdd = new User();
+                    userToAdd.setUserName(nameTextField.getText());
+                    userToAdd.setUserSurname(surnameTextField.getText());
+                    userToAdd.setUserPassword(passwordTextField.getText());
+                    userToAdd.setUserEmail(mailTextField.getText());
+                    userToAdd.setUserTelephoneNumber(mobileNumberTextField.getText());
+                    userToAdd.setUserId(userToEdit.getUserId());
+                    Connection connection = DataBaseHandlingClass.StartConnectionWithDB();
+                    DataBaseHandlingClass.EditUserInfoInDB(connection, userToEdit, userToAdd);
+                    prompt.setText("The edition was a success");
+                } else
+                    prompt.setText("There is no such user in the database (Editing is forbidden)");
             }
-            else
-                prompt.setText("There is no such user in the database (Editing is forbidden)");
+            catch(Exception exception){
+                System.out.println("Problem has arisen during editing profile");
+            }
         });
 
         frame.add(editUserPanel, BorderLayout.CENTER);

@@ -11,7 +11,7 @@ public class GUI{
     Frame frame;
     MenuBar menu;
     Menu fileMenu, optionsMenu, helpMenu;
-    Panel upperPanel, centralPanel, lowerPanel;
+    Panel centralPanel;
     Button[] buttons = new Button[10];
     static String enteredUsername;
     static String enteredPassword;
@@ -50,10 +50,15 @@ public class GUI{
      */
     private void createButtonsOrthodontist(){
         buttons[0] = new Button("My visits");
+        buttons[0].setBackground(Color.getHSBColor(178.8f,102.2f,85.1f));
         buttons[1] = new Button("My mailbox");
+        buttons[1].setBackground(Color.getHSBColor(178.8f,102.2f,85.1f));
         buttons[2] = new Button("My profile");
+        buttons[2].setBackground(Color.getHSBColor(178.8f,102.2f,85.1f));
         buttons[3] = new Button("Log out");
+        buttons[3].setBackground(Color.getHSBColor(178.8f,102.2f,85.1f));
         buttons[4] = new Button("Exit the program");
+        buttons[4].setBackground(Color.getHSBColor(178.8f,102.2f,85.1f));
 
         buttons[0].addActionListener(e -> {
             frame.removeAll();
@@ -85,10 +90,15 @@ public class GUI{
      */
     private void createButtonsPatient(){
         buttons[0] = new Button("My visits");
+        buttons[0].setBackground(Color.getHSBColor(137.4f,101.1f,85.1f));
         buttons[1] = new Button("My mailbox");
+        buttons[1].setBackground(Color.getHSBColor(137.4f,101.1f,85.1f));
         buttons[2] = new Button("My profile");
+        buttons[2].setBackground(Color.getHSBColor(137.4f,101.1f,85.1f));
         buttons[3] = new Button("Log out");
+        buttons[3].setBackground(Color.getHSBColor(137.4f,101.1f,85.1f));
         buttons[4] = new Button("Exit the program");
+        buttons[4].setBackground(Color.getHSBColor(137.4f,101.1f,85.1f));
 
         buttons[0].addActionListener(e -> {
             frame.removeAll();
@@ -120,10 +130,19 @@ public class GUI{
      */
     private void createButtonsDeveloper(){
         buttons[0] = new Button("Find user in database");
+        buttons[0].setBackground(Color.lightGray);
         buttons[1] = new Button("Edit users");
-        buttons[2] = new Button("My profile");
-        buttons[3] = new Button("Log out");
-        buttons[4] = new Button("Exit the program");
+        buttons[1].setBackground(Color.lightGray);
+        buttons[2] = new Button("Add user");
+        buttons[2].setBackground(Color.lightGray);
+        buttons[3] = new Button("Delete user");
+        buttons[3].setBackground(Color.lightGray);
+        buttons[4] = new Button("My profile");
+        buttons[4].setBackground(Color.lightGray);
+        buttons[5] = new Button("Log out");
+        buttons[5].setBackground(Color.lightGray);
+        buttons[6] = new Button("Exit the program");
+        buttons[6].setBackground(Color.lightGray);
 
         buttons[0].addActionListener(e -> {
             frame.removeAll();
@@ -137,14 +156,24 @@ public class GUI{
 
         buttons[2].addActionListener(e -> {
             frame.removeAll();
-            myProfileDeveloper();
+            addUser();
         });
 
         buttons[3].addActionListener(e -> {
+            frame.removeAll();
+            deleteUser();
+        });
+
+        buttons[4].addActionListener(e -> {
+            frame.removeAll();
+            myProfileDeveloper();
+        });
+
+        buttons[5].addActionListener(e -> {
             frame.dispose();
             loginScreen();
         });
-        buttons[4].addActionListener(e -> {
+        buttons[6].addActionListener(e -> {
             frame.dispose();
             System.exit(0);
         });
@@ -154,8 +183,6 @@ public class GUI{
      * The method which creates Panels in main frame
      */
     private void createPanels(){
-        upperPanel = new Panel();
-        lowerPanel = new Panel();
         centralPanel = new Panel();
     }
 
@@ -218,13 +245,9 @@ public class GUI{
      * The method which adds Panels in main frame
      */
     private void addPanels(){
-        GridLayout layout = new GridLayout(6,6,10,10);
-        upperPanel.setLayout(layout);
-        centralPanel.setLayout(layout);
-        lowerPanel.setLayout(layout);
-        frame.add(upperPanel, BorderLayout.NORTH);
-        frame.add(centralPanel, BorderLayout.CENTER);
-        frame.add(lowerPanel, BorderLayout.SOUTH);
+        //frame.add(upperPanel, BorderLayout.NORTH);
+        frame.add(centralPanel);
+        //frame.add(lowerPanel, BorderLayout.SOUTH);
         frame.setVisible(true);
     }
 
@@ -234,6 +257,7 @@ public class GUI{
     public void addExitButtonDeveloper(){
         Panel editUserPanel = new Panel();
         Button exitButton = new Button("Return to main menu");
+        exitButton.setBackground(Color.yellow);
         editUserPanel.add(exitButton);
         exitButton.addActionListener(e -> {
             frame.setLayout(null);
@@ -249,6 +273,7 @@ public class GUI{
     public void addExitButtonOrthodontist(){
         Panel editUserPanel = new Panel();
         Button exitButton = new Button("Return to main menu");
+        exitButton.setBackground(Color.yellow);
         editUserPanel.add(exitButton);
         exitButton.addActionListener(e -> {
             frame.setLayout(null);
@@ -264,6 +289,7 @@ public class GUI{
     public void addExitButtonPatient(){
         Panel editUserPanel = new Panel();
         Button exitButton = new Button("Return to main menu");
+        exitButton.setBackground(Color.yellow);
         editUserPanel.add(exitButton);
         exitButton.addActionListener(e -> {
             frame.setLayout(null);
@@ -335,6 +361,214 @@ public class GUI{
         frame.add(findUserPanel, BorderLayout.NORTH);
         frame.add(findPanelMessage, BorderLayout.CENTER);
         frame.add(welcomePanel, BorderLayout.SOUTH);
+        addExitButtonDeveloper();
+        frame.setLayout(new BoxLayout(frame, BoxLayout.Y_AXIS));
+        frame.setVisible(true);
+    }
+
+    /**
+     * The method which is responsible for adding new user to the database
+     */
+    public void addUser(){
+        frame.removeAll();
+
+        Panel editUserPanel = new Panel();
+        Label info = new Label("When adding a user, remember to fill in all data, and prohibit creating duplicates, otherwise adding will fail");
+        editUserPanel.add(info);
+        Label username = new Label("Username: ");
+        TextField usernameTextField = new TextField();
+        Label password = new Label("Password: ");
+        TextField passwordTextField = new TextField();
+        Label name = new Label("Name: ");
+        TextField nameTextField = new TextField();
+        Label surname = new Label("Surname: ");
+        TextField surnameTextField = new TextField();
+        Label mobileNumber = new Label("Mobile number: ");
+        TextField mobileNumberTextField = new TextField();
+        Label mail = new Label("E-mail: ");
+        TextField mailTextField = new TextField();
+        Label level = new Label("Permission level (0,1,2): ");
+        TextField levelTextField = new TextField();
+
+        editUserPanel.add(username);
+        editUserPanel.add(usernameTextField);
+        editUserPanel.add(password);
+        editUserPanel.add(passwordTextField);
+        editUserPanel.add(name);
+        editUserPanel.add(nameTextField);
+        editUserPanel.add(surname);
+        editUserPanel.add(surnameTextField);
+        editUserPanel.add(mobileNumber);
+        editUserPanel.add(mobileNumberTextField);
+        editUserPanel.add(mail);
+        editUserPanel.add(mailTextField);
+        editUserPanel.add(level);
+        editUserPanel.add(levelTextField);
+
+        editUserPanel.setLayout(new BoxLayout(editUserPanel, BoxLayout.Y_AXIS));
+
+        Button editUserButton = new Button("Add new user to database");
+        Label prompt = new Label("Please before pressing the button, check the correctness of the data");
+        editUserPanel.add(prompt);
+        editUserPanel.add(editUserButton);
+
+        editUserButton.addActionListener(e -> {
+
+            // TODO funkcja ktora edytuje dane developera
+            if(!levelTextField.getText().isEmpty() && !mailTextField.getText().isEmpty() && !mobileNumberTextField.getText().isEmpty() && !surnameTextField.getText().isEmpty() &&
+            !nameTextField.getText().isEmpty() && !passwordTextField.getText().isEmpty() && !usernameTextField.getText().isEmpty() )
+            {
+                Connection connection = DataBaseHandlingClass.StartConnectionWithDB();
+                User admin = DataBaseHandlingClass.LogInUser(connection,"admin", "admin");
+                User adminorthodontist = DataBaseHandlingClass.LogInUser(connection,"adminortodonta", "admin");
+                User userToAdd = new User();
+                userToAdd.setUserName(nameTextField.getText());
+                userToAdd.setUserSurname(surnameTextField.getText());
+                userToAdd.setUserLogin(usernameTextField.getText());
+                userToAdd.setUserPassword(passwordTextField.getText());
+                userToAdd.setUserEmail(mailTextField.getText());
+                if (!levelTextField.getText().isEmpty())
+                    userToAdd.setUserPermissionsLevel(Integer.valueOf(levelTextField.getText()));
+
+
+                userToAdd.setUserTelephoneNumber(mobileNumberTextField.getText());
+
+
+                if(userToEdit.getUserPermissionsLevel() == 0){
+                    //assert admin != null;
+                    //DataBaseHandlingClass.AddNewPatientToDB(connection, admin, userToAdd, adminorthodontist);
+                }
+                else if(userToEdit.getUserPermissionsLevel() == 1) {
+                    try {
+                        if(userToAdd.getUserLogin().equals("adminortodonta"))
+                            throw new Exception();
+                        //DataBaseHandlingClass.AddNewOrthodontistToDB(connection, admin, userToAdd);
+                    }
+                    catch(Exception exception){
+                        System.out.println("Exception caught!");
+                    }
+                }
+                else if(userToEdit.getUserPermissionsLevel() == 2) {
+                    try {
+                        if(userToAdd.getUserLogin().equals("admin"))
+                            throw new Exception();
+                        //DataBaseHandlingClass.AddNewAdministratorToDB(connection, admin, userToAdd);
+                    }
+                    catch(Exception exception){
+                        System.out.println("Exception caught!");
+                    }
+                }
+                prompt.setText("The user: " + userToAdd.getUserLogin() + ", has been successfully added to the database");
+            }
+            else
+                prompt.setText("There was an error adding the user, please check the entered data and try again...");
+        });
+
+        frame.add(editUserPanel, BorderLayout.CENTER);
+        addExitButtonDeveloper();
+        frame.setLayout(new BoxLayout(frame, BoxLayout.Y_AXIS));
+        frame.setVisible(true);
+    }
+
+    /**
+     * The method which is responsible for adding user from the database
+     */
+    public void deleteUser(){
+        enteredUsername = "null";
+        Connection connection = DataBaseHandlingClass.StartConnectionWithDB();
+        User admin = DataBaseHandlingClass.LogInUser(connection, "admin", "admin");
+        assert admin != null;
+        List<User> list = DataBaseHandlingClass.SearchForAllUsers(connection, admin);
+
+        Panel welcomePanel = new Panel();
+        Panel findPanelMessage = new Panel();
+        Panel findUserPanel = new Panel(new GridBagLayout());
+
+        Label usernameLabel = new Label("Username: ");
+        Label userStatement = new Label("Please enter the username to see user's credentials");
+
+        TextField userField = new TextField(20);
+
+        Button loginButton = new Button("Find user");
+        ActionListener action = e -> {
+            numberOfAttempts++;
+            try {
+                enteredUsername = userField.getText();
+
+                boolean userFound = false;
+                assert list != null;
+                for(User userToFind: list){
+                    if(userToFind.getUserLogin().equals(enteredUsername)){
+                        userFound = true;
+                        userToEdit = userToFind;
+                    }
+                }
+                if(userFound){
+                    userStatement.setText("You have found user: " + userToEdit.getUserName() + " " + userToEdit.getUserSurname() + ", with id: " + userToEdit.getUserId());
+
+                }
+                else {
+                    userStatement.setText("There is no such user in the database (Attempt: " + numberOfAttempts + ")");
+                }
+            }
+            catch(Exception exception){
+                System.out.println("Exception caught!" + exception.getMessage());
+                userStatement.setText("There is no such user in the database (Attempt: " + numberOfAttempts + ")");
+            }
+        };
+
+        userField.addActionListener(action);
+        loginButton.addActionListener(action);
+
+        findUserPanel.add(usernameLabel);
+        findUserPanel.add(userField);
+        findUserPanel.setLayout(new BoxLayout(findUserPanel, BoxLayout.Y_AXIS));
+        findUserPanel.add(loginButton);
+
+        findPanelMessage.setLayout(new BoxLayout(findPanelMessage, BoxLayout.Y_AXIS));
+        findPanelMessage.add(userStatement);
+
+        Panel deletePanel = new Panel();
+        Label deleteInfo = new Label("Are you sure you want to delete this user? If yes press the button below...");
+        Button deleteButton = new Button("Delete user");
+        deleteButton.addActionListener(e -> {
+            try {
+                if (userToEdit.getUserPermissionsLevel() == 0) {
+                    // TODO funkcja usuwajaca pacjenta
+                    //DataBaseHandlingClass.RemovePatientFromDB(connection, admin, userToEdit);
+                    deleteInfo.setText("Deletion of patient: " + userToEdit.getUserLogin() + ", was successful");
+                } else if (userToEdit.getUserPermissionsLevel() == 1) {
+                    // TODO funkcja usuwajaca ortodonte
+                    User adminorthodontist = DataBaseHandlingClass.LogInUser(connection, "adminortodonta", "admin");
+                    deleteInfo.setText("Deletion of orthodontist: " + userToEdit.getUserLogin() + ", was successful");
+                    //DataBaseHandlingClass.RemoveOrthodontistFromDB(connection, admin, userToEdit, adminorthodontist);
+                } else if (userToEdit.getUserPermissionsLevel() == 2) {
+                    // TODO funkcja usuwajaca dewelopera
+                    try {
+                        if (userToEdit.getUserLogin().equals(admin.getUserLogin()))
+                            throw new Exception();
+                        //DataBaseHandlingClass.RemoveAdministratorFromDB(connection, admin, userToEdit);
+                        deleteInfo.setText("Deletion of developer: " + userToEdit.getUserLogin() + ", was successful");
+                    } catch (Exception exception) {
+                        System.out.println("Exception caught!");
+                    }
+                }
+            }
+            catch(Exception exception){
+                System.out.println("Exception caught!");
+            }
+
+        });
+        deletePanel.add(deleteInfo);
+        deletePanel.add(deleteButton);
+        deletePanel.setLayout(new BoxLayout(deletePanel, BoxLayout.Y_AXIS));
+
+
+        frame.removeAll();
+        frame.add(findUserPanel, BorderLayout.NORTH);
+        frame.add(findPanelMessage, BorderLayout.CENTER);
+        frame.add(welcomePanel, BorderLayout.SOUTH);
+        frame.add(deletePanel);
         addExitButtonDeveloper();
         frame.setLayout(new BoxLayout(frame, BoxLayout.Y_AXIS));
         frame.setVisible(true);
@@ -684,7 +918,6 @@ public class GUI{
     public void loginScreen() {
         enteredUsername = "null";
         enteredPassword = "null";
-
         Frame loginFrame = new Frame("Login Screen");
 
         Panel welcomePanel = new Panel();
@@ -726,10 +959,7 @@ public class GUI{
                     }
                 }
 
-                if(user == null){
-                    loginStatement.setText("\t\t(Attempt: " + numberOfAttempts + ")");
-                }
-                else if (user.getUserPermissionsLevel()==0){
+                if (user.getUserPermissionsLevel()==0){
                     numberOfAttempts = 0;
                     loginFrame.setVisible(false);
                     loginFrame.dispose();
@@ -749,7 +979,6 @@ public class GUI{
                 }
             }
             catch(Exception exception){
-                System.out.println("exception caught " + exception.getMessage());
                 loginStatement.setText("\t\t(Attempt: " + numberOfAttempts + ")");
             }
         };
@@ -804,6 +1033,7 @@ public class GUI{
         frame.setMenuBar(menu);
         frame.setResizable(false);
         centralPanel.removeAll();
+        centralPanel.setLayout(new BoxLayout(centralPanel, BoxLayout.Y_AXIS));
         for(int i=0;i<5;i++)
             centralPanel.add(buttons[i]);
     }
@@ -821,6 +1051,7 @@ public class GUI{
         frame.setMenuBar(menu);
         frame.setResizable(false);
         centralPanel.removeAll();
+        centralPanel.setLayout(new BoxLayout(centralPanel, BoxLayout.Y_AXIS));
         for(int i=0;i<5;i++)
             centralPanel.add(buttons[i]);
     }
@@ -838,7 +1069,8 @@ public class GUI{
         frame.setMenuBar(menu);
         frame.setResizable(false);
         centralPanel.removeAll();
-        for(int i=0;i<5;i++)
+        centralPanel.setLayout(new BoxLayout(centralPanel, BoxLayout.Y_AXIS));
+        for(int i=0;i<7;i++)
             centralPanel.add(buttons[i]);
     }
 }

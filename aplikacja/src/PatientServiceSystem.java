@@ -7,7 +7,6 @@ public class PatientServiceSystem {
     public static void main(String [] args){
 
         GUI gui = new GUI();
-        gui.addMenuBars();
         gui.configureMenuBars();
         gui.loginScreen();
     }

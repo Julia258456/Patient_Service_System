@@ -21,12 +21,13 @@ public class GUI{
     int screenHeight = (int)(screenDimension.height * 0.7);
     Image icon = Toolkit.getDefaultToolkit().getImage(".//resources//icon.JPG");
     User user = new User();
+    User userToEdit = new User();
 
     /**
      * The basic Constructor which creates basic frame of Main menu.
      */
     public GUI() {
-        frame = new Frame("Main menu");
+        frame = new Frame("Patient Service System - Orthodontic office");
         frame.addWindowListener(
                 new WindowAdapter() {
                     @Override
@@ -37,7 +38,6 @@ public class GUI{
         );
         menu = new MenuBar();
         createPanels();
-        createMenu();
 
         fileMenu = new Menu("File");
         optionsMenu = new Menu("Options");
@@ -126,7 +126,7 @@ public class GUI{
 
         buttons[0].addActionListener(e -> {
             frame.removeAll();
-            findUserScreen();
+            findUser("Find user");
         });
 
         buttons[1].addActionListener(e -> {
@@ -159,43 +159,58 @@ public class GUI{
     }
 
     /**
-     * The method which creates Menu in main frame
-     */
-    private void createMenu(){
-        fileMenu = new Menu("File");
-        helpMenu = new Menu("Help");
-        optionsMenu = new Menu("Options");
-    }
-
-    /**
-     * The method which adds Menu Bars in main frame
-     */
-    public void addMenuBars(){
-        menu.add(fileMenu);
-        menu.add(optionsMenu);
-        menu.add(helpMenu);
-    }
-
-    /**
      * The method which configures Menu Bars in main frame
      */
     public void configureMenuBars(){
-        fileMenu.add(new MenuItem("Load file"));
-        MenuItem defaultItem = new MenuItem("Exit");
-        defaultItem.addActionListener(e -> {
+        fileMenu = new Menu("File");
+        helpMenu = new Menu("Help");
+        optionsMenu = new Menu("Options");
+
+        menu.add(fileMenu);
+        menu.add(optionsMenu);
+        menu.add(helpMenu);
+
+        MenuItem loadFileItem = new MenuItem("Load file");
+        MenuItem exitMenuItem = new MenuItem("Exit");
+        MenuItem resetTheGraphicalInterface = new MenuItem("Reset the graphical interface (Log out)");
+        MenuItem openSettingsItem = new MenuItem("Open settings");
+        MenuItem yourAccountItem = new MenuItem("Your account");
+        MenuItem helpItem = new MenuItem("Help");
+        MenuItem gettingStartedItem = new MenuItem("Getting started");
+        MenuItem checkForUpdatesItem = new MenuItem("Check for updates");
+        MenuItem aboutItem = new MenuItem("About");
+
+        loadFileItem.addActionListener(e -> {});
+        exitMenuItem.addActionListener(e -> {
             frame.dispose();
             frame.setVisible(false);
             System.exit(0);
         });
-        fileMenu.add(defaultItem);
-        optionsMenu.add(new MenuItem("Open settings"));
-        optionsMenu.add(new MenuItem("Reset the graphical interface"));
 
-        helpMenu.add(new MenuItem("Your account"));
-        helpMenu.add(new MenuItem("Help"));
-        helpMenu.add(new MenuItem("Getting started"));
-        helpMenu.add(new MenuItem("Check for updates"));
-        helpMenu.add(new MenuItem("About"));
+        fileMenu.add(loadFileItem);
+        fileMenu.add(exitMenuItem);
+
+        resetTheGraphicalInterface.addActionListener(e -> {
+            frame.dispose();
+            frame.setLayout(null);
+            loginScreen();
+        });
+        openSettingsItem.addActionListener(e -> {});
+
+        optionsMenu.add(resetTheGraphicalInterface);
+        optionsMenu.add(openSettingsItem);
+
+        yourAccountItem.addActionListener(e -> {});
+        helpItem.addActionListener(e -> {});
+        gettingStartedItem.addActionListener(e -> {});
+        checkForUpdatesItem.addActionListener(e -> {});
+        aboutItem.addActionListener(e -> {});
+
+        helpMenu.add(yourAccountItem);
+        helpMenu.add(helpItem);
+        helpMenu.add(gettingStartedItem);
+        helpMenu.add(checkForUpdatesItem);
+        helpMenu.add(aboutItem);
     }
 
     /**
@@ -220,10 +235,9 @@ public class GUI{
         Button exitButton = new Button("Return to main menu");
         editUserPanel.add(exitButton);
         exitButton.addActionListener(e -> {
-            frame.dispose();
             frame.setLayout(null);
             runGUIDeveloper();
-
+            frame.setVisible(true);
         });
         frame.add(editUserPanel);
     }
@@ -231,7 +245,7 @@ public class GUI{
     /**
      * The method which is responsible for finding the user by e-mail address
      */
-    public void findUserScreen(){
+    public void findUser(String text){
         enteredUsername = "null";
         Connection connection = DataBaseHandlingClass.StartConnectionWithDB();
         User user = DataBaseHandlingClass.LogInUser(connection, "admin", "admin");
@@ -247,33 +261,31 @@ public class GUI{
 
         TextField userField = new TextField(20);
 
-        Button loginButton = new Button("Find User");
+        Button loginButton = new Button(text);
         ActionListener action = e -> {
             numberOfAttempts++;
             try {
                 enteredUsername = userField.getText();
-                User userToBeFound = new User();
 
                 boolean userFound = false;
                 assert list != null;
                 for(User userToFind: list){
                     if(userToFind.getUserLogin().equals(enteredUsername)){
                         userFound = true;
-                        userToBeFound = userToFind;
+                        userToEdit = userToFind;
                     }
                 }
                 if(userFound){
-                    userStatement.setText("You have found user: " + userToBeFound.getUserName() + " " + userToBeFound.getUserSurname() + ", with id: " + userToBeFound.getUserId());
+                    userStatement.setText("You have found user: " + userToEdit.getUserName() + " " + userToEdit.getUserSurname() + ", with id: " + userToEdit.getUserId());
+
                 }
                 else {
                     userStatement.setText("There is no such user in the database (Attempt: " + numberOfAttempts + ")");
-                    System.out.println("There is no such user in the database (Attempt: " + numberOfAttempts + ")");
                 }
             }
             catch(Exception exception){
                 System.out.println("Exception caught!" + exception.getMessage());
                 userStatement.setText("There is no such user in the database (Attempt: " + numberOfAttempts + ")");
-                System.out.println("There is no such user in the database (Attempt: " + numberOfAttempts + ")");
             }
         };
 
@@ -295,20 +307,72 @@ public class GUI{
         addExitButton();
         frame.setLayout(new BoxLayout(frame, BoxLayout.Y_AXIS));
         frame.setVisible(true);
-
     }
 
     /**
-     * The method
+     * The method which is responsible for editing the user's credentials
      */
     public void editUsers(){
-        addExitButton();
-        frame.setLayout(new BoxLayout(frame, BoxLayout.Y_AXIS));
+        userToEdit = null;
+        findUser("Find user to edit");
+        Panel editUserPanel = new Panel();
+        Label info = new Label("Please first find the user in database, then enter all of the following data to edit the user's credentials...");
+        editUserPanel.add(info);
+        Label username = new Label("New username: ");
+        TextField usernameTextField = new TextField();
+        Label password = new Label("New password: ");
+        TextField passwordTextField = new TextField();
+        Label name = new Label("New user's name: ");
+        TextField nameTextField = new TextField();
+        Label surname = new Label("New user's surname: ");
+        TextField surnameTextField = new TextField();
+        Label mobileNumber = new Label("New user's mobile number: ");
+        TextField mobileNumberTextField = new TextField();
+        Label mail = new Label("New user's mail: ");
+        TextField mailTextField = new TextField();
+        Label level = new Label("New user's level of permissions: ");
+        TextField levelTextField = new TextField();
+        editUserPanel.add(username);
+        editUserPanel.add(usernameTextField);
+        editUserPanel.add(password);
+        editUserPanel.add(passwordTextField);
+        editUserPanel.add(name);
+        editUserPanel.add(nameTextField);
+        editUserPanel.add(surname);
+        editUserPanel.add(surnameTextField);
+        editUserPanel.add(mobileNumber);
+        editUserPanel.add(mobileNumberTextField);
+        editUserPanel.add(mail);
+        editUserPanel.add(mailTextField);
+        editUserPanel.add(level);
+        editUserPanel.add(levelTextField);
+
+
+        editUserPanel.setLayout(new BoxLayout(editUserPanel, BoxLayout.Y_AXIS));
+
+        Button editUserButton = new Button("Edit user");
+        editUserPanel.add(editUserButton);
+        Label prompt = new Label("Please before editing the user find him in the database");
+        editUserPanel.add(prompt);
+
+        editUserButton.addActionListener(e -> {
+
+            // TODO funkcja ktora edytuje dane uzytkownika z bazy danych userToEdit
+            if(userToEdit != null)
+            {
+                prompt.setText("The edition was a success");
+            }
+            else
+                prompt.setText("There is no such user in the database (Editing is forbidden)");
+        });
+
+
+        frame.add(editUserPanel);
         frame.setVisible(true);
     }
 
     /**
-     * The method
+     * The method which is responsible for patient's mailbox
      */
     public void myMailboxPatient(){
         addExitButton();
@@ -317,7 +381,7 @@ public class GUI{
     }
 
     /**
-     * The method
+     * The method which is responsible for orthodontist's mailbox
      */
     public void myMailboxOrthodontist(){
         addExitButton();
@@ -326,7 +390,7 @@ public class GUI{
     }
 
     /**
-     * The method
+     * The method which is responsible for viewing and editing developer's credentials
      */
     public void myProfileDeveloper(){
         addExitButton();
@@ -335,7 +399,7 @@ public class GUI{
     }
 
     /**
-     * The method
+     * The method which is responsible for viewing and editing patient's credentials
      */
     public void myProfilePatient(){
         addExitButton();
@@ -344,7 +408,7 @@ public class GUI{
     }
 
     /**
-     * The method
+     * The method which is responsible for viewing and editing orthodontist's credentials
      */
     public void myProfileOrthodontist(){
         addExitButton();
@@ -353,7 +417,7 @@ public class GUI{
     }
 
     /**
-     * The method
+     * The method which is responsible for viewing patient's visits
      */
     public void myVisitsPatient(){
         addExitButton();
@@ -362,7 +426,7 @@ public class GUI{
     }
 
     /**
-     * The method
+     * The method is responsible for viewing and editing orthodontist's visits
      */
     public void myVisitsOrthodontist(){
         addExitButton();
@@ -402,8 +466,7 @@ public class GUI{
                 User user = DataBaseHandlingClass.LogInUser(connection, enteredUsername, enteredPassword);
 
                 if(user == null){
-                    loginStatement.setText("Your data is wrong (Attempt: " + numberOfAttempts + ")");
-                    System.out.println("Your data is wrong (Attempt: " + numberOfAttempts + ")");
+                    loginStatement.setText("(Attempt: " + numberOfAttempts + ")");
                 }
                 else if (user.getUserPermissionsLevel()==0){
                     numberOfAttempts = 0;
@@ -425,8 +488,7 @@ public class GUI{
                 }
             }
             catch(Exception exception){
-                loginStatement.setText("Your data is wrong (Attempt: " + numberOfAttempts + ")");
-                System.out.println("Your data is wrong (Attempt: " + numberOfAttempts + ")");
+                loginStatement.setText("(Attempt: " + numberOfAttempts + ")");
             }
         };
 

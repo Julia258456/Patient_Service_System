@@ -618,6 +618,8 @@ public class GUI{
         TextField mobileNumberTextField = new TextField("null");
         Label mail = new Label("New user's mail: ");
         TextField mailTextField = new TextField("null");
+        Label address = new Label("New user's address: ");
+        TextField addressTextField = new TextField("null");
         Label level = new Label("New user's level of permissions: ");
         TextField levelTextField = new TextField("null");
 
@@ -640,6 +642,7 @@ public class GUI{
                         mobileNumberTextField.setText(userToEdit.getUserTelephoneNumber());
                         mailTextField.setText(userToEdit.getUserEmail());
                         levelTextField.setText(Integer.toString(userToEdit.getUserId()));
+                        addressTextField.setText(userToEdit.getUserAddress());
                     }
                 }
                 if(userFound){
@@ -677,6 +680,8 @@ public class GUI{
         editUserPanel.add(mobileNumberTextField);
         editUserPanel.add(mail);
         editUserPanel.add(mailTextField);
+        editUserPanel.add(address);
+        editUserPanel.add(addressTextField);
         editUserPanel.add(level);
         editUserPanel.add(levelTextField);
 
@@ -700,6 +705,7 @@ public class GUI{
                     userToAdd.setUserPermissionsLevel(Integer.parseInt(levelTextField.getText()));
                     userToAdd.setUserTelephoneNumber(mobileNumberTextField.getText());
                     userToAdd.setUserId(userToEdit.getUserId());
+                    userToAdd.setUserAddress(userToEdit.getUserAddress());
                     DataBaseHandlingClass.EditUserInfoInDB(connection, userToEdit, userToAdd);
                     prompt.setText("The edition was a success");
                 } else
@@ -785,7 +791,7 @@ public class GUI{
                     User userToAdd = new User();
                     userToAdd.setUserName(nameTextField.getText());
                     userToAdd.setUserSurname(surnameTextField.getText());
-                    userToAdd.setUserPassword(passwordTextField.getText());
+                    userToAdd.setUserAddress(addressTextField.getText());
                     userToAdd.setUserEmail(mailTextField.getText());
                     userToAdd.setUserTelephoneNumber(mobileNumberTextField.getText());
                     userToAdd.setUserId(userToEdit.getUserId());
@@ -854,7 +860,7 @@ public class GUI{
                     User userToAdd = new User();
                     userToAdd.setUserName(nameTextField.getText());
                     userToAdd.setUserSurname(surnameTextField.getText());
-                    userToAdd.setUserPassword(passwordTextField.getText());
+                    userToAdd.setUserAddress(addressTextField.getText());
                     userToAdd.setUserEmail(mailTextField.getText());
                     userToAdd.setUserTelephoneNumber(mobileNumberTextField.getText());
                     userToAdd.setUserId(userToEdit.getUserId());
@@ -923,7 +929,7 @@ public class GUI{
                     User userToAdd = new User();
                     userToAdd.setUserName(nameTextField.getText());
                     userToAdd.setUserSurname(surnameTextField.getText());
-                    userToAdd.setUserPassword(passwordTextField.getText());
+                    userToAdd.setUserAddress(addressTextField.getText());
                     userToAdd.setUserEmail(mailTextField.getText());
                     userToAdd.setUserTelephoneNumber(mobileNumberTextField.getText());
                     userToAdd.setUserId(userToEdit.getUserId());

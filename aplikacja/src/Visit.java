@@ -12,6 +12,15 @@ public class Visit {
 
     public Visit() {}
 
+    public Visit(int patientId, int orthodontistId, int userPatientId, int userOrthodontistId, Timestamp visitDate, String visitComment) {
+        this.patientId = patientId;
+        this.orthodontistId = orthodontistId;
+        this.userPatientId = userPatientId;
+        this.userOrthodontistId = userOrthodontistId;
+        this.visitDate = visitDate;
+        this.visitComment = visitComment;
+    }
+
     public Visit(int visitId, int patientId, int orthodontistId, int userPatientId, int userOrthodontistId, Timestamp visitDate, String visitComment) {
         this.visitId = visitId;
         this.patientId = patientId;

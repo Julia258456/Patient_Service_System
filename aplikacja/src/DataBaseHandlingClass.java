@@ -90,6 +90,38 @@ public class DataBaseHandlingClass {
     }
 
     /**
+     * The method which allows the patient to get the data of his orthodontist from the database.
+     * @param connection Connection class object necessary to access the database
+     * @param patient User object - the patient's data
+     * @return User object (if method was successful) or null (if user provided incorrect input/connection with database failed)
+     */
+    public static User SearchForOrthodontistOfPatient(Connection connection, User patient){
+        try {
+            Statement statement = connection.createStatement();
+            Statement statement1 = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM pacjenci WHERE user_id_pacjenta = " + patient.getUserId());
+            if (resultSet.next()) {
+                ResultSet resultSet1 = statement1.executeQuery("SELECT * FROM users WHERE idUzytkownika = "
+                        + resultSet.getInt("user_id_ortodonty"));
+                if (resultSet1.next()) {
+                    User orthodontist = new User(resultSet1.getInt("idUzytkownika"),
+                            resultSet1.getString("nazwaUzytkownika"),
+                            resultSet1.getString("imieUzytkownika"),
+                            resultSet1.getString("nazwiskoUzytkownika"),
+                            resultSet1.getString("numerTelefonuUzytkownika"),
+                            resultSet1.getString("adresUzytkownika"),
+                            resultSet1.getString("emailUzytkownika"),
+                            resultSet1.getInt("poziomUprawnien"));
+                    return orthodontist;
+                }
+            }
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
      * The method which allows the administrator to get the list of all orthodontists from the database.
      * @param connection Connection class object necessary to access the database
      * @param admin User object - the administrator's data
@@ -201,6 +233,37 @@ public class DataBaseHandlingClass {
         try {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT * FROM odbyte_wizyty WHERE user_id_pacjenta = " + patient.getUserId());
+            List<Visit> visitList = new ArrayList();
+            while (resultSet.next()) {
+                Visit visit = new Visit(resultSet.getInt("idWizyty"),
+                        resultSet.getInt("pacjent"),
+                        resultSet.getInt("ortodonta"),
+                        resultSet.getInt("user_id_pacjenta"),
+                        resultSet.getInt("user_id_ortodonty"),
+                        resultSet.getTimestamp("dataWizyty"),
+                        resultSet.getString("komentarz"));
+                visitList.add(visit);
+            }
+            return visitList;
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * The method which allows the orthodontist to get the list of all his visits from the database.
+     * @param connection Connection class object necessary to access the database
+     * @param orthodontist User object - the orthodontist whose visits the method is supposed to return
+     * @return List<Wizyta> object (if method was successful) or null (if user provided incorrect input/connection with database failed)
+     */
+    public static List<Visit> SearchForVisitsOfPOrthodontist(Connection connection, User orthodontist){
+        if (orthodontist.getUserPermissionsLevel() != 1){
+            return null;
+        }
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM odbyte_wizyty WHERE user_id_ortodonty = " + orthodontist.getUserId());
             List<Visit> visitList = new ArrayList();
             while (resultSet.next()) {
                 Visit visit = new Visit(resultSet.getInt("idWizyty"),
@@ -577,6 +640,69 @@ public class DataBaseHandlingClass {
         return false;
     }
 
+    /**
+     * The method which allows adding new visit to the database.
+     * @param connection Connection class object necessary to access the database
+     * @param visit Visit object - the visit to be added to the database
+     * @return boolean true (if method was successful) or false (if user provided incorrect input/connection with database failed)
+     */
+    public static boolean AddNewVisitToDB(Connection connection, Visit visit) {
+        try {
+            Statement statement = connection.createStatement();
+            Statement statement1 = connection.createStatement();
+            statement.executeUpdate("INSERT INTO odbyte_wizyty (pacjent, ortodonta, user_id_pacjenta, user_id_ortodonty, dataWizyty, komentarz) " +
+                    "VALUES (" + visit.getPatientId() + ", " + visit.getOrthodontistId() + ", " + visit.getUserPatientId() + ", "
+                    + visit.getUserOrthodontistId() + ", \"" + visit.getVisitDate() + "\", \"" + visit.getVisitComment() + "\");");
+            ResultSet resultSet1 = statement1.executeQuery("SELECT * FROM odbyte_wizyty WHERE pacjent = " + visit.getPatientId()
+                    + " AND ortodonta = " + visit.getOrthodontistId() + " AND dataWizyty = \"" + visit.getVisitDate() + "\" AND komentarz = \""
+                    + visit.getVisitComment() + "\";");
+            if(resultSet1.next()){
+                visit.setVisitId(resultSet1.getInt("idWizyty"));
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 
+    /**
+     * The method which allows removing the visit from the database.
+     * @param connection Connection class object necessary to access the database
+     * @param visit Visit object - the visit to be removed from the database
+     * @return boolean true (if method was successful) or false (if user provided incorrect input/connection with database failed)
+     */
+    public static boolean RemoveVisitFromDB(Connection connection, Visit visit){
+        try {
+            Statement statement = connection.createStatement();
+            statement.executeUpdate("DELETE FROM odbyte_wizyty WHERE idWizyty = " + visit.getVisitId());
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 
+    // jeszcze nie działa
+    /*public static boolean AddNewVisitToDB(Connection connection, User orthodontist, User patient) {
+        if (orthodontist.getUserPermissionsLevel() != 1) {
+            return false;
+        }
+        try {
+            Statement statement = connection.createStatement();
+            Statement statement1 = connection.createStatement();
+            Statement statement2 = connection.createStatement();
+            Statement statement3 = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM ortodonci WHERE user_id = " + orthodontist.getUserId() + ";");
+            ResultSet resultSet1 = statement1.executeQuery("SELECT * FROM pacjenci WHERE user_id_pacjenta = " + patient.getUserId() + ";");
+            if(resultSet.next() && resultSet1.next()){
+                statement2.executeUpdate("INSERT INTO odbyte_wizyty (pacjent, ortodonta, user_id_pacjenta, user_id_ortodonty, dataWizyty, komentarz) " +
+                        "VALUES (" + resultSet1.getInt("idPacjenta") + ");");
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }*/
 }

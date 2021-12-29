@@ -232,9 +232,10 @@ public class DataBaseHandlingClass {
         }
         try {
             Statement statement = connection.createStatement();
-            Statement statement1 = connection.createStatement();
-            Statement statement2 = connection.createStatement();
-            statement.executeUpdate("UPDATE users SET imieUzytkownika = \"" + userNewData.getUserName() + "\", nazwiskoUzytkownika = \"" + userNewData.getUserSurname() + "\", numerTelefonuUzytkownika = \"" + userNewData.getUserTelephoneNumber() + "\", adresUzytkownika = \"" + userNewData.getUserAddress() + "\", emailUzytkownika = \"" + userNewData.getUserEmail() + "\" WHERE idUzytkownika = " + userNewData.getUserId() + ";");
+            statement.executeUpdate("UPDATE users SET hasloUzytkownika = \"" + userNewData.getUserPassword() + "\" , imieUzytkownika = \""
+                    + userNewData.getUserName() + "\", nazwiskoUzytkownika = \"" + userNewData.getUserSurname() + "\", numerTelefonuUzytkownika = \""
+                    + userNewData.getUserTelephoneNumber() + "\", adresUzytkownika = \"" + userNewData.getUserAddress() + "\", emailUzytkownika = \""
+                    + userNewData.getUserEmail() + "\" WHERE idUzytkownika = " + userNewData.getUserId() + ";");
             return userNewData;
         } catch(Exception e){
             e.printStackTrace();
@@ -575,5 +576,7 @@ public class DataBaseHandlingClass {
         }
         return false;
     }
+
+
 
 }

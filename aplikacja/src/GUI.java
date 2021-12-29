@@ -416,8 +416,12 @@ public class GUI{
         editUserButton.addActionListener(e -> {
 
             try {
+                if( Integer.parseInt(levelTextField.getText())>3 || Integer.parseInt(levelTextField.getText())<0 )
+                    throw new Exception();
+
                 if (!levelTextField.getText().isEmpty() && !mailTextField.getText().isEmpty() && !mobileNumberTextField.getText().isEmpty() && !surnameTextField.getText().isEmpty() &&
                         !nameTextField.getText().isEmpty() && !passwordTextField.getText().isEmpty() && !usernameTextField.getText().isEmpty()) {
+
 
                     Connection connection = DataBaseHandlingClass.StartConnectionWithDB();
                     User admin = DataBaseHandlingClass.LogInUser(connection, "admin", "admin");
@@ -1035,7 +1039,7 @@ public class GUI{
                 }
             }
             catch(Exception exception){
-                loginStatement.setText("\t\t(Attempt: " + numberOfAttempts + ")");
+                loginStatement.setText("Your input is wrong (Attempt: " + numberOfAttempts + ")");
             }
         };
 

@@ -377,25 +377,58 @@ public class DataBaseHandlingClass {
         return false;
     }
 
-    // jeszcze nie działa!!!
-    /*
-    public static boolean RemoveOrthodontistFromDB(Connection connection, User admin, User orthodontist){
-        if ((admin.getUserPermissionsLevel() != 2) || (orthodontist.getUserPermissionsLevel() != 1)){
+    /**
+     * The method which allows the administrator to remove orthodontist's data from the database.
+     * @param connection Connection class object necessary to access the database
+     * @param admin User object - the administrator who is removing the orthodontist from the database
+     * @param orthodontistToRemove User object - the orthodontist whose data is being removed from the database
+     * @param orthodontistToPassPatients User object - the orthodontist who will treat the patients of removed orthodontist from now on
+     * @return boolean true (if method was successful) or false (if user provided incorrect input/connection with database failed)
+     */
+    public static boolean RemoveOrthodontistFromDB(Connection connection, User admin, User orthodontistToRemove, User orthodontistToPassPatients){
+        if ((admin.getUserPermissionsLevel() != 2) || (orthodontistToRemove.getUserPermissionsLevel() != 1) || (orthodontistToPassPatients.getUserPermissionsLevel() != 1)){
             return false;
         }
         try {
             Statement statement = connection.createStatement();
             Statement statement1 = connection.createStatement();
             Statement statement2 = connection.createStatement();
-            statement.executeUpdate("DELETE FROM odbyte_wizyty WHERE user_id_pacjenta = " + orthodontist.getUserId());
-            statement1.executeUpdate("DELETE FROM pacjenci WHERE user_id_pacjenta = " + orthodontist.getUserId());
-            statement2.executeUpdate("DELETE FROM users WHERE idUzytkownika = " + orthodontist.getUserId());
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM ortodonci WHERE user_id = " + orthodontistToPassPatients.getUserId() + ";");
+            while (resultSet.next()) {
+                statement1.executeUpdate("UPDATE pacjenci SET ortodonta_id = " + resultSet.getInt("idOrtodonty")
+                        + ", user_id_ortodonty = " + orthodontistToPassPatients.getUserId() + " WHERE user_id_ortodonty = "
+                        + orthodontistToRemove.getUserId() + ";");
+                statement2.executeUpdate("DELETE FROM ortodonci WHERE user_id = " + orthodontistToRemove.getUserId() + ";");
+                statement2.executeUpdate("DELETE FROM users WHERE idUzytkownika = " + orthodontistToRemove.getUserId() + ";");
+                return true;
+            }
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    /**
+     * The method which allows the administrator to remove other administrator's data from the database.
+     * @param connection Connection class object necessary to access the database
+     * @param admin User object - the administrator who is removing the other administrator from the database
+     * @param adminToRemove User object - the other administrator whose data is being removed from the database
+     * @return boolean true (if method was successful) or false (if user provided incorrect input/connection with database failed)
+     */
+    public static boolean RemoveAdministratorFromDB(Connection connection, User admin, User adminToRemove){
+        if ((admin.getUserPermissionsLevel() != 2) || (adminToRemove.getUserPermissionsLevel() != 2)){
+            return false;
+        }
+        try {
+            Statement statement = connection.createStatement();
+            Statement statement1 = connection.createStatement();
+            statement.executeUpdate("DELETE FROM administratorzy WHERE user_id = " + adminToRemove.getUserId());
+            statement1.executeUpdate("DELETE FROM users WHERE idUzytkownika = " + adminToRemove.getUserId());
             return true;
         } catch(Exception e){
             e.printStackTrace();
         }
         return false;
-    }*/
-
+    }
 
 }

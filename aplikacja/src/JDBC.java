@@ -15,15 +15,22 @@ public class JDBC {
           e.printStackTrace();
       }*/
         Connection c = DataBaseHandlingClass.StartConnectionWithDB();
-        User user = DataBaseHandlingClass.LogInUser(c,"tnowak", "qwerty1");
-        System.out.println(null == user);
-        List<User> list = DataBaseHandlingClass.SearchForPatientsOfOrthodontist(c, user);
+        User usero = DataBaseHandlingClass.LogInUser(c,"tnowak", "qwerty1");
+        System.out.println(null == usero);
+        List<User> list = DataBaseHandlingClass.SearchForPatientsOfOrthodontist(c, usero);
         List<Visit> list1 = DataBaseHandlingClass.SearchForVisitsOfPatient(c, list.get(0));
 
-        User user1 = DataBaseHandlingClass.LogInUser(c,"jkowal", "qwerty");
-        List<User> list2 = DataBaseHandlingClass.SearchForAllOrthodontists(c, user1);
-        List<User> list3 = DataBaseHandlingClass.SearchForAllUsers(c, user1);
-        List<User> list4 = DataBaseHandlingClass.SearchForAllPatients(c, user1);
+        User user1a = DataBaseHandlingClass.LogInUser(c,"jkowal", "qwerty");
+        List<User> list2 = DataBaseHandlingClass.SearchForAllOrthodontists(c, user1a);
+        List<User> list3 = DataBaseHandlingClass.SearchForAllUsers(c, user1a);
+        List<User> list4 = DataBaseHandlingClass.SearchForAllPatients(c, user1a);
+
+        //User user2o = DataBaseHandlingClass.LogInUser(c,"jnowic", "qwerty2");
+        //System.out.println(DataBaseHandlingClass.RemoveOrthodontistFromDB(c, user1a, user2o, usero));
+
+        //User user2a = DataBaseHandlingClass.LogInUser(c,"aakowal", "qwerty3");
+        //System.out.println(DataBaseHandlingClass.RemoveAdministratorFromDB(c, user1a, user2a));
+
         //User user2 = list4.get(0);
         //user2.setUserLogin("asdfg");
         //System.out.println(DataBaseHandlingClass.AddNewPatientToDB(c, user1, user2, user));

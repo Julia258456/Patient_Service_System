@@ -199,8 +199,9 @@ public class GUI{
         menu.add(helpMenu);
 
         MenuItem loadFileItem = new MenuItem("Load file");
+        MenuItem exportFileItem = new MenuItem("Export to pdf");
         MenuItem exitMenuItem = new MenuItem("Exit");
-        MenuItem resetTheGraphicalInterface = new MenuItem("Reset the graphical interface (Log out)");
+        MenuItem resetTheGraphicalInterface = new MenuItem("Reset the graphical user interface (Log out from the app)");
         MenuItem openSettingsItem = new MenuItem("Open settings");
         MenuItem yourAccountItem = new MenuItem("Your account");
         MenuItem helpItem = new MenuItem("Help");
@@ -208,7 +209,12 @@ public class GUI{
         MenuItem checkForUpdatesItem = new MenuItem("Check for updates");
         MenuItem aboutItem = new MenuItem("About");
 
-        loadFileItem.addActionListener(e -> {});
+        loadFileItem.addActionListener(e -> {
+            System.out.println("Button in progress...."); // TODO, maybe a method which can read png files
+        });
+        exportFileItem.addActionListener(e -> {
+            System.out.println("Button in progress...."); // TODO, maybe a method which can generate directly a pdf file
+        });
         exitMenuItem.addActionListener(e -> {
             frame.dispose();
             frame.setVisible(false);
@@ -216,6 +222,7 @@ public class GUI{
         });
 
         fileMenu.add(loadFileItem);
+        fileMenu.add(exportFileItem);
         fileMenu.add(exitMenuItem);
 
         resetTheGraphicalInterface.addActionListener(e -> {
@@ -223,16 +230,306 @@ public class GUI{
             frame.setLayout(null);
             loginScreen();
         });
-        openSettingsItem.addActionListener(e -> {});
+        openSettingsItem.addActionListener(e -> {
+            Frame settingsFrame = new Frame("Settings");
+            settingsFrame.setBackground(Color.gray);
+            settingsFrame.setVisible(true);
+            Label message = new Label("Change settings of the app..."); // TODO change settings
+            Button boldButton = new Button("upper case font");
+            boldButton.addActionListener(e1 -> boldButton.setName("UPPER CASE FONT"));
+            Button italicButton = new Button("LOWER CASE FONT");
+            italicButton.addActionListener(e1 -> italicButton.setName("lowercase font"));
+            Button romanBaselineButton = new Button("Roman Baseline");
+            romanBaselineButton.addActionListener(e1 -> romanBaselineButton.setName("RoMaNbAsLiNe"));
+            settingsFrame.add(boldButton);
+            settingsFrame.add(italicButton);
+            settingsFrame.add(romanBaselineButton);
+            settingsFrame.add(message);
+            settingsFrame.setLayout(new BoxLayout(settingsFrame, BoxLayout.Y_AXIS));
+            Point location = frame.getLocation();
+            location.x += frame.getWidth()/3;
+            location.y += frame.getHeight()/5;
+            settingsFrame.setLocation(location);
+            settingsFrame.setSize(frame.getWidth()/3,frame.getHeight()/3);
+            settingsFrame.setVisible(true);
+            settingsFrame.addWindowListener(new WindowListener() {
+                @Override
+                public void windowOpened(WindowEvent e) {
+
+                }
+
+                @Override
+                public void windowClosing(WindowEvent e) {
+                    settingsFrame.removeAll();
+                    settingsFrame.setVisible(false);
+                    settingsFrame.dispose();
+                }
+
+                @Override
+                public void windowClosed(WindowEvent e) {
+
+                }
+
+                @Override
+                public void windowIconified(WindowEvent e) {
+
+                }
+
+                @Override
+                public void windowDeiconified(WindowEvent e) {
+
+                }
+
+                @Override
+                public void windowActivated(WindowEvent e) {
+
+                }
+
+                @Override
+                public void windowDeactivated(WindowEvent e) {
+
+                }
+            });
+        });
 
         optionsMenu.add(resetTheGraphicalInterface);
         optionsMenu.add(openSettingsItem);
 
-        yourAccountItem.addActionListener(e -> {});
-        helpItem.addActionListener(e -> {});
-        gettingStartedItem.addActionListener(e -> {});
-        checkForUpdatesItem.addActionListener(e -> {});
-        aboutItem.addActionListener(e -> {});
+        yourAccountItem.addActionListener(e -> {
+            if(loggedUser.getUserPermissionsLevel()==0) {
+                frame.removeAll();
+                myProfilePatient();
+            }
+            else if(loggedUser.getUserPermissionsLevel()==1){
+                frame.removeAll();
+                myProfileOrthodontist();
+            }
+            else if(loggedUser.getUserPermissionsLevel()==2){
+                frame.removeAll();
+                myProfileDeveloper();
+            }
+        });
+        helpItem.addActionListener(e -> {
+            Frame helpFrame = new Frame("Help");
+            helpFrame.setBackground(Color.gray);
+            helpFrame.setVisible(true);
+            Label message = new Label("For assistance with the application, please contact the administrator");
+            helpFrame.add(message);
+            helpFrame.setLayout(new BoxLayout(helpFrame, BoxLayout.Y_AXIS));
+            Point location = frame.getLocation();
+            location.x += frame.getWidth()/3;
+            location.y += frame.getHeight()/5;
+            helpFrame.setLocation(location);
+            helpFrame.setSize(frame.getWidth()/3,frame.getHeight()/3);
+            helpFrame.setVisible(true);
+            helpFrame.addWindowListener(new WindowListener() {
+                @Override
+                public void windowOpened(WindowEvent e) {
+
+                }
+
+                @Override
+                public void windowClosing(WindowEvent e) {
+                    helpFrame.removeAll();
+                    helpFrame.setVisible(false);
+                    helpFrame.dispose();
+                }
+
+                @Override
+                public void windowClosed(WindowEvent e) {
+
+                }
+
+                @Override
+                public void windowIconified(WindowEvent e) {
+
+                }
+
+                @Override
+                public void windowDeiconified(WindowEvent e) {
+
+                }
+
+                @Override
+                public void windowActivated(WindowEvent e) {
+
+                }
+
+                @Override
+                public void windowDeactivated(WindowEvent e) {
+
+                }
+            });
+        });
+        gettingStartedItem.addActionListener(e -> {
+            Frame gettingStartedFrame = new Frame("Getting Started");
+            gettingStartedFrame.setBackground(Color.gray);
+            gettingStartedFrame.setVisible(true);
+            Label message = new Label("For more instructions please read README.md file"); // TODO
+            gettingStartedFrame.add(message);
+            Point location = frame.getLocation();
+            location.x += frame.getWidth()/3;
+            location.y += frame.getHeight()/5;
+            gettingStartedFrame.setLocation(location);
+            gettingStartedFrame.setSize(frame.getWidth()/3,frame.getHeight()/3);
+            gettingStartedFrame.setVisible(true);
+            gettingStartedFrame.setLayout(new BoxLayout(gettingStartedFrame, BoxLayout.Y_AXIS));
+            gettingStartedFrame.addWindowListener(new WindowListener() {
+                @Override
+                public void windowOpened(WindowEvent e) {
+
+                }
+
+                @Override
+                public void windowClosing(WindowEvent e) {
+                    gettingStartedFrame.removeAll();
+                    gettingStartedFrame.setVisible(false);
+                    gettingStartedFrame.dispose();
+                }
+
+                @Override
+                public void windowClosed(WindowEvent e) {
+
+                }
+
+                @Override
+                public void windowIconified(WindowEvent e) {
+
+                }
+
+                @Override
+                public void windowDeiconified(WindowEvent e) {
+
+                }
+
+                @Override
+                public void windowActivated(WindowEvent e) {
+
+                }
+
+                @Override
+                public void windowDeactivated(WindowEvent e) {
+
+                }
+            });
+        });
+        checkForUpdatesItem.addActionListener(e -> {
+            Frame updateFrame = new Frame("Check for updates");
+            updateFrame.setBackground(Color.gray);
+            updateFrame.setVisible(true);
+            Label message = new Label("You have the latest version: 1.00204021424");
+            updateFrame.add(message);
+            updateFrame.setLayout(new BoxLayout(updateFrame, BoxLayout.Y_AXIS));
+            updateFrame.setBackground(Color.gray);
+            updateFrame.setResizable(false);
+            Point location = frame.getLocation();
+            location.x += frame.getWidth()/3;
+            location.y += frame.getHeight()/5;
+            updateFrame.setLocation(location);
+            updateFrame.setSize(frame.getWidth()/3,frame.getHeight()/3);
+            updateFrame.setVisible(true);
+            updateFrame.addWindowListener(new WindowListener() {
+                @Override
+                public void windowOpened(WindowEvent e) {
+
+                }
+
+                @Override
+                public void windowClosing(WindowEvent e) {
+                    updateFrame.setVisible(false);
+                    updateFrame.removeAll();
+                    updateFrame.dispose();
+                }
+
+                @Override
+                public void windowClosed(WindowEvent e) {
+
+                }
+
+                @Override
+                public void windowIconified(WindowEvent e) {
+
+                }
+
+                @Override
+                public void windowDeiconified(WindowEvent e) {
+
+                }
+
+                @Override
+                public void windowActivated(WindowEvent e) {
+
+                }
+
+                @Override
+                public void windowDeactivated(WindowEvent e) {
+
+                }
+            });
+
+
+        });
+        aboutItem.addActionListener(e -> {
+            Frame aboutFrame = new Frame("About Patient Service System - Orthodontic office");
+            Panel aboutPanel = new Panel();
+            Label message = new Label("Build #OP-4214.2421323, built on January 10, 2022");
+            Label message2 = new Label("Runtime version: 1.00312313123 amd64");
+            Label message3 = new Label("Powered by open-source software");
+            Label message4 = new Label("Copyright © 2022-2042 Orthodontic office systems s.r.o.");
+
+            aboutPanel.add(message);
+            aboutPanel.add(message2);
+            aboutPanel.add(message3);
+            aboutPanel.add(message4);
+            aboutFrame.setBackground(Color.gray);
+            aboutFrame.setResizable(false);
+            Point location = frame.getLocation();
+            location.x += frame.getWidth()/3;
+            location.y += frame.getHeight()/5;
+            aboutFrame.setLocation(location);
+            aboutFrame.setSize(frame.getWidth()/3,frame.getHeight()/3);
+            aboutPanel.setVisible(true);
+            aboutFrame.setVisible(true);
+            aboutFrame.add(aboutPanel);
+            aboutFrame.setLayout(new BoxLayout(aboutFrame, BoxLayout.Y_AXIS));
+            aboutFrame.addWindowListener(new WindowListener() {
+                @Override
+                public void windowOpened(WindowEvent e) {
+
+                }
+
+                @Override
+                public void windowClosing(WindowEvent e) {
+                    aboutFrame.setVisible(false);
+                    aboutFrame.removeAll();
+                    aboutFrame.dispose();
+                }
+
+                @Override
+                public void windowClosed(WindowEvent e) {
+                }
+
+                @Override
+                public void windowIconified(WindowEvent e) {
+
+                }
+
+                @Override
+                public void windowDeiconified(WindowEvent e) {
+
+                }
+
+                @Override
+                public void windowActivated(WindowEvent e) {
+
+                }
+
+                @Override
+                public void windowDeactivated(WindowEvent e) {
+
+                }
+            });
+        });
 
         helpMenu.add(yourAccountItem);
         helpMenu.add(helpItem);

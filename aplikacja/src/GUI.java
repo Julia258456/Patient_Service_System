@@ -4,6 +4,9 @@ import java.awt.event.*;
 import java.sql.Connection;
 import java.util.List;
 
+/**
+ * The main class which represents graphical user interface
+ */
 public class GUI{
     Frame frame;
     MenuBar menu;
@@ -52,15 +55,18 @@ public class GUI{
         buttons[4] = new Button("Exit the program");
 
         buttons[0].addActionListener(e -> {
-
+            frame.removeAll();
+            myVisitsOrthodontist();
         });
 
         buttons[1].addActionListener(e -> {
-
+            frame.removeAll();
+            myMailboxOrthodontist();
         });
 
         buttons[2].addActionListener(e -> {
-
+            frame.removeAll();
+            myProfileOrthodontist();
         });
 
         buttons[3].addActionListener(e -> {
@@ -84,15 +90,18 @@ public class GUI{
         buttons[4] = new Button("Exit the program");
 
         buttons[0].addActionListener(e -> {
-
+            frame.removeAll();
+            myVisitsPatient();
         });
 
         buttons[1].addActionListener(e -> {
-
+            frame.removeAll();
+            myMailboxPatient();
         });
 
         buttons[2].addActionListener(e -> {
-
+            frame.removeAll();
+            myProfilePatient();
         });
 
         buttons[3].addActionListener(e -> {
@@ -111,33 +120,30 @@ public class GUI{
     private void createButtonsDeveloper(){
         buttons[0] = new Button("Find user in database");
         buttons[1] = new Button("Edit users");
-        buttons[2] = new Button("My mailbox");
-        buttons[3] = new Button("My profile");
-        buttons[4] = new Button("Log out");
-        buttons[5] = new Button("Exit the program");
+        buttons[2] = new Button("My profile");
+        buttons[3] = new Button("Log out");
+        buttons[4] = new Button("Exit the program");
 
         buttons[0].addActionListener(e -> {
-            frame.dispose();
+            frame.removeAll();
             findUserScreen();
         });
 
         buttons[1].addActionListener(e -> {
-
+            frame.removeAll();
+            editUsers();
         });
 
         buttons[2].addActionListener(e -> {
-
+            frame.removeAll();
+            myProfileDeveloper();
         });
 
         buttons[3].addActionListener(e -> {
-
-        });
-
-        buttons[4].addActionListener(e -> {
             frame.dispose();
             loginScreen();
         });
-        buttons[5].addActionListener(e -> {
+        buttons[4].addActionListener(e -> {
             frame.dispose();
             System.exit(0);
         });
@@ -164,7 +170,7 @@ public class GUI{
     /**
      * The method which adds Menu Bars in main frame
      */
-    private void addMenuBars(){
+    public void addMenuBars(){
         menu.add(fileMenu);
         menu.add(optionsMenu);
         menu.add(helpMenu);
@@ -173,7 +179,7 @@ public class GUI{
     /**
      * The method which configures Menu Bars in main frame
      */
-    private void configureMenuBars(){
+    public void configureMenuBars(){
         fileMenu.add(new MenuItem("Load file"));
         MenuItem defaultItem = new MenuItem("Exit");
         defaultItem.addActionListener(e -> {
@@ -207,6 +213,22 @@ public class GUI{
     }
 
     /**
+     * The method which is responsible for adding exit buttons to GUI
+     */
+    public void addExitButton(){
+        Panel editUserPanel = new Panel();
+        Button exitButton = new Button("Return to main menu");
+        editUserPanel.add(exitButton);
+        exitButton.addActionListener(e -> {
+            frame.dispose();
+            frame.setLayout(null);
+            runGUIDeveloper();
+
+        });
+        frame.add(editUserPanel);
+    }
+
+    /**
      * The method which is responsible for finding the user by e-mail address
      */
     public void findUserScreen(){
@@ -215,7 +237,6 @@ public class GUI{
         User user = DataBaseHandlingClass.LogInUser(connection, "admin", "admin");
         assert user != null;
         List<User> list = DataBaseHandlingClass.SearchForAllUsers(connection, user);
-        Frame findUserFrame = new Frame("Find user by his username");
 
         Panel welcomePanel = new Panel();
         Panel findPanelMessage = new Panel();
@@ -264,34 +285,89 @@ public class GUI{
         findUserPanel.setLayout(new BoxLayout(findUserPanel, BoxLayout.Y_AXIS));
         findUserPanel.add(loginButton);
 
-        Button exitButton = new Button("Return to main menu");
-        exitButton.addActionListener(e -> {
-            findUserFrame.setVisible(false);
-            findUserFrame.dispose();
-            numberOfAttempts = 0;
-            runGUIDeveloper();
-        });
         findPanelMessage.setLayout(new BoxLayout(findPanelMessage, BoxLayout.Y_AXIS));
         findPanelMessage.add(userStatement);
-        findPanelMessage.add(exitButton);
 
-        findUserFrame.setLocation((screenWidth/4),(screenHeight/2));
-        findUserFrame.setIconImage(icon);
-        findUserFrame.add(findUserPanel, BorderLayout.CENTER);
-        findUserFrame.add(findPanelMessage, BorderLayout.SOUTH);
-        findUserFrame.add(welcomePanel,BorderLayout.NORTH);
-        findUserFrame.setSize((screenWidth),(screenHeight/2));
-        findUserFrame.setVisible(true);
-        findUserFrame.setResizable(false);
-        findUserFrame.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                super.windowClosing(e);
-                findUserFrame.setVisible(false);
-                findUserFrame.dispose();
-            }
+        frame.removeAll();
+        frame.add(findUserPanel, BorderLayout.NORTH);
+        frame.add(findPanelMessage, BorderLayout.CENTER);
+        frame.add(welcomePanel, BorderLayout.SOUTH);
+        addExitButton();
+        frame.setLayout(new BoxLayout(frame, BoxLayout.Y_AXIS));
+        frame.setVisible(true);
 
-        });
+    }
+
+    /**
+     * The method
+     */
+    public void editUsers(){
+        addExitButton();
+        frame.setLayout(new BoxLayout(frame, BoxLayout.Y_AXIS));
+        frame.setVisible(true);
+    }
+
+    /**
+     * The method
+     */
+    public void myMailboxPatient(){
+        addExitButton();
+        frame.setLayout(new BoxLayout(frame, BoxLayout.Y_AXIS));
+        frame.setVisible(true);
+    }
+
+    /**
+     * The method
+     */
+    public void myMailboxOrthodontist(){
+        addExitButton();
+        frame.setLayout(new BoxLayout(frame, BoxLayout.Y_AXIS));
+        frame.setVisible(true);
+    }
+
+    /**
+     * The method
+     */
+    public void myProfileDeveloper(){
+        addExitButton();
+        frame.setLayout(new BoxLayout(frame, BoxLayout.Y_AXIS));
+        frame.setVisible(true);
+    }
+
+    /**
+     * The method
+     */
+    public void myProfilePatient(){
+        addExitButton();
+        frame.setLayout(new BoxLayout(frame, BoxLayout.Y_AXIS));
+        frame.setVisible(true);
+    }
+
+    /**
+     * The method
+     */
+    public void myProfileOrthodontist(){
+        addExitButton();
+        frame.setLayout(new BoxLayout(frame, BoxLayout.Y_AXIS));
+        frame.setVisible(true);
+    }
+
+    /**
+     * The method
+     */
+    public void myVisitsPatient(){
+        addExitButton();
+        frame.setLayout(new BoxLayout(frame, BoxLayout.Y_AXIS));
+        frame.setVisible(true);
+    }
+
+    /**
+     * The method
+     */
+    public void myVisitsOrthodontist(){
+        addExitButton();
+        frame.setLayout(new BoxLayout(frame, BoxLayout.Y_AXIS));
+        frame.setVisible(true);
     }
 
     /**
@@ -395,9 +471,8 @@ public class GUI{
      * The method which is responsible for running main frame of GUI for Orthodontist
      */
     public void runGUIOrthodontist() {
+        frame.removeAll();
         createButtonsOrthodontist();
-        addMenuBars();
-        configureMenuBars();
         addPanels();
 
         frame.setIconImage(icon);
@@ -414,9 +489,8 @@ public class GUI{
      * The method which is responsible for running main frame of GUI for Patient
      */
     public void runGUIPatient() {
+        frame.removeAll();
         createButtonsPatient();
-        addMenuBars();
-        configureMenuBars();
         addPanels();
 
         frame.setIconImage(icon);
@@ -433,18 +507,16 @@ public class GUI{
      * The method which is responsible for running main frame of GUI for Developer
      */
     public void runGUIDeveloper() {
+        frame.removeAll();
         createButtonsDeveloper();
-        addMenuBars();
-        configureMenuBars();
         addPanels();
-
         frame.setIconImage(icon);
         frame.setLocation((screenWidth/5),(screenHeight/4));
         frame.setSize(screenWidth,screenHeight);
         frame.setMenuBar(menu);
         frame.setResizable(false);
         centralPanel.removeAll();
-        for(int i=0;i<6;i++)
+        for(int i=0;i<5;i++)
             centralPanel.add(buttons[i]);
     }
 }

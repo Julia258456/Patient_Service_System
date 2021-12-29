@@ -2,14 +2,14 @@ public class User {
 
     // private fields of User containing all of credentials
     private int userId;
-    private String userLogin;
-    private String userPassword;
-    private String userName;
-    private String userSurname;
-    private String userTelephoneNumber;
-    private String userAddress;
-    private String userEmail;
-    private int userPermissionsLevel; // 0 - patient, 1 - orthodontist, 2 - dev
+    private String userLogin = "null";
+    private String userPassword = "null";
+    private String userName = "null";
+    private String userSurname = "null";
+    private String userTelephoneNumber = "null";
+    private String userAddress = "null";
+    private String userEmail = "null";
+    private int userPermissionsLevel = 0; // 0 - patient, 1 - orthodontist, 2 - dev
 
     public User() {
     }

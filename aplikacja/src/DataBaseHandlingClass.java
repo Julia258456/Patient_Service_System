@@ -220,6 +220,29 @@ public class DataBaseHandlingClass {
     }
 
     /**
+     * The method which allows the user to change his own data in the database.
+     * @param connection Connection class object necessary to access the database
+     * @param userOldData User object - the old data which should be changed
+     * @param userNewData User object - the new data which should be saved in the database
+     * @return User object (if method was successful) or null (if user provided incorrect input/connection with database failed)
+     */
+    public static User EditUserInfoInDB(Connection connection, User userOldData, User userNewData){
+        if ( userOldData.getUserId() != userNewData.getUserId()){
+            return null;
+        }
+        try {
+            Statement statement = connection.createStatement();
+            Statement statement1 = connection.createStatement();
+            Statement statement2 = connection.createStatement();
+            statement.executeUpdate("UPDATE users SET imieUzytkownika = \"" + userNewData.getUserName() + "\", nazwiskoUzytkownika = \"" + userNewData.getUserSurname() + "\", numerTelefonuUzytkownika = \"" + userNewData.getUserTelephoneNumber() + "\", adresUzytkownika = \"" + userNewData.getUserAddress() + "\", emailUzytkownika = \"" + userNewData.getUserEmail() + "\" WHERE idUzytkownika = " + userNewData.getUserId() + ";");
+            return userNewData;
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
      * The method which allows the administrator to add new orthodontist/administrator to the database.
      * @param connection Connection class object necessary to access the database
      * @param admin User object - the administrator who is adding new orthodontist/administrator  to the database

@@ -220,6 +220,128 @@ public class DataBaseHandlingClass {
     }
 
     /**
+     * The method which allows the administrator to add new orthodontist/administrator to the database.
+     * @param connection Connection class object necessary to access the database
+     * @param admin User object - the administrator who is adding new orthodontist/administrator  to the database
+     * @param newUser User object - the orthodontist/administrator whose data the method is supposed to insert into the database
+     * @return boolean true (if method was successful) or false (if user provided incorrect input/connection with database failed)
+     */
+    public static boolean AddNewUserToDB(Connection connection, User admin, User newUser){
+        if ((admin.getUserPermissionsLevel() == 2) && (newUser.getUserPermissionsLevel() == 1)) {
+            try {
+                Statement statement = connection.createStatement();
+                Statement statement1 = connection.createStatement();
+                Statement statement2 = connection.createStatement();
+                Statement statement3 = connection.createStatement();
+                ResultSet resultSet = statement.executeQuery("SELECT * FROM users WHERE nazwaUzytkownika = \"" + newUser.getUserLogin() + "\";");
+                if (resultSet.next()) {
+                    //System.out.println("Result set is not empty");
+                    return false;
+                } else {
+                    //System.out.println("result set is empty");
+                    statement2.executeUpdate("INSERT INTO users (nazwaUzytkownika, hasloUzytkownika, imieUzytkownika, "
+                            + "nazwiskoUzytkownika, numerTelefonuUzytkownika, adresUzytkownika, emailUzytkownika, "
+                            + "poziomUprawnien) " + "VALUES (\"" + newUser.getUserLogin() + "\", \""
+                            + newUser.getUserPassword() + "\",  \"" + newUser.getUserName() + "\",\""
+                            + newUser.getUserSurname() + "\", \"" + newUser.getUserTelephoneNumber()
+                            + "\", \"" + newUser.getUserAddress() + "\", \"" + newUser.getUserEmail()
+                            + "\", " + newUser.getUserPermissionsLevel() + ");");
+                    ResultSet resultSet1 = statement1.executeQuery("SELECT * FROM users WHERE nazwaUzytkownika = \"" + newUser.getUserLogin() + "\"");
+                    if (resultSet1.next()) {
+                        statement3.executeUpdate("INSERT INTO ortodonci (user_id) VALUES (" + resultSet1.getInt("idUzytkownika") + ");");
+                    }
+                    return true;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return false;
+        }
+        if ((admin.getUserPermissionsLevel() == 2) && (newUser.getUserPermissionsLevel() == 2)) {
+            try {
+                Statement statement = connection.createStatement();
+                Statement statement1 = connection.createStatement();
+                Statement statement2 = connection.createStatement();
+                Statement statement3 = connection.createStatement();
+                ResultSet resultSet = statement.executeQuery("SELECT * FROM users WHERE nazwaUzytkownika = \"" + newUser.getUserLogin() + "\";");
+                if (resultSet.next()) {
+                    //System.out.println("Result set is not empty");
+                    return false;
+                } else {
+                    //System.out.println("result set is empty");
+                    statement2.executeUpdate("INSERT INTO users (nazwaUzytkownika, hasloUzytkownika, imieUzytkownika, "
+                            + "nazwiskoUzytkownika, numerTelefonuUzytkownika, adresUzytkownika, emailUzytkownika, "
+                            + "poziomUprawnien) " + "VALUES (\"" + newUser.getUserLogin() + "\", \""
+                            + newUser.getUserPassword() + "\",  \"" + newUser.getUserName() + "\",\""
+                            + newUser.getUserSurname() + "\", \"" + newUser.getUserTelephoneNumber()
+                            + "\", \"" + newUser.getUserAddress() + "\", \"" + newUser.getUserEmail()
+                            + "\", " + newUser.getUserPermissionsLevel() + ");");
+                    ResultSet resultSet1 = statement1.executeQuery("SELECT * FROM users WHERE nazwaUzytkownika = \"" + newUser.getUserLogin() + "\"");
+                    if (resultSet1.next()) {
+                        statement3.executeUpdate("INSERT INTO administratorzy (user_id) VALUES (" + resultSet1.getInt("idUzytkownika") + ");");
+                    }
+                    return true;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return false;
+        }
+        return false;
+    }
+
+    /**
+     * The method which allows the administrator to add new patient to the database.
+     * @param connection Connection class object necessary to access the database
+     * @param admin User object - the administrator who is adding new patient to the database
+     * @param patient User object - the patient whose data the method is supposed to insert into the database
+     * @param orthodontist User object - the orthodontist
+     * @return boolean true (if method was successful) or false (if user provided incorrect input/connection with database failed)
+     */
+    public static boolean AddNewUserToDB(Connection connection, User admin, User patient, User orthodontist){
+        if ((admin.getUserPermissionsLevel() != 2) || (patient.getUserPermissionsLevel() != 0) || (orthodontist.getUserPermissionsLevel() != 1)){
+            return false;
+        }
+        try {
+
+            Statement statement = connection.createStatement();
+            Statement statement1 = connection.createStatement();
+            Statement statement2 = connection.createStatement();
+            Statement statement3 = connection.createStatement();
+            Statement statement4 = connection.createStatement();
+            int orthodontistUserId = 0;
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM users WHERE nazwaUzytkownika = \"" + patient.getUserLogin() + "\";");
+            if(resultSet.next()){
+                //System.out.println("Result set is not empty");
+                return false;
+            } else {
+                //System.out.println("result set is empty");
+                statement3.executeUpdate("INSERT INTO users (nazwaUzytkownika, hasloUzytkownika, imieUzytkownika, "
+                        + "nazwiskoUzytkownika, numerTelefonuUzytkownika, adresUzytkownika, emailUzytkownika, "
+                        + "poziomUprawnien) " + "VALUES (\"" + patient.getUserLogin() + "\", \""
+                        + patient.getUserPassword() + "\",  \"" + patient.getUserName() + "\",\""
+                        + patient.getUserSurname() + "\", \"" + patient.getUserTelephoneNumber()
+                        + "\", \"" + patient.getUserAddress() + "\", \"" + patient.getUserEmail()
+                        + "\", " + patient.getUserPermissionsLevel() + ");");
+                ResultSet resultSet1 = statement1.executeQuery("SELECT * FROM users WHERE nazwaUzytkownika = \"" + patient.getUserLogin() + "\"");
+                ResultSet resultSet2 = statement2.executeQuery("SELECT * FROM ortodonci WHERE user_id = " + orthodontist.getUserId());
+                while(resultSet2.next()) {
+                    orthodontistUserId = resultSet2.getInt("idOrtodonty");
+                }
+                if(resultSet1.next()) {
+                    statement4.executeUpdate("INSERT INTO pacjenci (user_id_pacjenta, user_id_ortodonty, ortodonta_id) "
+                            + "VALUES (" + resultSet1.getInt("idUzytkownika") + ", " + orthodontist.getUserId() + ", "
+                            + orthodontistUserId + ");");
+                }
+                return true;
+            }
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    /**
      * The method which allows the administrator to add new patient to the database.
      * @param connection Connection class object necessary to access the database
      * @param admin User object - the administrator who is adding new patient to the database
@@ -273,7 +395,7 @@ public class DataBaseHandlingClass {
     /**
      * The method which allows the administrator to add new orthodontist to the database.
      * @param connection Connection class object necessary to access the database
-     * @param admin User object - the administrator who is adding new patient to the database
+     * @param admin User object - the administrator who is adding new orthodontist to the database
      * @param orthodontist User object - the orthodontist whose data the method is supposed to insert into the database
      * @return boolean true (if method was successful) or false (if user provided incorrect input/connection with database failed)
      */
@@ -314,7 +436,7 @@ public class DataBaseHandlingClass {
     /**
      * The method which allows the administrator to add new administrator to the database.
      * @param connection Connection class object necessary to access the database
-     * @param admin User object - the administrator who is adding new patient to the database
+     * @param admin User object - the administrator who is adding new administrator to the database
      * @param newAdmin User object - the new administrator whose data the method is supposed to insert into the database
      * @return boolean true (if method was successful) or false (if user provided incorrect input/connection with database failed)
      */

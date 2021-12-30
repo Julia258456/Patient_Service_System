@@ -2,7 +2,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * The main class which represents graphical user interface
@@ -721,6 +723,7 @@ public class GUI{
 
         editUserButton.addActionListener(e -> {
 
+            Connection connection = DataBaseHandlingClass.StartConnectionWithDB();
             try {
                 if( Integer.parseInt(levelTextField.getText())>3 || Integer.parseInt(levelTextField.getText())<0 )
                     throw new Exception();
@@ -728,8 +731,6 @@ public class GUI{
                 if (!levelTextField.getText().isEmpty() && !mailTextField.getText().isEmpty() && !mobileNumberTextField.getText().isEmpty() && !surnameTextField.getText().isEmpty() &&
                         !nameTextField.getText().isEmpty() && !passwordTextField.getText().isEmpty() && !usernameTextField.getText().isEmpty()) {
 
-
-                    Connection connection = DataBaseHandlingClass.StartConnectionWithDB();
                     User admin = DataBaseHandlingClass.LogInUser(connection, "admin", "admin");
                     assert admin != null;
                     List<User> list = DataBaseHandlingClass.SearchForAllUsers(connection, admin);
@@ -776,7 +777,15 @@ public class GUI{
             }
             catch (Exception exception){
                 prompt.setText("A problem has arisen while adding a new user to database");
-                System.out.println("A problem has arisen while adding a new user to database");
+                System.out.println("A problem has arisen while adding a new user to database " + exception.getMessage());
+            }
+            finally{
+                try {
+                    assert connection != null;
+                    connection.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
             }
         });
 
@@ -794,7 +803,7 @@ public class GUI{
         Connection connection = DataBaseHandlingClass.StartConnectionWithDB();
         User admin = DataBaseHandlingClass.LogInUser(connection, "admin", "admin");
         assert admin != null;
-        List<User> list = DataBaseHandlingClass.SearchForAllUsers(connection, admin);
+        AtomicReference<List<User>> list = new AtomicReference<>(DataBaseHandlingClass.SearchForAllUsers(connection, admin));
 
         Panel welcomePanel = new Panel();
         Panel findPanelMessage = new Panel();
@@ -812,8 +821,8 @@ public class GUI{
                 enteredUsername = userField.getText();
 
                 boolean userFound = false;
-                assert list != null;
-                for(User userToFind: list){
+                assert list.get() != null;
+                for(User userToFind: list.get()){
                     if(userToFind.getUserLogin().equals(enteredUsername)){
                         userFound = true;
                         userToEdit = userToFind;
@@ -850,28 +859,25 @@ public class GUI{
         deleteButton.addActionListener(e -> {
             try {
                 if (userToEdit.getUserLogin().equals("admin") || userToEdit.getUserLogin().equals("adminOrthodontist"))
-                    throw new Exception();
+                    throw new Exception("Attempting to add a user who is already in the database");
 
                 if (userToEdit.getUserPermissionsLevel() == 0) {
                     DataBaseHandlingClass.RemovePatientFromDB(connection, admin, userToEdit);
-                    assert list != null;
-                    list.remove(userToEdit.getUserId()-1);
+                    list.set(DataBaseHandlingClass.SearchForAllUsers(connection, admin));
                     deleteInfo.setText("Deletion of patient: " + userToEdit.getUserLogin() + ", was successful");
                     userToEdit = null;
                 } else if (userToEdit.getUserPermissionsLevel() == 1) {
                     User adminOrthodontist = DataBaseHandlingClass.LogInUser(connection, "adminOrthodontist", "admin");
                     deleteInfo.setText("Deletion of orthodontist: " + userToEdit.getUserLogin() + ", was successful");
                     DataBaseHandlingClass.RemoveOrthodontistFromDB(connection, admin, userToEdit, adminOrthodontist);
-                    assert list != null;
-                    list.remove(userToEdit.getUserId()-1);
+                    list.set(DataBaseHandlingClass.SearchForAllUsers(connection, admin));
                     userToEdit = null;
                 } else if (userToEdit.getUserPermissionsLevel() == 2) {
                     try {
                         if (userToEdit.getUserLogin().equals(admin.getUserLogin()))
                             throw new Exception();
                         DataBaseHandlingClass.RemoveAdministratorFromDB(connection, admin, userToEdit);
-                        assert list != null;
-                        list.remove(userToEdit.getUserId()-1);
+                        list.set(DataBaseHandlingClass.SearchForAllUsers(connection, admin));
                         deleteInfo.setText("Deletion of developer: " + userToEdit.getUserLogin() + ", was successful");
                         userToEdit = null;
                     } catch (Exception exception) {
@@ -880,7 +886,15 @@ public class GUI{
                 }
             }
             catch(Exception exception){
-                System.out.println("Exception caught!");
+                System.out.println("Exception caught! " + exception.getMessage());
+            }
+            finally{
+                try {
+                    assert connection != null;
+                    connection.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
             }
 
         });
@@ -1030,6 +1044,14 @@ public class GUI{
             catch(Exception exception){
                 System.out.println("Problem has arisen during editing profile");
             }
+            finally {
+                try {
+                    assert connection != null;
+                    connection.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
         });
 
         frame.add(findUserPanel, BorderLayout.NORTH);
@@ -1102,6 +1124,7 @@ public class GUI{
         editUserPanel.add(editUserButton);
 
         editUserButton.addActionListener(e -> {
+            Connection connection = DataBaseHandlingClass.StartConnectionWithDB();
             try {
                 if (userToEdit != null) {
                     User userToAdd = new User();
@@ -1111,7 +1134,6 @@ public class GUI{
                     userToAdd.setUserEmail(mailTextField.getText());
                     userToAdd.setUserTelephoneNumber(mobileNumberTextField.getText());
                     userToAdd.setUserId(userToEdit.getUserId());
-                    Connection connection = DataBaseHandlingClass.StartConnectionWithDB();
                     DataBaseHandlingClass.EditUserInfoInDB(connection, userToEdit, userToAdd);
                     prompt.setText("The edition was a success");
                 } else
@@ -1119,6 +1141,14 @@ public class GUI{
             }
             catch(Exception exception){
                 System.out.println("Problem has arisen during editing profile");
+            }
+            finally {
+                try {
+                    assert connection != null;
+                    connection.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
             }
         });
 
@@ -1171,6 +1201,7 @@ public class GUI{
         editUserPanel.add(prompt);
 
         editUserButton.addActionListener(e -> {
+            Connection connection = DataBaseHandlingClass.StartConnectionWithDB();
             try {
                 if (userToEdit != null) {
                     User userToAdd = new User();
@@ -1180,7 +1211,6 @@ public class GUI{
                     userToAdd.setUserEmail(mailTextField.getText());
                     userToAdd.setUserTelephoneNumber(mobileNumberTextField.getText());
                     userToAdd.setUserId(userToEdit.getUserId());
-                    Connection connection = DataBaseHandlingClass.StartConnectionWithDB();
                     DataBaseHandlingClass.EditUserInfoInDB(connection, userToEdit, userToAdd);
                     prompt.setText("The edition was a success");
                 } else
@@ -1188,6 +1218,14 @@ public class GUI{
             }
             catch(Exception exception){
                 System.out.println("Problem has arisen during editing profile");
+            }
+            finally {
+                try {
+                    assert connection != null;
+                    connection.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
             }
         });
 
@@ -1240,6 +1278,7 @@ public class GUI{
         editUserPanel.add(prompt);
 
         editUserButton.addActionListener(e -> {
+            Connection connection = DataBaseHandlingClass.StartConnectionWithDB();
             try {
                 if (userToEdit != null) {
                     User userToAdd = new User();
@@ -1249,7 +1288,6 @@ public class GUI{
                     userToAdd.setUserEmail(mailTextField.getText());
                     userToAdd.setUserTelephoneNumber(mobileNumberTextField.getText());
                     userToAdd.setUserId(userToEdit.getUserId());
-                    Connection connection = DataBaseHandlingClass.StartConnectionWithDB();
                     DataBaseHandlingClass.EditUserInfoInDB(connection, userToEdit, userToAdd);
                     prompt.setText("The edition was a success");
                 } else
@@ -1257,6 +1295,14 @@ public class GUI{
             }
             catch(Exception exception){
                 System.out.println("Problem has arisen during editing profile");
+            }
+            finally {
+                try {
+                    assert connection != null;
+                    connection.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
             }
         });
 
@@ -1317,11 +1363,11 @@ public class GUI{
         Button loginButton = new Button("Login");
 
         ActionListener action = e -> {
+            Connection connection = DataBaseHandlingClass.StartConnectionWithDB();
             try {
                 enteredUsername = usernameField.getText();
                 enteredPassword = passwordField.getText();
                 numberOfAttempts++;
-                Connection connection = DataBaseHandlingClass.StartConnectionWithDB();
                 User user = DataBaseHandlingClass.LogInUser(connection, enteredUsername, enteredPassword);
                 assert user != null;
                 User admin = DataBaseHandlingClass.LogInUser(connection,"admin", "admin");
@@ -1363,6 +1409,15 @@ public class GUI{
             catch(Exception exception){
                 loginStatement.setText("Your input is wrong (Attempt: " + numberOfAttempts + ")");
             }
+            finally {
+                try {
+                    assert connection != null;
+                    connection.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+
         };
 
         welcomePanel.add(welcomeLabel);

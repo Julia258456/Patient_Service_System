@@ -234,16 +234,25 @@ public class GUI{
             Frame settingsFrame = new Frame("Settings");
             settingsFrame.setBackground(Color.gray);
             settingsFrame.setVisible(true);
-            Label message = new Label("Change settings of the app..."); // TODO change settings
-            Button boldButton = new Button("upper case font");
-            boldButton.addActionListener(e1 -> boldButton.setName("UPPER CASE FONT"));
-            Button italicButton = new Button("LOWER CASE FONT");
-            italicButton.addActionListener(e1 -> italicButton.setName("lowercase font"));
-            Button romanBaselineButton = new Button("Roman Baseline");
-            romanBaselineButton.addActionListener(e1 -> romanBaselineButton.setName("RoMaNbAsLiNe"));
-            settingsFrame.add(boldButton);
-            settingsFrame.add(italicButton);
-            settingsFrame.add(romanBaselineButton);
+            Label message = new Label("Change the size of the window"); // TODO change settings
+            Button normalButton = new Button("Standard (70% screen size)");
+            normalButton.addActionListener(e1 -> {
+                    frame.setSize(screenWidth,screenHeight);
+                    frame.setLayout(new BoxLayout(frame, BoxLayout.Y_AXIS));
+            });
+            Button greaterButton = new Button("Greater (90% screen size)");
+            greaterButton.addActionListener(e1 -> {
+                frame.setSize((int)(screenWidth*1.3),(int)(screenHeight*1.3));
+                frame.setLayout(new BoxLayout(frame, BoxLayout.Y_AXIS));
+            });
+            Button fullscreenButton = new Button("Fullscreen (100% screen size)");
+            fullscreenButton.addActionListener(e1 -> {
+                frame.setSize(screenDimension.width, screenDimension.height);
+                frame.setLayout(new BoxLayout(frame, BoxLayout.Y_AXIS));
+            });
+            settingsFrame.add(normalButton);
+            settingsFrame.add(greaterButton);
+            settingsFrame.add(fullscreenButton);
             settingsFrame.add(message);
             settingsFrame.setLayout(new BoxLayout(settingsFrame, BoxLayout.Y_AXIS));
             Point location = frame.getLocation();
@@ -252,7 +261,7 @@ public class GUI{
             settingsFrame.setLocation(location);
             settingsFrame.setSize(frame.getWidth()/3,frame.getHeight()/3);
             settingsFrame.setVisible(true);
-            settingsFrame.addWindowListener(new WindowListener() {
+            settingsFrame.addWindowListener(new WindowListener() { // TODO
                 @Override
                 public void windowOpened(WindowEvent e) {
 
@@ -322,7 +331,7 @@ public class GUI{
             helpFrame.setLocation(location);
             helpFrame.setSize(frame.getWidth()/3,frame.getHeight()/3);
             helpFrame.setVisible(true);
-            helpFrame.addWindowListener(new WindowListener() {
+            helpFrame.addWindowListener(new WindowListener() { // TODO
                 @Override
                 public void windowOpened(WindowEvent e) {
 
@@ -428,7 +437,7 @@ public class GUI{
             updateFrame.setLocation(location);
             updateFrame.setSize(frame.getWidth()/3,frame.getHeight()/3);
             updateFrame.setVisible(true);
-            updateFrame.addWindowListener(new WindowListener() {
+            updateFrame.addWindowListener(new WindowListener() { // TODO
                 @Override
                 public void windowOpened(WindowEvent e) {
 
@@ -494,7 +503,7 @@ public class GUI{
             aboutFrame.setLayout(new BoxLayout(aboutFrame, BoxLayout.Y_AXIS));
             aboutFrame.addWindowListener(new WindowListener() {
                 @Override
-                public void windowOpened(WindowEvent e) {
+                public void windowOpened(WindowEvent e) { // TODO
 
                 }
 
@@ -730,7 +739,7 @@ public class GUI{
                             throw new Exception();
                     }
 
-                    User adminOrthodontist = DataBaseHandlingClass.LogInUser(connection, "adminortodonta", "admin");
+                    User adminOrthodontist = DataBaseHandlingClass.LogInUser(connection, "adminOrthodontist", "admin");
                     User userToAdd = new User();
                     userToAdd.setUserName(nameTextField.getText());
                     userToAdd.setUserSurname(surnameTextField.getText());
@@ -745,7 +754,7 @@ public class GUI{
                         DataBaseHandlingClass.AddNewPatientToDB(connection, admin, userToAdd, adminOrthodontist);
                     } else if (userToEdit.getUserPermissionsLevel() == 1) {
                         try {
-                            if (userToAdd.getUserLogin().equals("adminortodonta")) // double check
+                            if (userToAdd.getUserLogin().equals("adminOrthodontist")) // double check
                                 throw new Exception();
                             DataBaseHandlingClass.AddNewOrthodontistToDB(connection, admin, userToAdd);
                         } catch (Exception exception) {
@@ -840,23 +849,29 @@ public class GUI{
         Button deleteButton = new Button("Delete user");
         deleteButton.addActionListener(e -> {
             try {
-                if (userToEdit.getUserLogin().equals("admin") || userToEdit.getUserLogin().equals("adminortodonta"))
+                if (userToEdit.getUserLogin().equals("admin") || userToEdit.getUserLogin().equals("adminOrthodontist"))
                     throw new Exception();
 
                 if (userToEdit.getUserPermissionsLevel() == 0) {
                     DataBaseHandlingClass.RemovePatientFromDB(connection, admin, userToEdit);
+                    assert list != null;
+                    list.remove(userToEdit.getUserId()-1);
                     deleteInfo.setText("Deletion of patient: " + userToEdit.getUserLogin() + ", was successful");
                     userToEdit = null;
                 } else if (userToEdit.getUserPermissionsLevel() == 1) {
-                    User adminOrthodontist = DataBaseHandlingClass.LogInUser(connection, "adminortodonta", "admin");
+                    User adminOrthodontist = DataBaseHandlingClass.LogInUser(connection, "adminOrthodontist", "admin");
                     deleteInfo.setText("Deletion of orthodontist: " + userToEdit.getUserLogin() + ", was successful");
                     DataBaseHandlingClass.RemoveOrthodontistFromDB(connection, admin, userToEdit, adminOrthodontist);
+                    assert list != null;
+                    list.remove(userToEdit.getUserId()-1);
                     userToEdit = null;
                 } else if (userToEdit.getUserPermissionsLevel() == 2) {
                     try {
                         if (userToEdit.getUserLogin().equals(admin.getUserLogin()))
                             throw new Exception();
                         DataBaseHandlingClass.RemoveAdministratorFromDB(connection, admin, userToEdit);
+                        assert list != null;
+                        list.remove(userToEdit.getUserId()-1);
                         deleteInfo.setText("Deletion of developer: " + userToEdit.getUserLogin() + ", was successful");
                         userToEdit = null;
                     } catch (Exception exception) {
@@ -1029,7 +1044,7 @@ public class GUI{
     /**
      * The method which is responsible for patient's mailbox
      */
-    public void myMailboxPatient(){
+    public void myMailboxPatient(){ // TODO
         addExitButtonPatient();
         frame.setLayout(new BoxLayout(frame, BoxLayout.Y_AXIS));
         frame.setVisible(true);
@@ -1038,7 +1053,7 @@ public class GUI{
     /**
      * The method which is responsible for orthodontist's mailbox
      */
-    public void myMailboxOrthodontist(){
+    public void myMailboxOrthodontist(){ // TODO
         addExitButtonOrthodontist();
         frame.setLayout(new BoxLayout(frame, BoxLayout.Y_AXIS));
         frame.setVisible(true);
@@ -1254,7 +1269,11 @@ public class GUI{
     /**
      * The method which is responsible for viewing patient's visits
      */
-    public void myVisitsPatient(){
+    public void myVisitsPatient(){ // TODO
+
+        //String[] messagesStrings = new String[5];
+        TextField visitsTextField = new TextField("00.00.0000");
+        frame.add(visitsTextField);
         addExitButtonPatient();
         frame.setLayout(new BoxLayout(frame, BoxLayout.Y_AXIS));
         frame.setVisible(true);
@@ -1263,7 +1282,13 @@ public class GUI{
     /**
      * The method is responsible for viewing and editing orthodontist's visits
      */
-    public void myVisitsOrthodontist(){
+    public void myVisitsOrthodontist(){ // TODO
+        Button createVisit = new Button("Create a new visit");
+        Button cancelVisit = new Button("Cancel a visit");
+        Button refreshVisits = new Button("Refresh your visits");
+        frame.add(createVisit);
+        frame.add(cancelVisit);
+        frame.add(refreshVisits);
         addExitButtonOrthodontist();
         frame.setLayout(new BoxLayout(frame, BoxLayout.Y_AXIS));
         frame.setVisible(true);

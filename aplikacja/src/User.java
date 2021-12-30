@@ -14,6 +14,18 @@ public class User {
     public User() {
     }
 
+    public User(User user){
+        this.userId = user.getUserId();
+        this.userLogin = user.getUserLogin();
+        this.userPassword = user.getUserPassword();
+        this.userName = user.getUserName();
+        this.userSurname = user.getUserSurname();
+        this.userTelephoneNumber = user.getUserTelephoneNumber();
+        this.userAddress = user.getUserAddress();
+        this.userEmail = user.getUserEmail();
+        this.userPermissionsLevel = user.getUserPermissionsLevel();
+    }
+
     public User(int userId, String userLogin, String userName, String userSurname,
                 String userTelephoneNumber, String userAddress, String userEmail, int userPermissionsLevel){
         this.userId = userId;

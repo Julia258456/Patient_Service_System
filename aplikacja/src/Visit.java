@@ -31,6 +31,16 @@ public class Visit {
         this.visitComment = visitComment;
     }
 
+    public Visit(Visit visit){
+        this.visitId = visit.getVisitId();
+        this.patientId = visit.getPatientId();
+        this.orthodontistId = visit.getOrthodontistId();
+        this.userPatientId = visit.getUserPatientId();
+        this.userOrthodontistId = visit.getUserOrthodontistId();
+        this.visitDate = visit.getVisitDate();
+        this.visitComment = visit.getVisitComment();
+    }
+
     public int getVisitId() {
         return visitId;
     }

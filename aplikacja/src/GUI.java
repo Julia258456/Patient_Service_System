@@ -51,16 +51,17 @@ public class GUI{
      * The method which creates Buttons in main frame for Orthodontist
      */
     private void createButtonsOrthodontist(){
+        Color colorForOrthodontist = Color.getHSBColor(178.8f,102.2f,85.1f);
         buttons[0] = new Button("My visits");
-        buttons[0].setBackground(Color.getHSBColor(178.8f,102.2f,85.1f));
+        buttons[0].setBackground(colorForOrthodontist);
         buttons[1] = new Button("My mailbox");
-        buttons[1].setBackground(Color.getHSBColor(178.8f,102.2f,85.1f));
+        buttons[1].setBackground(colorForOrthodontist);
         buttons[2] = new Button("My profile");
-        buttons[2].setBackground(Color.getHSBColor(178.8f,102.2f,85.1f));
+        buttons[2].setBackground(colorForOrthodontist);
         buttons[3] = new Button("Log out");
-        buttons[3].setBackground(Color.getHSBColor(178.8f,102.2f,85.1f));
+        buttons[3].setBackground(colorForOrthodontist);
         buttons[4] = new Button("Exit the program");
-        buttons[4].setBackground(Color.getHSBColor(178.8f,102.2f,85.1f));
+        buttons[4].setBackground(colorForOrthodontist);
 
         buttons[0].addActionListener(e -> {
             frame.removeAll();
@@ -91,16 +92,17 @@ public class GUI{
      * The method which creates Buttons in main frame for Patient
      */
     private void createButtonsPatient(){
+        Color colorForPatient = Color.getHSBColor(137.4f,101.1f,85.1f);
         buttons[0] = new Button("My visits");
-        buttons[0].setBackground(Color.getHSBColor(137.4f,101.1f,85.1f));
+        buttons[0].setBackground(colorForPatient);
         buttons[1] = new Button("My mailbox");
-        buttons[1].setBackground(Color.getHSBColor(137.4f,101.1f,85.1f));
+        buttons[1].setBackground(colorForPatient);
         buttons[2] = new Button("My profile");
-        buttons[2].setBackground(Color.getHSBColor(137.4f,101.1f,85.1f));
+        buttons[2].setBackground(colorForPatient);
         buttons[3] = new Button("Log out");
-        buttons[3].setBackground(Color.getHSBColor(137.4f,101.1f,85.1f));
+        buttons[3].setBackground(colorForPatient);
         buttons[4] = new Button("Exit the program");
-        buttons[4].setBackground(Color.getHSBColor(137.4f,101.1f,85.1f));
+        buttons[4].setBackground(colorForPatient);
 
         buttons[0].addActionListener(e -> {
             frame.removeAll();
@@ -581,12 +583,18 @@ public class GUI{
         Label optionalOrthodontist = new Label("OPTIONAL [select only when adding a patient] Patient's Orthodontist: ");
         Choice orthodontistToSelect = new Choice();
 
-        Connection connection = DataBaseHandlingClass.StartConnectionWithDB();
-        List<User> listOfOrthodontist = DataBaseHandlingClass.SearchForAllOrthodontists(connection, loggedUser);
+        Connection connectionList = DataBaseHandlingClass.StartConnectionWithDB();
+        List<User> listOfOrthodontist = DataBaseHandlingClass.SearchForAllOrthodontists(connectionList, loggedUser);
         if (listOfOrthodontist != null)
             for (User userToAdd : listOfOrthodontist) {
                 orthodontistToSelect.add(userToAdd.getUserLogin());
             }
+        try {
+            assert connectionList != null;
+            connectionList.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
         editUserPanel.add(username);
         editUserPanel.add(usernameTextField);
@@ -615,8 +623,9 @@ public class GUI{
         editUserPanel.add(editUserButton);
 
         editUserButton.addActionListener(e -> {
-
+            prompt.setBackground(null);
             try {
+                Connection connection = DataBaseHandlingClass.StartConnectionWithDB();
                 User orthodontistSelected = new User();
                 if(listOfOrthodontist != null){
                     for(User userToFind: listOfOrthodontist){
@@ -636,10 +645,12 @@ public class GUI{
                     List<User> list = DataBaseHandlingClass.SearchForAllUsers(connection, loggedUser);
                     if(list!=null){
                         for(User userToCheck: list) {
-                            if(usernameTextField.getText().equals(userToCheck.getUserName()))
-                                throw new Exception();
+                            if(usernameTextField.getText().equals(userToCheck.getUserLogin()))
+                                throw new Exception("You can't create a user with the same username");
                         }
                     }
+                    else
+                        throw new Exception("There are no users, a problem has arisen while adding a new user to database");
 
                     User userToAdd = new User();
                     userToAdd.setUserName(nameTextField.getText());
@@ -664,16 +675,9 @@ public class GUI{
 
             }
             catch (Exception exception){
-                prompt.setText("A problem has arisen while adding a new user to database");
+                prompt.setText("You can't create a user with this credentials, please fill them again");
+                prompt.setBackground(Color.red);
                 System.out.println("A problem has arisen while adding a new user to database " + exception.getMessage());
-            }
-            finally{
-                try {
-                    assert connection != null;
-                    connection.close();
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                }
             }
         });
 
@@ -688,8 +692,15 @@ public class GUI{
      */
     public void deleteUser(){
         enteredUsername = "null";
-        Connection connection = DataBaseHandlingClass.StartConnectionWithDB();
-        List<User> list = DataBaseHandlingClass.SearchForAllUsers(connection, loggedUser);
+        Connection connectionList = DataBaseHandlingClass.StartConnectionWithDB();
+        List<User> list = DataBaseHandlingClass.SearchForAllUsers(connectionList, loggedUser);
+        try {
+            if (connectionList != null) {
+                connectionList.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
         Panel welcomePanel = new Panel();
         Panel findPanelMessage = new Panel();
@@ -748,6 +759,8 @@ public class GUI{
 
         deleteButton.addActionListener(e -> {
             try {
+                Connection connection = DataBaseHandlingClass.StartConnectionWithDB();
+                deleteInfo.setBackground(null);
                 if (userToEdit.getUserPermissionsLevel() == 0) {
                     DataBaseHandlingClass.RemovePatientFromDB(connection, loggedUser, userToEdit);
                     deleteInfo.setText("Deletion of patient: " + userToEdit.getUserLogin() + ", was successful");
@@ -765,9 +778,21 @@ public class GUI{
                 }
             }
             catch(Exception exception){
+                deleteInfo.setText("Deletion of user: " + userToEdit.getUserLogin() + ", was not successful!");
+                deleteInfo.setBackground(Color.red);
                 System.out.println("Exception caught! " + exception.getMessage());
             }
             finally{
+                Connection connection = DataBaseHandlingClass.StartConnectionWithDB();
+                List <User> listUpdate = DataBaseHandlingClass.SearchForAllUsers(connection, loggedUser);
+                if (listUpdate != null) {
+                    for (User userToAdd : listUpdate) {
+                        if (!userToAdd.getUserLogin().equals(loggedUser.getUserLogin()))
+                            userToSelect.add(userToAdd.getUserLogin());
+                    }
+                    if(userToSelect.getItemCount()>=1)
+                        userToSelect.select(0);
+                }
                 try {
                     assert connection != null;
                     connection.close();

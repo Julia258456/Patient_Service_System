@@ -752,24 +752,22 @@ public class GUI{
         deleteInfo.setMaximumSize(new Dimension(frame.getWidth(), frame.getHeight()/12));
         Button deleteButton = new Button("Delete user");
         deleteButton.setSize(new Dimension(frame.getWidth(), frame.getHeight()/7));
+
         deleteButton.addActionListener(e -> {
             try {
-                if (userToEdit.getUserLogin().equals("admin") || userToEdit.getUserLogin().equals("adminOrthodontist"))
-                    throw new Exception("Attempting to add a user who is already in the database");
-
                 if (userToEdit.getUserPermissionsLevel() == 0) {
                     DataBaseHandlingClass.RemovePatientFromDB(connection, loggedUser, userToEdit);
                     deleteInfo.setText("Deletion of patient: " + userToEdit.getUserLogin() + ", was successful");
                     userToEdit = null;
                 } else if (userToEdit.getUserPermissionsLevel() == 1) {
-                    User adminOrthodontist = DataBaseHandlingClass.LogInUser(connection, "adminOrthodontist", "admin");
                     deleteInfo.setText("Deletion of orthodontist: " + userToEdit.getUserLogin() + ", was successful");
-                    DataBaseHandlingClass.RemoveOrthodontistFromDB(connection, loggedUser, userToEdit, adminOrthodontist);
+                    User adminOrthodontist = new User();
+                    adminOrthodontist.setUserLogin("adminOrthodontist");
+                    adminOrthodontist.setUserPassword("admin");
+                    DataBaseHandlingClass.RemoveOrthodontistFromDB(connection, loggedUser, userToEdit,adminOrthodontist);
                     userToEdit = null;
                 } else if (userToEdit.getUserPermissionsLevel() == 2) {
                     try {
-                        if (userToEdit.getUserLogin().equals(loggedUser.getUserLogin()))
-                            throw new Exception();
                         DataBaseHandlingClass.RemoveAdministratorFromDB(connection, loggedUser, userToEdit);
                         deleteInfo.setText("Deletion of developer: " + userToEdit.getUserLogin() + ", was successful");
                         userToEdit = null;

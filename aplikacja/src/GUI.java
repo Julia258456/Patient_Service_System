@@ -570,6 +570,8 @@ public class GUI{
         TextField nameTextField = new TextField();
         Label surname = new Label("Surname: ");
         TextField surnameTextField = new TextField();
+        Label address = new Label("Address: ");
+        TextField addressTextField = new TextField();
         Label mobileNumber = new Label("Mobile number: ");
         TextField mobileNumberTextField = new TextField();
         Label mail = new Label("E-mail: ");
@@ -594,6 +596,8 @@ public class GUI{
         editUserPanel.add(nameTextField);
         editUserPanel.add(surname);
         editUserPanel.add(surnameTextField);
+        editUserPanel.add(address);
+        editUserPanel.add(addressTextField);
         editUserPanel.add(mobileNumber);
         editUserPanel.add(mobileNumberTextField);
         editUserPanel.add(mail);
@@ -622,47 +626,37 @@ public class GUI{
                     }
                 }
 
-                if( Integer.parseInt(levelTextField.getText())>3 || Integer.parseInt(levelTextField.getText())<0 )
+                if(Integer.parseInt(levelTextField.getText())>3 || Integer.parseInt(levelTextField.getText())<0)
                     throw new Exception();
 
                 if (!levelTextField.getText().isEmpty() && !mailTextField.getText().isEmpty() && !mobileNumberTextField.getText().isEmpty() && !surnameTextField.getText().isEmpty() &&
-                        !nameTextField.getText().isEmpty() && !passwordTextField.getText().isEmpty() && !usernameTextField.getText().isEmpty()) {
+                        !nameTextField.getText().isEmpty() && !passwordTextField.getText().isEmpty() && !usernameTextField.getText().isEmpty() && !addressTextField.getText().isEmpty()) {
 
-                    User admin = DataBaseHandlingClass.LogInUser(connection, "admin", "admin");
-                    assert admin != null;
-                    List<User> list = DataBaseHandlingClass.SearchForAllUsers(connection, admin);
-                    assert list != null;
-                    for(User userToCheck: list) {
-                        if(usernameTextField.getText().equals(userToCheck.getUserName()))
-                            throw new Exception();
+
+                    List<User> list = DataBaseHandlingClass.SearchForAllUsers(connection, loggedUser);
+                    if(list!=null){
+                        for(User userToCheck: list) {
+                            if(usernameTextField.getText().equals(userToCheck.getUserName()))
+                                throw new Exception();
+                        }
                     }
 
                     User userToAdd = new User();
                     userToAdd.setUserName(nameTextField.getText());
                     userToAdd.setUserSurname(surnameTextField.getText());
                     userToAdd.setUserLogin(usernameTextField.getText());
+                    userToAdd.setUserAddress(addressTextField.getText());
                     userToAdd.setUserPassword(passwordTextField.getText());
                     userToAdd.setUserEmail(mailTextField.getText());
                     userToAdd.setUserPermissionsLevel(Integer.parseInt(levelTextField.getText()));
                     userToAdd.setUserTelephoneNumber(mobileNumberTextField.getText());
 
-
-                    if (userToEdit.getUserPermissionsLevel() == 0) {
-                        DataBaseHandlingClass.AddNewPatientToDB(connection, admin, userToAdd, orthodontistSelected);
-                    } else if (userToEdit.getUserPermissionsLevel() == 1) {
-                        try {
-                            DataBaseHandlingClass.AddNewOrthodontistToDB(connection, admin, userToAdd);
-                        } catch (Exception exception) {
-                            System.out.println("Exception caught!");
-                        }
-                    } else if (userToEdit.getUserPermissionsLevel() == 2) {
-                        try {
-                            if (userToAdd.getUserLogin().equals("admin"))
-                                throw new Exception();
-                            DataBaseHandlingClass.AddNewAdministratorToDB(connection, admin, userToAdd);
-                        } catch (Exception exception) {
-                            System.out.println("Exception caught!");
-                        }
+                    if (levelTextField.getText().equals("0")) {
+                        DataBaseHandlingClass.AddNewPatientToDB(connection, loggedUser, userToAdd, orthodontistSelected);
+                    } else if (levelTextField.getText().equals("1")) {
+                        DataBaseHandlingClass.AddNewOrthodontistToDB(connection, loggedUser, userToAdd);
+                    } else if (levelTextField.getText().equals("2")) {
+                        DataBaseHandlingClass.AddNewAdministratorToDB(connection, loggedUser, userToAdd);
                     }
                     prompt.setText("The user: " + userToAdd.getUserLogin() + ", has been successfully added to the database");
                 } else
@@ -706,7 +700,6 @@ public class GUI{
         Label userStatement = new Label("Please select the username from the list, to see user's credentials", Label.CENTER);
         userStatement.setMaximumSize(new Dimension(frame.getWidth(), frame.getHeight()/12));
 
-        //TextField userField = new TextField(20);
         Choice userToSelect = new Choice();
         userToSelect.setMaximumSize(new Dimension(frame.getWidth(), frame.getHeight()/12));
         if (list != null)
@@ -758,19 +751,14 @@ public class GUI{
                 if (userToEdit.getUserPermissionsLevel() == 0) {
                     DataBaseHandlingClass.RemovePatientFromDB(connection, loggedUser, userToEdit);
                     deleteInfo.setText("Deletion of patient: " + userToEdit.getUserLogin() + ", was successful");
-                    userToEdit = null;
                 } else if (userToEdit.getUserPermissionsLevel() == 1) {
                     deleteInfo.setText("Deletion of orthodontist: " + userToEdit.getUserLogin() + ", was successful");
-                    User adminOrthodontist = new User();
-                    adminOrthodontist.setUserLogin("adminOrthodontist");
-                    adminOrthodontist.setUserPassword("admin");
-                    DataBaseHandlingClass.RemoveOrthodontistFromDB(connection, loggedUser, userToEdit,adminOrthodontist);
-                    userToEdit = null;
+                    User adminOrthodontist = DataBaseHandlingClass.LogInUser(connection, "adminOrthodontist", "admin");
+                    DataBaseHandlingClass.RemoveOrthodontistFromDB(connection, loggedUser, userToEdit, adminOrthodontist);
                 } else if (userToEdit.getUserPermissionsLevel() == 2) {
                     try {
                         DataBaseHandlingClass.RemoveAdministratorFromDB(connection, loggedUser, userToEdit);
                         deleteInfo.setText("Deletion of developer: " + userToEdit.getUserLogin() + ", was successful");
-                        userToEdit = null;
                     } catch (Exception exception) {
                         System.out.println("Exception caught! a problem has arisen while deleting user from the database");
                     }

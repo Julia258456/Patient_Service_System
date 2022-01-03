@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="798ddb25-3dfe-433e-8232-508aa3459add" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/aplikacja/src/GUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/aplikacja/src/GUI.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/aplikacja/GUI$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/aplikacja/GUI$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/aplikacja/GUI$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/aplikacja/GUI$2.class" afterDir="false" />
@@ -11,8 +12,6 @@
       <change beforePath="$PROJECT_DIR$/out/production/aplikacja/GUI$6.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/aplikacja/GUI$6.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/aplikacja/GUI$7.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/aplikacja/GUI$7.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/aplikacja/GUI.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/aplikacja/GUI.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/aplikacja/User.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/aplikacja/User.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/aplikacja/Visit.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/aplikacja/Visit.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

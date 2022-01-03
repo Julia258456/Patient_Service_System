@@ -17,7 +17,6 @@ public class GUI{
     Button[] buttons = new Button[10];
     static String enteredUsername;
     static String enteredPassword;
-    int numberOfAttempts = 0;
     Dimension screenDimension = Toolkit.getDefaultToolkit().getScreenSize();
     int screenWidth = (int)(screenDimension.width * 0.7);
     int screenHeight = (int)(screenDimension.height * 0.7);
@@ -25,6 +24,8 @@ public class GUI{
     User user = new User();
     User loggedUser = new User();
     User userToEdit = new User();
+    int numberOfAttempts = 0;
+    int SCREEN_RES = 0;
 
     /**
      * The basic Constructor which creates basic frame of Main menu.
@@ -236,20 +237,27 @@ public class GUI{
             Frame settingsFrame = new Frame("Settings");
             settingsFrame.setBackground(Color.gray);
             settingsFrame.setVisible(true);
-            Label message = new Label("Change the size of the window"); // TODO change settings
+            Label message = new Label("Change the size of the window", Label.CENTER);
             Button normalButton = new Button("Standard (70% screen size)");
             normalButton.addActionListener(e1 -> {
                     frame.setSize(screenWidth,screenHeight);
+                    
+                    frame.setLocationRelativeTo(null);
+                    SCREEN_RES = 0;
                     frame.setLayout(new BoxLayout(frame, BoxLayout.Y_AXIS));
             });
             Button greaterButton = new Button("Greater (90% screen size)");
             greaterButton.addActionListener(e1 -> {
                 frame.setSize((int)(screenWidth*1.3),(int)(screenHeight*1.3));
+                frame.setLocationRelativeTo(null);
+                SCREEN_RES = 1;
                 frame.setLayout(new BoxLayout(frame, BoxLayout.Y_AXIS));
             });
             Button fullscreenButton = new Button("Fullscreen (100% screen size)");
             fullscreenButton.addActionListener(e1 -> {
                 frame.setSize(screenDimension.width, screenDimension.height);
+                frame.setLocationRelativeTo(null);
+                SCREEN_RES = 3;
                 frame.setLayout(new BoxLayout(frame, BoxLayout.Y_AXIS));
             });
             settingsFrame.add(normalButton);
@@ -263,43 +271,16 @@ public class GUI{
             settingsFrame.setLocation(location);
             settingsFrame.setSize(frame.getWidth()/3,frame.getHeight()/3);
             settingsFrame.setVisible(true);
-            settingsFrame.addWindowListener(new WindowListener() { // TODO
-                @Override
-                public void windowOpened(WindowEvent e) {
-
-                }
-
+            settingsFrame.addWindowListener(new WindowAdapter(){
                 @Override
                 public void windowClosing(WindowEvent e) {
-                    settingsFrame.removeAll();
+                    super.windowClosing(e);
                     settingsFrame.setVisible(false);
                     settingsFrame.dispose();
+                    if (user == null)
+                        System.exit(0);
                 }
 
-                @Override
-                public void windowClosed(WindowEvent e) {
-
-                }
-
-                @Override
-                public void windowIconified(WindowEvent e) {
-
-                }
-
-                @Override
-                public void windowDeiconified(WindowEvent e) {
-
-                }
-
-                @Override
-                public void windowActivated(WindowEvent e) {
-
-                }
-
-                @Override
-                public void windowDeactivated(WindowEvent e) {
-
-                }
             });
         });
 
@@ -324,111 +305,59 @@ public class GUI{
             Frame helpFrame = new Frame("Help");
             helpFrame.setBackground(Color.gray);
             helpFrame.setVisible(true);
-            Label message = new Label("For assistance with the application, please contact the administrator");
+            Label message = new Label("For assistance with the application, please contact the administrator", Label.CENTER);
             helpFrame.add(message);
             helpFrame.setLayout(new BoxLayout(helpFrame, BoxLayout.Y_AXIS));
             Point location = frame.getLocation();
             location.x += frame.getWidth()/3;
             location.y += frame.getHeight()/5;
             helpFrame.setLocation(location);
-            helpFrame.setSize(frame.getWidth()/3,frame.getHeight()/3);
+            helpFrame.setSize(frame.getWidth()/3,frame.getHeight()/6);
             helpFrame.setVisible(true);
-            helpFrame.addWindowListener(new WindowListener() { // TODO
-                @Override
-                public void windowOpened(WindowEvent e) {
-
-                }
-
+            helpFrame.addWindowListener(new WindowAdapter(){
                 @Override
                 public void windowClosing(WindowEvent e) {
-                    helpFrame.removeAll();
+                    super.windowClosing(e);
                     helpFrame.setVisible(false);
                     helpFrame.dispose();
+                    if (user == null)
+                        System.exit(0);
                 }
 
-                @Override
-                public void windowClosed(WindowEvent e) {
-
-                }
-
-                @Override
-                public void windowIconified(WindowEvent e) {
-
-                }
-
-                @Override
-                public void windowDeiconified(WindowEvent e) {
-
-                }
-
-                @Override
-                public void windowActivated(WindowEvent e) {
-
-                }
-
-                @Override
-                public void windowDeactivated(WindowEvent e) {
-
-                }
             });
         });
         gettingStartedItem.addActionListener(e -> {
             Frame gettingStartedFrame = new Frame("Getting Started");
             gettingStartedFrame.setBackground(Color.gray);
             gettingStartedFrame.setVisible(true);
-            Label message = new Label("For more instructions please read README.md file"); // TODO
+            Label message = new Label("For more instructions please read README.md file", Label.CENTER);
+            Label message2 = new Label("!!!This file is located in SystemObslugiPacjenta-GabinetOrtodontyczny directory", Label.CENTER);
             gettingStartedFrame.add(message);
+            gettingStartedFrame.add(message2);
             Point location = frame.getLocation();
             location.x += frame.getWidth()/3;
             location.y += frame.getHeight()/5;
             gettingStartedFrame.setLocation(location);
-            gettingStartedFrame.setSize(frame.getWidth()/3,frame.getHeight()/3);
+            gettingStartedFrame.setSize(frame.getWidth()/3,frame.getHeight()/5);
             gettingStartedFrame.setVisible(true);
             gettingStartedFrame.setLayout(new BoxLayout(gettingStartedFrame, BoxLayout.Y_AXIS));
-            gettingStartedFrame.addWindowListener(new WindowListener() {
-                @Override
-                public void windowOpened(WindowEvent e) {
-
-                }
-
+            gettingStartedFrame.addWindowListener(new WindowAdapter(){
                 @Override
                 public void windowClosing(WindowEvent e) {
-                    gettingStartedFrame.removeAll();
+                    super.windowClosing(e);
                     gettingStartedFrame.setVisible(false);
                     gettingStartedFrame.dispose();
+                    if (user == null)
+                        System.exit(0);
                 }
 
-                @Override
-                public void windowClosed(WindowEvent e) {
-
-                }
-
-                @Override
-                public void windowIconified(WindowEvent e) {
-
-                }
-
-                @Override
-                public void windowDeiconified(WindowEvent e) {
-
-                }
-
-                @Override
-                public void windowActivated(WindowEvent e) {
-
-                }
-
-                @Override
-                public void windowDeactivated(WindowEvent e) {
-
-                }
             });
         });
         checkForUpdatesItem.addActionListener(e -> {
             Frame updateFrame = new Frame("Check for updates");
             updateFrame.setBackground(Color.gray);
             updateFrame.setVisible(true);
-            Label message = new Label("You have the latest version: 1.00204021424");
+            Label message = new Label("You have the latest version installed, current version: 1.00000023", Label.CENTER);
             updateFrame.add(message);
             updateFrame.setLayout(new BoxLayout(updateFrame, BoxLayout.Y_AXIS));
             updateFrame.setBackground(Color.gray);
@@ -437,56 +366,27 @@ public class GUI{
             location.x += frame.getWidth()/3;
             location.y += frame.getHeight()/5;
             updateFrame.setLocation(location);
-            updateFrame.setSize(frame.getWidth()/3,frame.getHeight()/3);
+            updateFrame.setSize(frame.getWidth()/3,frame.getHeight()/6);
             updateFrame.setVisible(true);
-            updateFrame.addWindowListener(new WindowListener() { // TODO
-                @Override
-                public void windowOpened(WindowEvent e) {
-
-                }
-
+            updateFrame.addWindowListener(new WindowAdapter(){
                 @Override
                 public void windowClosing(WindowEvent e) {
+                    super.windowClosing(e);
                     updateFrame.setVisible(false);
-                    updateFrame.removeAll();
                     updateFrame.dispose();
+                    if (user == null)
+                        System.exit(0);
                 }
 
-                @Override
-                public void windowClosed(WindowEvent e) {
-
-                }
-
-                @Override
-                public void windowIconified(WindowEvent e) {
-
-                }
-
-                @Override
-                public void windowDeiconified(WindowEvent e) {
-
-                }
-
-                @Override
-                public void windowActivated(WindowEvent e) {
-
-                }
-
-                @Override
-                public void windowDeactivated(WindowEvent e) {
-
-                }
             });
-
-
         });
         aboutItem.addActionListener(e -> {
             Frame aboutFrame = new Frame("About Patient Service System - Orthodontic office");
             Panel aboutPanel = new Panel();
-            Label message = new Label("Build #OP-4214.2421323, built on January 10, 2022");
-            Label message2 = new Label("Runtime version: 1.00312313123 amd64");
-            Label message3 = new Label("Powered by open-source software");
-            Label message4 = new Label("Copyright © 2022-2042 Orthodontic office systems s.r.o.");
+            Label message = new Label("Build #OP-4214.2421323, built on January 10, 2022", Label.CENTER);
+            Label message2 = new Label("Runtime version: 1.00312313123 amd64", Label.CENTER);
+            Label message3 = new Label("Powered by open-source software", Label.CENTER);
+            Label message4 = new Label("Copyright © 2022-2042 Orthodontic office systems s.r.o.", Label.CENTER);
 
             aboutPanel.add(message);
             aboutPanel.add(message2);
@@ -498,50 +398,23 @@ public class GUI{
             location.x += frame.getWidth()/3;
             location.y += frame.getHeight()/5;
             aboutFrame.setLocation(location);
-            aboutFrame.setSize(frame.getWidth()/3,frame.getHeight()/3);
+            aboutFrame.setSize(frame.getWidth()/3,frame.getHeight()/4);
             aboutPanel.setVisible(true);
             aboutFrame.setVisible(true);
             aboutFrame.add(aboutPanel);
             aboutFrame.setLayout(new BoxLayout(aboutFrame, BoxLayout.Y_AXIS));
-            aboutFrame.addWindowListener(new WindowListener() {
-                @Override
-                public void windowOpened(WindowEvent e) { // TODO
-
-                }
-
+            aboutFrame.addWindowListener(new WindowAdapter(){
                 @Override
                 public void windowClosing(WindowEvent e) {
+                    super.windowClosing(e);
                     aboutFrame.setVisible(false);
-                    aboutFrame.removeAll();
                     aboutFrame.dispose();
+                    if (user == null)
+                        System.exit(0);
                 }
 
-                @Override
-                public void windowClosed(WindowEvent e) {
-                }
-
-                @Override
-                public void windowIconified(WindowEvent e) {
-
-                }
-
-                @Override
-                public void windowDeiconified(WindowEvent e) {
-
-                }
-
-                @Override
-                public void windowActivated(WindowEvent e) {
-
-                }
-
-                @Override
-                public void windowDeactivated(WindowEvent e) {
-
-                }
             });
         });
-
         helpMenu.add(yourAccountItem);
         helpMenu.add(helpItem);
         helpMenu.add(gettingStartedItem);
@@ -801,16 +674,14 @@ public class GUI{
     public void deleteUser(){
         enteredUsername = "null";
         Connection connection = DataBaseHandlingClass.StartConnectionWithDB();
-        User admin = DataBaseHandlingClass.LogInUser(connection, "admin", "admin");
-        assert admin != null;
-        AtomicReference<List<User>> list = new AtomicReference<>(DataBaseHandlingClass.SearchForAllUsers(connection, admin));
+        AtomicReference<List<User>> list = new AtomicReference<>(DataBaseHandlingClass.SearchForAllUsers(connection, loggedUser));
 
         Panel welcomePanel = new Panel();
         Panel findPanelMessage = new Panel();
         Panel findUserPanel = new Panel(new GridBagLayout());
 
         Label usernameLabel = new Label("Username: ");
-        Label userStatement = new Label("Please enter the username to see user's credentials");
+        Label userStatement = new Label("Please enter the username to see user's credentials", Label.CENTER);
 
         TextField userField = new TextField(20);
 
@@ -862,22 +733,22 @@ public class GUI{
                     throw new Exception("Attempting to add a user who is already in the database");
 
                 if (userToEdit.getUserPermissionsLevel() == 0) {
-                    DataBaseHandlingClass.RemovePatientFromDB(connection, admin, userToEdit);
-                    list.set(DataBaseHandlingClass.SearchForAllUsers(connection, admin));
+                    DataBaseHandlingClass.RemovePatientFromDB(connection, loggedUser, userToEdit);
+                    list.set(DataBaseHandlingClass.SearchForAllUsers(connection, loggedUser));
                     deleteInfo.setText("Deletion of patient: " + userToEdit.getUserLogin() + ", was successful");
                     userToEdit = null;
                 } else if (userToEdit.getUserPermissionsLevel() == 1) {
                     User adminOrthodontist = DataBaseHandlingClass.LogInUser(connection, "adminOrthodontist", "admin");
                     deleteInfo.setText("Deletion of orthodontist: " + userToEdit.getUserLogin() + ", was successful");
-                    DataBaseHandlingClass.RemoveOrthodontistFromDB(connection, admin, userToEdit, adminOrthodontist);
-                    list.set(DataBaseHandlingClass.SearchForAllUsers(connection, admin));
+                    DataBaseHandlingClass.RemoveOrthodontistFromDB(connection, loggedUser, userToEdit, adminOrthodontist);
+                    list.set(DataBaseHandlingClass.SearchForAllUsers(connection, loggedUser));
                     userToEdit = null;
                 } else if (userToEdit.getUserPermissionsLevel() == 2) {
                     try {
-                        if (userToEdit.getUserLogin().equals(admin.getUserLogin()))
+                        if (userToEdit.getUserLogin().equals(loggedUser.getUserLogin()))
                             throw new Exception();
-                        DataBaseHandlingClass.RemoveAdministratorFromDB(connection, admin, userToEdit);
-                        list.set(DataBaseHandlingClass.SearchForAllUsers(connection, admin));
+                        DataBaseHandlingClass.RemoveAdministratorFromDB(connection, loggedUser, userToEdit);
+                        list.set(DataBaseHandlingClass.SearchForAllUsers(connection, loggedUser));
                         deleteInfo.setText("Deletion of developer: " + userToEdit.getUserLogin() + ", was successful");
                         userToEdit = null;
                     } catch (Exception exception) {
@@ -1067,6 +938,63 @@ public class GUI{
      * The method which is responsible for patient's mailbox
      */
     public void myMailboxPatient(){ // TODO
+        if(loggedUser.getUserPermissionsLevel()==0) {
+            Dimension maxDimension = new Dimension(frame.getWidth()/20,frame.getHeight()/20);
+            Dimension maxDimensionWidth = new Dimension(frame.getWidth(), frame.getHeight()/15);
+            Label infoList = new Label("Please select a user from the list in order to send an e-mail: ", Label.CENTER);
+            infoList.setMaximumSize(maxDimensionWidth);
+            Choice selectionList = new Choice();
+            selectionList.setMaximumSize(maxDimensionWidth);
+            Connection connection = DataBaseHandlingClass.StartConnectionWithDB();
+            User orthodontistOfPatient = DataBaseHandlingClass.SearchForOrthodontistOfPatient(connection, loggedUser);
+            if (orthodontistOfPatient != null) {
+                selectionList.add(orthodontistOfPatient.getUserName() + " " + orthodontistOfPatient.getUserSurname() + ", +48 " + orthodontistOfPatient.getUserTelephoneNumber());
+                selectionList.add("Dev (Please contact us only if you have any problems with the application)");
+            }
+            else{
+                selectionList.add("Dev (Please contact us only if you have any problems with the application)");
+            }
+
+            frame.add(infoList);
+            frame.add(selectionList);
+
+            TextField textFieldTopic = new TextField();
+            Label textFieldTopicLabel = new Label("e-mail subject:");
+            textFieldTopic.setMaximumSize(maxDimensionWidth);
+            textFieldTopicLabel.setMaximumSize(maxDimensionWidth);
+            frame.add(textFieldTopicLabel);
+            frame.add(textFieldTopic);
+
+            TextField textField = new TextField();
+            Dimension textFieldDimension = new Dimension(frame.getWidth(), frame.getHeight());
+            textField.setPreferredSize(textFieldDimension);
+            frame.add(textField);
+
+
+            Label sendInfo = new Label("Please check before submitting if a valid user is selected, and the subject and text fields are not empty", Label.CENTER);
+            Button sendButton = new Button("Send");
+            sendInfo.setMaximumSize(maxDimensionWidth);
+            sendButton.setMaximumSize(maxDimension);
+            frame.add(sendInfo);
+            frame.add(sendButton);
+
+            sendButton.addActionListener(e -> {
+
+                if(textField.getText().isEmpty() || textFieldTopic.getText().isEmpty())
+                {
+                    sendInfo.setText("The subject and text fields are empty, please fill them in and try again");
+                }
+                else {
+                    // TODO email sending algorithm
+                    sendInfo.setText("The message has been sent successfully!");
+                }
+            });
+
+        }
+        else
+        {
+            System.err.println("There were problems logging in the correct user");
+        }
         addExitButtonPatient();
         frame.setLayout(new BoxLayout(frame, BoxLayout.Y_AXIS));
         frame.setVisible(true);
@@ -1076,6 +1004,64 @@ public class GUI{
      * The method which is responsible for orthodontist's mailbox
      */
     public void myMailboxOrthodontist(){ // TODO
+        if(loggedUser.getUserPermissionsLevel()==1) {
+            Dimension maxDimension = new Dimension(frame.getWidth()/20,frame.getHeight()/20);
+            Dimension maxDimensionWidth = new Dimension(frame.getWidth(), frame.getHeight()/15);
+            Label infoList = new Label("Please select a user from the list in order to send an e-mail: ", Label.CENTER);
+            infoList.setMaximumSize(maxDimensionWidth);
+            Choice selectionList = new Choice();
+            selectionList.setMaximumSize(maxDimensionWidth);
+            Connection connection = DataBaseHandlingClass.StartConnectionWithDB();
+            List<User> listOfPatients = DataBaseHandlingClass.SearchForPatientsOfOrthodontist(connection, loggedUser);
+            if (listOfPatients != null) {
+                for (User patient : listOfPatients)
+                    selectionList.add(patient.getUserName() + " " + patient.getUserSurname() + ", +48 " + patient.getUserTelephoneNumber());
+                selectionList.add("Dev (Please contact us only if you have any problems with the application)");
+            }
+            else{
+                selectionList.add("Dev (Please contact us only if you have any problems with the application)");
+            }
+
+            frame.add(infoList);
+            frame.add(selectionList);
+
+            TextField textFieldTopic = new TextField();
+            Label textFieldTopicLabel = new Label("e-mail subject:");
+            textFieldTopic.setMaximumSize(maxDimensionWidth);
+            textFieldTopicLabel.setMaximumSize(maxDimensionWidth);
+            frame.add(textFieldTopicLabel);
+            frame.add(textFieldTopic);
+
+            TextField textField = new TextField();
+            Dimension textFieldDimension = new Dimension(frame.getWidth(), frame.getHeight());
+            textField.setPreferredSize(textFieldDimension);
+            frame.add(textField);
+
+
+            Label sendInfo = new Label("Please check before submitting if a valid user is selected, and the subject and text fields are not empty", Label.CENTER);
+            Button sendButton = new Button("Send");
+            sendInfo.setMaximumSize(maxDimensionWidth);
+            sendButton.setMaximumSize(maxDimension);
+            frame.add(sendInfo);
+            frame.add(sendButton);
+
+            sendButton.addActionListener(e -> {
+
+                if(textField.getText().isEmpty() || textFieldTopic.getText().isEmpty())
+                {
+                    sendInfo.setText("The subject and text fields are empty, please fill them in and try again");
+                }
+                else {
+                    // TODO email sending algorithm
+                    sendInfo.setText("The message has been sent successfully!");
+                }
+            });
+
+        }
+        else
+        {
+            System.err.println("There were problems logging in the correct user");
+        }
         addExitButtonOrthodontist();
         frame.setLayout(new BoxLayout(frame, BoxLayout.Y_AXIS));
         frame.setVisible(true);
@@ -1127,6 +1113,7 @@ public class GUI{
             Connection connection = DataBaseHandlingClass.StartConnectionWithDB();
             try {
                 if (userToEdit != null) {
+                    loggedUser = DataBaseHandlingClass.LogInUser(connection, loggedUser.getUserLogin(), loggedUser.getUserPassword());
                     User userToAdd = new User();
                     userToAdd.setUserName(nameTextField.getText());
                     userToAdd.setUserSurname(surnameTextField.getText());
@@ -1134,6 +1121,7 @@ public class GUI{
                     userToAdd.setUserEmail(mailTextField.getText());
                     userToAdd.setUserTelephoneNumber(mobileNumberTextField.getText());
                     userToAdd.setUserId(userToEdit.getUserId());
+                    loggedUser = userToAdd;
                     DataBaseHandlingClass.EditUserInfoInDB(connection, userToEdit, userToAdd);
                     prompt.setText("The edition was a success");
                 } else
@@ -1204,6 +1192,7 @@ public class GUI{
             Connection connection = DataBaseHandlingClass.StartConnectionWithDB();
             try {
                 if (userToEdit != null) {
+                    loggedUser = DataBaseHandlingClass.LogInUser(connection, loggedUser.getUserLogin(), loggedUser.getUserPassword());
                     User userToAdd = new User();
                     userToAdd.setUserName(nameTextField.getText());
                     userToAdd.setUserSurname(surnameTextField.getText());
@@ -1211,6 +1200,7 @@ public class GUI{
                     userToAdd.setUserEmail(mailTextField.getText());
                     userToAdd.setUserTelephoneNumber(mobileNumberTextField.getText());
                     userToAdd.setUserId(userToEdit.getUserId());
+                    loggedUser = userToAdd;
                     DataBaseHandlingClass.EditUserInfoInDB(connection, userToEdit, userToAdd);
                     prompt.setText("The edition was a success");
                 } else
@@ -1240,7 +1230,7 @@ public class GUI{
      */
     public void myProfileOrthodontist(){
         frame.removeAll();
-
+        Connection connection = DataBaseHandlingClass.StartConnectionWithDB();
         Panel editUserPanel = new Panel();
         Label info = new Label("If u wish to edit your credentials, please change them and enter the button below");
         editUserPanel.add(info);
@@ -1278,8 +1268,8 @@ public class GUI{
         editUserPanel.add(prompt);
 
         editUserButton.addActionListener(e -> {
-            Connection connection = DataBaseHandlingClass.StartConnectionWithDB();
             try {
+                loggedUser = DataBaseHandlingClass.LogInUser(connection, loggedUser.getUserLogin(), loggedUser.getUserPassword());
                 if (userToEdit != null) {
                     User userToAdd = new User();
                     userToAdd.setUserName(nameTextField.getText());
@@ -1288,6 +1278,7 @@ public class GUI{
                     userToAdd.setUserEmail(mailTextField.getText());
                     userToAdd.setUserTelephoneNumber(mobileNumberTextField.getText());
                     userToAdd.setUserId(userToEdit.getUserId());
+                    loggedUser = userToAdd;
                     DataBaseHandlingClass.EditUserInfoInDB(connection, userToEdit, userToAdd);
                     prompt.setText("The edition was a success");
                 } else
@@ -1316,10 +1307,31 @@ public class GUI{
      * The method which is responsible for viewing patient's visits
      */
     public void myVisitsPatient(){ // TODO
+        if(loggedUser.getUserPermissionsLevel()==0) {
+            Dimension maxDimension = new Dimension(frame.getWidth()/5,frame.getHeight()/20);
+            Dimension maxDimensionWidth = new Dimension(frame.getWidth(), frame.getHeight()/15);
+            Choice visitSelection = new Choice();
+            visitSelection.setMaximumSize(maxDimensionWidth);
+            Connection connection = DataBaseHandlingClass.StartConnectionWithDB();
+            List<Visit> listOfVisits = DataBaseHandlingClass.SearchForVisitsOfPatient(connection, loggedUser);
+            if(listOfVisits != null) {
+                for (Visit visit : listOfVisits)
+                    visitSelection.add("Date of the visit:  " + visit.getVisitDate());
+            }
+            frame.add(visitSelection);
 
-        //String[] messagesStrings = new String[5];
-        TextField visitsTextField = new TextField("00.00.0000");
-        frame.add(visitsTextField);
+
+            Button buttonShowDetails = new Button("Show details of the visit");
+            buttonShowDetails.setMaximumSize(maxDimension);
+            Button generatePDF = new Button("Generate PDF file of the visit");
+            generatePDF.setMaximumSize(maxDimension);
+            frame.add(buttonShowDetails);
+            frame.add(generatePDF);
+        }
+        else {
+            System.err.println("There were problems logging in the correct user");
+        }
+
         addExitButtonPatient();
         frame.setLayout(new BoxLayout(frame, BoxLayout.Y_AXIS));
         frame.setVisible(true);
@@ -1354,7 +1366,7 @@ public class GUI{
 
         Label labelUsername = new Label("Username: ");
         Label labelPassword = new Label("Password: ");
-        Label loginStatement = new Label("Please enter your credentials");
+        Label loginStatement = new Label("Please enter your credentials", Label.CENTER);
         Label welcomeLabel = new Label("Patient Service System - Orthodontic office");
 
         TextField usernameField = new TextField(20);
@@ -1436,12 +1448,12 @@ public class GUI{
         loginPanelMessage.add(loginStatement, BorderLayout.NORTH);
         loginPanelMessage.setVisible(true);
 
-        loginFrame.setLocation((screenWidth/2),(screenHeight/2));
         loginFrame.setIconImage(icon);
         loginFrame.add(loginPanel, BorderLayout.CENTER);
         loginFrame.add(loginPanelMessage, BorderLayout.SOUTH);
         loginFrame.add(welcomePanel,BorderLayout.NORTH);
         loginFrame.setSize((int)(screenWidth/1.7),(screenHeight/3));
+        loginFrame.setLocationRelativeTo(null);
         loginFrame.setVisible(true);
         loginFrame.setResizable(false);
         loginFrame.addWindowListener(new WindowAdapter() {
@@ -1465,14 +1477,24 @@ public class GUI{
         createButtonsOrthodontist();
         addPanels();
         frame.setIconImage(icon);
-        frame.setLocation((screenWidth/5),(screenHeight/4));
-        frame.setSize(screenWidth,screenHeight);
+        switch (SCREEN_RES) {
+            case 0:
+                frame.setSize(screenWidth,screenHeight);
+                break;
+            case 1:
+                frame.setSize((int)(screenWidth*1.3),(int)(screenHeight*1.3));
+                break;
+            case 2:
+                frame.setSize(screenDimension.width, screenDimension.height);
+                break;
+        }
         frame.setMenuBar(menu);
         frame.setResizable(false);
         centralPanel.removeAll();
         centralPanel.setLayout(new BoxLayout(centralPanel, BoxLayout.Y_AXIS));
         for(int i=0;i<5;i++)
             centralPanel.add(buttons[i]);
+        frame.setLocationRelativeTo(null);
     }
 
     /**
@@ -1483,14 +1505,24 @@ public class GUI{
         createButtonsPatient();
         addPanels();
         frame.setIconImage(icon);
-        frame.setLocation((screenWidth/5),(screenHeight/4));
-        frame.setSize(screenWidth,screenHeight);
+        switch (SCREEN_RES) {
+            case 0:
+                frame.setSize(screenWidth,screenHeight);
+                break;
+            case 1:
+                frame.setSize((int)(screenWidth*1.3),(int)(screenHeight*1.3));
+                break;
+            case 2:
+                frame.setSize(screenDimension.width, screenDimension.height);
+                break;
+        }
         frame.setMenuBar(menu);
         frame.setResizable(false);
         centralPanel.removeAll();
         centralPanel.setLayout(new BoxLayout(centralPanel, BoxLayout.Y_AXIS));
         for(int i=0;i<5;i++)
             centralPanel.add(buttons[i]);
+        frame.setLocationRelativeTo(null);
     }
 
     /**
@@ -1501,13 +1533,23 @@ public class GUI{
         createButtonsDeveloper();
         addPanels();
         frame.setIconImage(icon);
-        frame.setLocation((screenWidth/5),(screenHeight/4));
-        frame.setSize(screenWidth,screenHeight);
+        switch (SCREEN_RES) {
+            case 0:
+                frame.setSize(screenWidth,screenHeight); // default size
+                break;
+            case 1:
+                frame.setSize((int)(screenWidth*1.3),(int)(screenHeight*1.3));
+                break;
+            case 2:
+                frame.setSize(screenDimension.width, screenDimension.height);
+                break;
+        }
         frame.setMenuBar(menu);
         frame.setResizable(false);
         centralPanel.removeAll();
         centralPanel.setLayout(new BoxLayout(centralPanel, BoxLayout.Y_AXIS));
         for(int i=0;i<7;i++)
             centralPanel.add(buttons[i]);
+        frame.setLocationRelativeTo(null);
     }
 }

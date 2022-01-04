@@ -4,13 +4,10 @@
     <list default="true" id="798ddb25-3dfe-433e-8232-508aa3459add" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/aplikacja/src/GUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/aplikacja/src/GUI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/aplikacja/src/MailHandlingClass.java" beforeDir="false" afterPath="$PROJECT_DIR$/aplikacja/src/MailHandling.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/aplikacja/DataBaseHandlingClass.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/aplikacja/DataBaseHandling.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/aplikacja/GUI$7.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/aplikacja/GUI$7.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/aplikacja/GUI.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/aplikacja/GUI.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/aplikacja/JDBC.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/aplikacja/JDBC.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/aplikacja/MailHandlingClass$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/aplikacja/MailHandlingClass$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/aplikacja/MailHandlingClass.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/aplikacja/MailHandlingClass.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/aplikacja/MailHandlingClass$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/aplikacja/MailHandlingClass.class" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

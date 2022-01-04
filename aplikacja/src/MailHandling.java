@@ -5,7 +5,7 @@ import java.util.*;
 /**
  * The class which is responsible for sending e-mails
  */
-public class MailHandlingClass {
+public class MailHandling {
 
     /**
      * A method which is responsible for preparing a message to be sent, which uses the 'javax.mail' API methods.

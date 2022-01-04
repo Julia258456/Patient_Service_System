@@ -1032,7 +1032,7 @@ public class GUI{
 
     /**
      * The method which is responsible for patient's mailbox. It allows the user to send an e-mail to an external
-     * address of his Orthodontist and Administrator. It uses MailHandlingClass class methods.
+     * address of his Orthodontist and Administrator. It uses MailHandling class methods.
      */
     public void myMailboxPatient(){
         if(loggedUser.getUserPermissionsLevel()==0) {
@@ -1086,9 +1086,9 @@ public class GUI{
                 } else {
                     try {
                         if (orthodontistOfPatient != null && selectionList.getSelectedItem().equals(orthodontistOfPatient.getUserName() + " " + orthodontistOfPatient.getUserSurname() + ", " + orthodontistOfPatient.getUserEmail())) {
-                            MailHandlingClass.sendMail(orthodontistOfPatient.getUserEmail(), textFieldTopic.getText(), textField.getText());
+                            MailHandling.sendMail(orthodontistOfPatient.getUserEmail(), textFieldTopic.getText(), textField.getText());
                         } else
-                            MailHandlingClass.sendMail("adampiszczek1904@gmail.com", textFieldTopic.getText(), textField.getText());
+                            MailHandling.sendMail("adampiszczek1904@gmail.com", textFieldTopic.getText(), textField.getText());
                         sendInfo.setText("The message has been sent successfully!");
                     } catch (Exception exception){
                         sendInfo.setText("There were problems with sending your e-mail (recipient's address is not vail)");
@@ -1110,7 +1110,7 @@ public class GUI{
 
     /**
      * The method which is responsible for orthodontist's mailbox. It allows the user to send an e-mail to an external
-     * address. It uses MailHandlingClass class methods.
+     * address. It uses MailHandling class methods.
      */
     public void myMailboxOrthodontist(){
         if(loggedUser.getUserPermissionsLevel()==1) {
@@ -1174,9 +1174,9 @@ public class GUI{
                         }
 
                         if (userFound) {
-                            MailHandlingClass.sendMail(recepient.getUserEmail(), textFieldTopic.getText(), textField.getText());
+                            MailHandling.sendMail(recepient.getUserEmail(), textFieldTopic.getText(), textField.getText());
                         } else
-                            MailHandlingClass.sendMail("adampiszczek1904@gmail.com", textFieldTopic.getText(), textField.getText());
+                            MailHandling.sendMail("adampiszczek1904@gmail.com", textFieldTopic.getText(), textField.getText());
                         sendInfo.setText("The message has been sent successfully!");
                     } catch (Exception exception){
                         sendInfo.setText("There were problems with sending your e-mail (recipient's address is not vail)");

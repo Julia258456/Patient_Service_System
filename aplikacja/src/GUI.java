@@ -806,6 +806,40 @@ public class GUI{
 
         Button downloadInfoButton = new Button("Confirm your selection");
         downloadInfoButton.setSize(new Dimension(frame.getWidth(), frame.getHeight()/7));
+        findUserPanel.add(usernameLabel);
+        findUserPanel.add(userToSelect);
+        Label gapLabel = new Label();
+        gapLabel.setPreferredSize(new Dimension(frame.getWidth(), frame.getHeight()/8));
+        findUserPanel.add(gapLabel);
+        Choice choice = new Choice();
+        Label infoChoice = new Label("OPTIONAL[select only while deleting an orthodontist] Please choose from the list an orthodontist who will take over patients: ");
+        findUserPanel.add(infoChoice);
+        findUserPanel.add(choice);
+        Connection connectionOrthodontist = DataBaseHandling.StartConnectionWithDB();
+        List<User> listOfOrthodontist = DataBaseHandling.SearchForAllUsers(connectionOrthodontist, loggedUser);
+        try {
+            if (connectionOrthodontist != null) {
+                connectionOrthodontist.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        if(listOfOrthodontist != null){
+            for(User orthodontist: listOfOrthodontist){
+                choice.add(orthodontist.getUserLogin());
+            }
+        }
+        findUserPanel.setLayout(new BoxLayout(findUserPanel, BoxLayout.Y_AXIS));
+        findUserPanel.add(downloadInfoButton);
+
+        findPanelMessage.setLayout(new BoxLayout(findPanelMessage, BoxLayout.Y_AXIS));
+        findPanelMessage.add(userStatement);
+
+        Panel deletePanel = new Panel();
+        Label deleteInfo = new Label("Are you sure you want to permanently delete this user? If yes press the button below", Label.CENTER);
+        deleteInfo.setMaximumSize(new Dimension(frame.getWidth(), frame.getHeight()/12));
+        Button deleteButton = new Button("Delete user");
+        deleteButton.setSize(new Dimension(frame.getWidth(), frame.getHeight()/7));
 
         downloadInfoButton.addActionListener(e -> {
             boolean userFound = false;
@@ -824,23 +858,6 @@ public class GUI{
             }
         });
 
-        findUserPanel.add(usernameLabel);
-        findUserPanel.add(userToSelect);
-        Label gapLabel = new Label();
-        gapLabel.setPreferredSize(new Dimension(frame.getWidth(), frame.getHeight()/8));
-        findUserPanel.add(gapLabel);
-        findUserPanel.setLayout(new BoxLayout(findUserPanel, BoxLayout.Y_AXIS));
-        findUserPanel.add(downloadInfoButton);
-
-        findPanelMessage.setLayout(new BoxLayout(findPanelMessage, BoxLayout.Y_AXIS));
-        findPanelMessage.add(userStatement);
-
-        Panel deletePanel = new Panel();
-        Label deleteInfo = new Label("Are you sure you want to permanently delete this user? If yes press the button below", Label.CENTER);
-        deleteInfo.setMaximumSize(new Dimension(frame.getWidth(), frame.getHeight()/12));
-        Button deleteButton = new Button("Delete user");
-        deleteButton.setSize(new Dimension(frame.getWidth(), frame.getHeight()/7));
-
         deleteButton.addActionListener(e -> {
             try {
                 Connection connection = DataBaseHandling.StartConnectionWithDB();
@@ -849,9 +866,15 @@ public class GUI{
                     DataBaseHandling.RemovePatientFromDB(connection, loggedUser, userToEdit);
                     deleteInfo.setText("Deletion of patient: " + userToEdit.getUserLogin() + ", was successful");
                 } else if (userToEdit.getUserPermissionsLevel() == 1) {
-                    deleteInfo.setText("Deletion of orthodontist: " + userToEdit.getUserLogin() + ", was successful");
-                    User adminOrthodontist = DataBaseHandling.LogInUser(connection, "adminOrthodontist", "admin");
+                    User adminOrthodontist = new User();
+                    if(list != null){
+                        for(User user: list) {
+                            if(user.getUserLogin().equals(choice.getSelectedItem()))
+                                adminOrthodontist = user;
+                        }
+                    }
                     DataBaseHandling.RemoveOrthodontistFromDB(connection, loggedUser, userToEdit, adminOrthodontist);
+                    deleteInfo.setText("Deletion of orthodontist: " + userToEdit.getUserLogin() + ", was successful");
                 } else if (userToEdit.getUserPermissionsLevel() == 2) {
                     try {
                         DataBaseHandling.RemoveAdministratorFromDB(connection, loggedUser, userToEdit);

@@ -2,9 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="798ddb25-3dfe-433e-8232-508aa3459add" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/mysql_connector_java_8_0_22.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/mysql_connector_java_8_0_22.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aplikacja/src/GUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/aplikacja/src/GUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/aplikacja/GUI$7.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/aplikacja/GUI$7.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/aplikacja/GUI.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/aplikacja/GUI.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/aplikacja/MailHandlingClass$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/aplikacja/MailHandlingClass.class" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,9 +49,9 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="ToolWindowRun.ShowToolbar" value="false" />
     <property name="jdk.selected.JAVA_MODULE" value="corretto-1.8" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/mysql-connector-java-8.0.22/mysql-connector-java-8.0.22.jar" />
-    <property name="project.structure.last.edited" value="Artifacts" />
-    <property name="project.structure.proportion" value="0.15" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/resources/javax.mail.jar" />
+    <property name="project.structure.last.edited" value="Libraries" />
+    <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.2" />
   </component>
   <component name="RecentsManager">
@@ -59,7 +62,7 @@
       <recent name="C:\Users\adas1\IdeaProjects\PJAVA\SystemObslugiPacjenta-GabinetOrtodontyczny" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.JDBC">
+  <component name="RunManager" selected="Application.PatientServiceSystem">
     <configuration name="JDBC" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="JDBC" />
       <module name="aplikacja" />
@@ -76,8 +79,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.JDBC" />
         <item itemvalue="Application.PatientServiceSystem" />
+        <item itemvalue="Application.JDBC" />
       </list>
     </recent_temporary>
   </component>

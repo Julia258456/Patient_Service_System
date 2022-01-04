@@ -2,8 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="798ddb25-3dfe-433e-8232-508aa3459add" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/mysql_connector_java_8_0_22.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/mysql_connector_java_8_0_22.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/aplikacja/src/GUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/aplikacja/src/GUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/aplikacja/GUI$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/aplikacja/GUI$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/aplikacja/GUI$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/aplikacja/GUI$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/aplikacja/GUI$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/aplikacja/GUI$3.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/aplikacja/GUI$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/aplikacja/GUI$4.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/aplikacja/GUI$5.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/aplikacja/GUI$5.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/aplikacja/GUI$6.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/aplikacja/GUI$6.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/aplikacja/GUI$7.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/aplikacja/GUI$7.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/aplikacja/GUI.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/aplikacja/GUI.class" afterDir="false" />
     </list>
@@ -47,12 +55,15 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="ToolWindowRun.ShowToolbar" value="false" />
     <property name="jdk.selected.JAVA_MODULE" value="corretto-1.8" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../old_saves/mysql-connector-java-8.0.22.jar" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/resources/javax.mail.jar" />
     <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.2" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\adas1\IdeaProjects\PJAVA\SystemObslugiPacjenta-GabinetOrtodontyczny\resources" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\adas1\IdeaProjects\PJAVA\SystemObslugiPacjenta-GabinetOrtodontyczny" />
     </key>

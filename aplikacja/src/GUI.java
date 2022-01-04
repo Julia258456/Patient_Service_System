@@ -1,8 +1,8 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.sql.Connection;
-import java.sql.SQLException;
+import java.io.*;
+import java.sql.*;
 import java.util.List;
 
 /**
@@ -25,6 +25,9 @@ public class GUI{
     User userToEdit = new User();
     int numberOfAttempts = 0;
     int SCREEN_RES = 0;
+    Color colorForOrthodontist = Color.getHSBColor(178.8f,102.2f,85.1f);
+    Color colorForPatient = Color.getHSBColor(137.4f,101.1f,85.1f);
+    Color colorForDeveloper = Color.darkGray.brighter().brighter();
 
     /**
      * The basic Constructor which creates basic frame of Main menu.
@@ -41,7 +44,6 @@ public class GUI{
         );
         menu = new MenuBar();
         centralPanel = new Panel();
-
         fileMenu = new Menu("File");
         optionsMenu = new Menu("Options");
         helpMenu = new Menu("Help");
@@ -52,15 +54,15 @@ public class GUI{
      */
     private void createButtonsOrthodontist(){
         buttons[0] = new Button("My visits");
-        buttons[0].setBackground(Color.getHSBColor(178.8f,102.2f,85.1f));
+        buttons[0].setBackground(colorForOrthodontist);
         buttons[1] = new Button("My mailbox");
-        buttons[1].setBackground(Color.getHSBColor(178.8f,102.2f,85.1f));
+        buttons[1].setBackground(colorForOrthodontist);
         buttons[2] = new Button("My profile");
-        buttons[2].setBackground(Color.getHSBColor(178.8f,102.2f,85.1f));
+        buttons[2].setBackground(colorForOrthodontist);
         buttons[3] = new Button("Log out");
-        buttons[3].setBackground(Color.getHSBColor(178.8f,102.2f,85.1f));
+        buttons[3].setBackground(colorForOrthodontist);
         buttons[4] = new Button("Exit the program");
-        buttons[4].setBackground(Color.getHSBColor(178.8f,102.2f,85.1f));
+        buttons[4].setBackground(colorForOrthodontist);
 
         buttons[0].addActionListener(e -> {
             frame.removeAll();
@@ -92,15 +94,15 @@ public class GUI{
      */
     private void createButtonsPatient(){
         buttons[0] = new Button("My visits");
-        buttons[0].setBackground(Color.getHSBColor(137.4f,101.1f,85.1f));
+        buttons[0].setBackground(colorForPatient);
         buttons[1] = new Button("My mailbox");
-        buttons[1].setBackground(Color.getHSBColor(137.4f,101.1f,85.1f));
+        buttons[1].setBackground(colorForPatient);
         buttons[2] = new Button("My profile");
-        buttons[2].setBackground(Color.getHSBColor(137.4f,101.1f,85.1f));
+        buttons[2].setBackground(colorForPatient);
         buttons[3] = new Button("Log out");
-        buttons[3].setBackground(Color.getHSBColor(137.4f,101.1f,85.1f));
+        buttons[3].setBackground(colorForPatient);
         buttons[4] = new Button("Exit the program");
-        buttons[4].setBackground(Color.getHSBColor(137.4f,101.1f,85.1f));
+        buttons[4].setBackground(colorForPatient);
 
         buttons[0].addActionListener(e -> {
             frame.removeAll();
@@ -132,19 +134,19 @@ public class GUI{
      */
     private void createButtonsDeveloper(){
         buttons[0] = new Button("Find user in database");
-        buttons[0].setBackground(Color.lightGray);
+        buttons[0].setBackground(colorForDeveloper);
         buttons[1] = new Button("Edit users");
-        buttons[1].setBackground(Color.lightGray);
+        buttons[1].setBackground(colorForDeveloper);
         buttons[2] = new Button("Add user");
-        buttons[2].setBackground(Color.lightGray);
+        buttons[2].setBackground(colorForDeveloper);
         buttons[3] = new Button("Delete user");
-        buttons[3].setBackground(Color.lightGray);
+        buttons[3].setBackground(colorForDeveloper);
         buttons[4] = new Button("My profile");
-        buttons[4].setBackground(Color.lightGray);
+        buttons[4].setBackground(colorForDeveloper);
         buttons[5] = new Button("Log out");
-        buttons[5].setBackground(Color.lightGray);
+        buttons[5].setBackground(colorForDeveloper);
         buttons[6] = new Button("Exit the program");
-        buttons[6].setBackground(Color.lightGray);
+        buttons[6].setBackground(colorForDeveloper);
 
         buttons[0].addActionListener(e -> {
             frame.removeAll();
@@ -204,7 +206,21 @@ public class GUI{
         MenuItem aboutItem = new MenuItem("About");
 
         loadFileItem.addActionListener(e -> {
-            System.out.println("Button in progress...."); // TODO, maybe a method which can read png files
+            JFrame jFrame = new JFrame("Preview of pantomography image");
+            JFileChooser fileChooser = new JFileChooser();
+            int response = fileChooser.showOpenDialog(null);
+            jFrame.setIconImage(icon);
+            if(response == JFileChooser.APPROVE_OPTION){
+                File file = new File(String.valueOf(fileChooser.getSelectedFile().getAbsoluteFile()));
+                jFrame.setVisible(true);
+                ImageIcon imageIcon = new ImageIcon(file.getAbsolutePath());
+                Panel panel= new Panel();
+                panel.add(new JLabel(imageIcon));
+                jFrame.setSize(imageIcon.getIconWidth(), imageIcon.getIconHeight());
+                jFrame.add(panel);
+                jFrame.setLocationRelativeTo(null);
+            }
+
         });
         exitMenuItem.addActionListener(e -> {
             frame.dispose();
@@ -227,17 +243,26 @@ public class GUI{
             Label message = new Label("Resize the window using these options:", Label.CENTER);
             Button normalButton = new Button("Standard (70% screen size)");
             normalButton.addActionListener(e1 -> {
-                    frame.setSize(screenWidth,screenHeight);
-                    
-                    frame.setLocationRelativeTo(null);
-                    SCREEN_RES = 0;
-                    frame.setLayout(new BoxLayout(frame, BoxLayout.Y_AXIS));
+                frame.setSize(screenWidth,screenHeight);
+                frame.setLocationRelativeTo(null);
+                SCREEN_RES = 0;
+                for(int i=0; i<10;i++) {
+                    if(buttons[i] == null)
+                        break;
+                    buttons[i].setMaximumSize(new Dimension((int) (frame.getWidth() / 1.5), frame.getHeight() / 9));
+                }
+                frame.setLayout(new BoxLayout(frame, BoxLayout.Y_AXIS));
             });
             Button greaterButton = new Button("Greater (90% screen size)");
             greaterButton.addActionListener(e1 -> {
                 frame.setSize((int)(screenWidth*1.3),(int)(screenHeight*1.3));
                 frame.setLocationRelativeTo(null);
                 SCREEN_RES = 1;
+                for(int i=0; i<10;i++) {
+                    if(buttons[i] == null)
+                        break;
+                    buttons[i].setMaximumSize(new Dimension((int) (frame.getWidth() / 1.5), frame.getHeight() / 9));
+                }
                 frame.setLayout(new BoxLayout(frame, BoxLayout.Y_AXIS));
             });
             Button fullscreenButton = new Button("Fullscreen (100% screen size)");
@@ -245,6 +270,11 @@ public class GUI{
                 frame.setSize(screenDimension.width, screenDimension.height);
                 frame.setLocationRelativeTo(null);
                 SCREEN_RES = 3;
+                for(int i=0; i<10;i++) {
+                    if(buttons[i] == null)
+                        break;
+                    buttons[i].setMaximumSize(new Dimension((int) (frame.getWidth() / 1.5), frame.getHeight() / 9));
+                }
                 frame.setLayout(new BoxLayout(frame, BoxLayout.Y_AXIS));
             });
             settingsFrame.add(message);
@@ -258,6 +288,23 @@ public class GUI{
             settingsFrame.setLocation(location);
             settingsFrame.setSize(frame.getWidth()/3,frame.getHeight()/3);
             settingsFrame.setVisible(true);
+            switch (loggedUser.getUserPermissionsLevel()){
+                case 0:
+                    normalButton.setBackground(colorForPatient);
+                    greaterButton.setBackground(colorForPatient);
+                    fullscreenButton.setBackground(colorForPatient);
+                    break;
+                case 1:
+                    normalButton.setBackground(colorForOrthodontist);
+                    greaterButton.setBackground(colorForOrthodontist);
+                    fullscreenButton.setBackground(colorForOrthodontist);
+                    break;
+                case 2:
+                    normalButton.setBackground(colorForDeveloper);
+                    greaterButton.setBackground(colorForDeveloper);
+                    fullscreenButton.setBackground(colorForDeveloper);
+                    break;
+            }
             settingsFrame.addWindowListener(new WindowAdapter(){
                 @Override
                 public void windowClosing(WindowEvent e) {
@@ -278,18 +325,27 @@ public class GUI{
             if(loggedUser.getUserPermissionsLevel()==0) {
                 frame.removeAll();
                 myProfilePatient();
-            }
-            else if(loggedUser.getUserPermissionsLevel()==1){
+            } else if(loggedUser.getUserPermissionsLevel()==1){
                 frame.removeAll();
                 myProfileOrthodontist();
-            }
-            else if(loggedUser.getUserPermissionsLevel()==2){
+            } else if(loggedUser.getUserPermissionsLevel()==2){
                 frame.removeAll();
                 myProfileDeveloper();
             }
         });
         helpItem.addActionListener(e -> {
             Frame helpFrame = new Frame("Help");
+            switch (loggedUser.getUserPermissionsLevel()){
+                case 0:
+                    helpFrame.setBackground(colorForPatient);
+                    break;
+                case 1:
+                    helpFrame.setBackground(colorForOrthodontist);
+                    break;
+                case 2:
+                    helpFrame.setBackground(colorForDeveloper);
+                    break;
+            }
             helpFrame.setIconImage(icon);
             helpFrame.setVisible(true);
             Label message = new Label("For assistance with the application, please contact the administrator", Label.CENTER);
@@ -315,6 +371,17 @@ public class GUI{
         });
         gettingStartedItem.addActionListener(e -> {
             Frame gettingStartedFrame = new Frame("Getting Started");
+            switch (loggedUser.getUserPermissionsLevel()){
+                case 0:
+                    gettingStartedFrame.setBackground(colorForPatient);
+                    break;
+                case 1:
+                    gettingStartedFrame.setBackground(colorForOrthodontist);
+                    break;
+                case 2:
+                    gettingStartedFrame.setBackground(colorForDeveloper);
+                    break;
+            }
             gettingStartedFrame.setIconImage(icon);
             gettingStartedFrame.setVisible(true);
             Label message = new Label("For more instructions please read README.md file", Label.CENTER);
@@ -342,6 +409,18 @@ public class GUI{
         });
         checkForUpdatesItem.addActionListener(e -> {
             Frame updateFrame = new Frame("Check for updates");
+            switch (loggedUser.getUserPermissionsLevel()){
+                case 0:
+                    updateFrame.setBackground(colorForPatient);
+                    break;
+                case 1:
+                    updateFrame.setBackground(colorForOrthodontist);
+                    break;
+                case 2:
+                    updateFrame.setBackground(colorForDeveloper);
+                    break;
+            }
+
             updateFrame.setIconImage(icon);
             updateFrame.setVisible(true);
             Label message = new Label("You have the latest version installed, current version: 1.00000023", Label.CENTER);
@@ -368,6 +447,17 @@ public class GUI{
         });
         aboutItem.addActionListener(e -> {
             Frame aboutFrame = new Frame("About Patient Service System - Orthodontic office");
+            switch (loggedUser.getUserPermissionsLevel()){
+                case 0:
+                    aboutFrame.setBackground(colorForPatient);
+                    break;
+                case 1:
+                    aboutFrame.setBackground(colorForOrthodontist);
+                    break;
+                case 2:
+                    aboutFrame.setBackground(colorForDeveloper);
+                    break;
+            }
             aboutFrame.setIconImage(icon);
             Panel aboutPanel = new Panel();
             Label message = new Label("Build #OP-4214.2421323, built on January 10, 2022", Label.CENTER);
@@ -513,21 +603,17 @@ public class GUI{
                                 messageToView.append(", ");
                         }
                         userStatement.setText(messageToView.toString());
-                    }
-                    else {
+                    } else {
                         String messageToView = "You have found user: " + userToEdit.getUserName() + " " + userToEdit.getUserSurname() + ", with DB id: " + userToEdit.getUserId() + ", this user has 0 visits";
                         userStatement.setText(messageToView);
                     }
-                }
-                else if(userFound && userToEdit.getUserPermissionsLevel()!=0){
+                } else if(userFound && userToEdit.getUserPermissionsLevel()!=0){
                     String messageToView = "You have found user: " + userToEdit.getUserName() + " " + userToEdit.getUserSurname() + ", with DB id: " + userToEdit.getUserId();
                     userStatement.setText(messageToView);
-                }
-                else {
+                } else {
                     userStatement.setText("There is no such user in the database (Attempt: " + numberOfAttempts + ")");
                 }
-            }
-            catch(Exception exception){
+            } catch(Exception exception){
                 System.out.println("Exception caught!" + exception.getMessage());
                 userStatement.setText("There is no such user in the database (Attempt: " + numberOfAttempts + ")");
             }
@@ -581,12 +667,18 @@ public class GUI{
         Label optionalOrthodontist = new Label("OPTIONAL [select only when adding a patient] Patient's Orthodontist: ");
         Choice orthodontistToSelect = new Choice();
 
-        Connection connection = DataBaseHandlingClass.StartConnectionWithDB();
-        List<User> listOfOrthodontist = DataBaseHandlingClass.SearchForAllOrthodontists(connection, loggedUser);
+        Connection connectionList = DataBaseHandlingClass.StartConnectionWithDB();
+        List<User> listOfOrthodontist = DataBaseHandlingClass.SearchForAllOrthodontists(connectionList, loggedUser);
         if (listOfOrthodontist != null)
             for (User userToAdd : listOfOrthodontist) {
                 orthodontistToSelect.add(userToAdd.getUserLogin());
             }
+        try {
+            assert connectionList != null;
+            connectionList.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
         editUserPanel.add(username);
         editUserPanel.add(usernameTextField);
@@ -608,15 +700,15 @@ public class GUI{
         editUserPanel.add(orthodontistToSelect);
 
         editUserPanel.setLayout(new BoxLayout(editUserPanel, BoxLayout.Y_AXIS));
-
         Button editUserButton = new Button("Add new user to database");
         Label prompt = new Label("Please before pressing the button, check the correctness of the data");
         editUserPanel.add(prompt);
         editUserPanel.add(editUserButton);
 
         editUserButton.addActionListener(e -> {
-
+            prompt.setBackground(null);
             try {
+                Connection connection = DataBaseHandlingClass.StartConnectionWithDB();
                 User orthodontistSelected = new User();
                 if(listOfOrthodontist != null){
                     for(User userToFind: listOfOrthodontist){
@@ -631,15 +723,14 @@ public class GUI{
 
                 if (!levelTextField.getText().isEmpty() && !mailTextField.getText().isEmpty() && !mobileNumberTextField.getText().isEmpty() && !surnameTextField.getText().isEmpty() &&
                         !nameTextField.getText().isEmpty() && !passwordTextField.getText().isEmpty() && !usernameTextField.getText().isEmpty() && !addressTextField.getText().isEmpty()) {
-
-
                     List<User> list = DataBaseHandlingClass.SearchForAllUsers(connection, loggedUser);
                     if(list!=null){
                         for(User userToCheck: list) {
-                            if(usernameTextField.getText().equals(userToCheck.getUserName()))
-                                throw new Exception();
+                            if(usernameTextField.getText().equals(userToCheck.getUserLogin()))
+                                throw new Exception("You can't create a user with the same username");
                         }
-                    }
+                    } else
+                        throw new Exception("There are no users, a problem has arisen while adding a new user to database");
 
                     User userToAdd = new User();
                     userToAdd.setUserName(nameTextField.getText());
@@ -662,18 +753,10 @@ public class GUI{
                 } else
                     prompt.setText("There was an error adding the user, please check the entered data and try again...");
 
-            }
-            catch (Exception exception){
-                prompt.setText("A problem has arisen while adding a new user to database");
+            } catch (Exception exception){
+                prompt.setText("You can't create a user with this credentials, please fill them again");
+                prompt.setBackground(Color.red);
                 System.out.println("A problem has arisen while adding a new user to database " + exception.getMessage());
-            }
-            finally{
-                try {
-                    assert connection != null;
-                    connection.close();
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                }
             }
         });
 
@@ -688,8 +771,15 @@ public class GUI{
      */
     public void deleteUser(){
         enteredUsername = "null";
-        Connection connection = DataBaseHandlingClass.StartConnectionWithDB();
-        List<User> list = DataBaseHandlingClass.SearchForAllUsers(connection, loggedUser);
+        Connection connectionList = DataBaseHandlingClass.StartConnectionWithDB();
+        List<User> list = DataBaseHandlingClass.SearchForAllUsers(connectionList, loggedUser);
+        try {
+            if (connectionList != null) {
+                connectionList.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
         Panel welcomePanel = new Panel();
         Panel findPanelMessage = new Panel();
@@ -723,8 +813,7 @@ public class GUI{
 
             if(userFound){
                 userStatement.setText("You have selected: " + userToEdit.getUserName() + " " + userToEdit.getUserSurname() + ", with username: " + userToEdit.getUserName());
-            }
-            else {
+            } else {
                 userStatement.setText("ERROR, Please select a user from the list first!");
             }
         });
@@ -748,6 +837,8 @@ public class GUI{
 
         deleteButton.addActionListener(e -> {
             try {
+                Connection connection = DataBaseHandlingClass.StartConnectionWithDB();
+                deleteInfo.setBackground(null);
                 if (userToEdit.getUserPermissionsLevel() == 0) {
                     DataBaseHandlingClass.RemovePatientFromDB(connection, loggedUser, userToEdit);
                     deleteInfo.setText("Deletion of patient: " + userToEdit.getUserLogin() + ", was successful");
@@ -763,11 +854,21 @@ public class GUI{
                         System.out.println("Exception caught! a problem has arisen while deleting user from the database");
                     }
                 }
-            }
-            catch(Exception exception){
+            } catch(Exception exception){
+                deleteInfo.setText("Deletion of user: " + userToEdit.getUserLogin() + ", was not successful!");
+                deleteInfo.setBackground(Color.red);
                 System.out.println("Exception caught! " + exception.getMessage());
-            }
-            finally{
+            } finally{
+                Connection connection = DataBaseHandlingClass.StartConnectionWithDB();
+                List <User> listUpdate = DataBaseHandlingClass.SearchForAllUsers(connection, loggedUser);
+                if (listUpdate != null) {
+                    for (User userToAdd : listUpdate) {
+                        if (!userToAdd.getUserLogin().equals(loggedUser.getUserLogin()))
+                            userToSelect.add(userToAdd.getUserLogin());
+                    }
+                    if(userToSelect.getItemCount()>=1)
+                        userToSelect.select(0);
+                }
                 try {
                     assert connection != null;
                     connection.close();
@@ -800,10 +901,17 @@ public class GUI{
         userToEdit = null;
         enteredUsername = "null";
 
-        Connection connection = DataBaseHandlingClass.StartConnectionWithDB();
-        User user = DataBaseHandlingClass.LogInUser(connection, "admin", "admin");
+        Connection connectionFindList = DataBaseHandlingClass.StartConnectionWithDB();
+        User user = DataBaseHandlingClass.LogInUser(connectionFindList, "admin", "admin");
         assert user != null;
-        List<User> list = DataBaseHandlingClass.SearchForAllUsers(connection, user);
+        List<User> list = DataBaseHandlingClass.SearchForAllUsers(connectionFindList, user);
+        try {
+            if (connectionFindList != null) {
+                connectionFindList.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
         Panel welcomePanel = new Panel();
         Panel findPanelMessage = new Panel();
@@ -886,6 +994,7 @@ public class GUI{
 
         editUserButton.addActionListener(e -> {
             try {
+                Connection connection = DataBaseHandlingClass.StartConnectionWithDB();
                 if (userToEdit != null) {
                     User userToAdd = new User();
                     userToAdd.setUserName(nameTextField.getText());
@@ -903,14 +1012,6 @@ public class GUI{
             }
             catch(Exception exception){
                 System.out.println("Problem has arisen during editing profile");
-            }
-            finally {
-                try {
-                    assert connection != null;
-                    connection.close();
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                }
             }
         });
 
@@ -937,10 +1038,9 @@ public class GUI{
             Connection connection = DataBaseHandlingClass.StartConnectionWithDB();
             User orthodontistOfPatient = DataBaseHandlingClass.SearchForOrthodontistOfPatient(connection, loggedUser);
             if (orthodontistOfPatient != null) {
-                selectionList.add(orthodontistOfPatient.getUserName() + " " + orthodontistOfPatient.getUserSurname() + ", +48 " + orthodontistOfPatient.getUserTelephoneNumber());
+                selectionList.add(orthodontistOfPatient.getUserName() + " " + orthodontistOfPatient.getUserSurname() + ", " + orthodontistOfPatient.getUserEmail());
                 selectionList.add("Dev (Please contact us only if you have any problems with the application)");
-            }
-            else{
+            } else{
                 selectionList.add("Dev (Please contact us only if you have any problems with the application)");
             }
 
@@ -963,6 +1063,7 @@ public class GUI{
             frame.add(textField);
 
             Label sendInfo = new Label("Please check before submitting if a valid user is selected, and the subject and text fields are not empty", Label.CENTER);
+            sendInfo.setBackground(null);
             Button sendButton = new Button("Send");
             sendInfo.setMaximumSize(maxDimensionWidth);
             sendButton.setMaximumSize(maxDimension);
@@ -973,11 +1074,20 @@ public class GUI{
 
                 if(textField.getText().isEmpty() || textFieldTopic.getText().isEmpty())
                 {
+                    sendInfo.setBackground(Color.red);
                     sendInfo.setText("The subject and text fields are empty, please fill them in and try again");
-                }
-                else {
-                    // TODO email sending algorithm
-                    sendInfo.setText("The message has been sent successfully!");
+                } else {
+                    try {
+                        if (orthodontistOfPatient != null && selectionList.getSelectedItem().equals(orthodontistOfPatient.getUserName() + " " + orthodontistOfPatient.getUserSurname() + ", " + orthodontistOfPatient.getUserEmail())) {
+                            MailHandlingClass.sendMail(orthodontistOfPatient.getUserEmail(), textFieldTopic.getText(), textField.getText());
+                        } else
+                            MailHandlingClass.sendMail("adampiszczek1904@gmail.com", textFieldTopic.getText(), textField.getText());
+                        sendInfo.setText("The message has been sent successfully!");
+                    } catch (Exception exception){
+                        sendInfo.setText("There were problems with sending your e-mail (recipient's address is not vail)");
+                        sendInfo.setBackground(Color.red);
+                        System.out.println("Exception caught while sending an e-mail");
+                    }
                 }
             });
 
@@ -1006,12 +1116,10 @@ public class GUI{
             List<User> listOfPatients = DataBaseHandlingClass.SearchForPatientsOfOrthodontist(connection, loggedUser);
             if (listOfPatients != null) {
                 for (User patient : listOfPatients)
-                    selectionList.add(patient.getUserName() + " " + patient.getUserSurname() + ", +48 " + patient.getUserTelephoneNumber());
+                    selectionList.add(patient.getUserName() + " " + patient.getUserSurname() + ", " + patient.getUserEmail());
                 selectionList.add("Dev (Please contact us only if you have any problems with the application)");
-            }
-            else{
+            } else
                 selectionList.add("Dev (Please contact us only if you have any problems with the application)");
-            }
 
             frame.add(infoList);
             frame.add(selectionList);
@@ -1042,19 +1150,38 @@ public class GUI{
 
                 if(textField.getText().isEmpty() || textFieldTopic.getText().isEmpty())
                 {
+                    sendInfo.setBackground(Color.red);
                     sendInfo.setText("The subject and text fields are empty, please fill them in and try again");
-                }
-                else {
-                    // TODO email sending algorithm
-                    sendInfo.setText("The message has been sent successfully!");
+                } else {
+                    try {
+                        boolean userFound = false;
+                        User recepient = new User();
+                        if (listOfPatients != null) {
+                            for(User userToFind: listOfPatients){
+                                if(selectionList.getSelectedItem().equals(userToFind.getUserName() + " " + userToFind.getUserSurname() + ", " + userToFind.getUserEmail())){
+                                    userFound = true;
+                                    recepient.setUserEmail(userToFind.getUserEmail());
+                                }
+                            }
+                        }
+
+                        if (userFound) {
+                            MailHandlingClass.sendMail(recepient.getUserEmail(), textFieldTopic.getText(), textField.getText());
+                        } else
+                            MailHandlingClass.sendMail("adampiszczek1904@gmail.com", textFieldTopic.getText(), textField.getText());
+                        sendInfo.setText("The message has been sent successfully!");
+                    } catch (Exception exception){
+                        sendInfo.setText("There were problems with sending your e-mail (recipient's address is not vail)");
+                        sendInfo.setBackground(Color.red);
+                        System.out.println("Exception caught while sending an e-mail");
+                    }
                 }
             });
 
         }
         else
-        {
             System.err.println("There were problems logging in the correct user");
-        }
+
         addExitButtonOrthodontist();
         frame.setLayout(new BoxLayout(frame, BoxLayout.Y_AXIS));
         frame.setVisible(true);
@@ -1065,7 +1192,6 @@ public class GUI{
      */
     public void myProfileDeveloper(){
         frame.removeAll();
-
         Panel editUserPanel = new Panel();
         Label info = new Label("If u wish to edit your credentials, please change them and enter the button below");
         editUserPanel.add(info);
@@ -1096,7 +1222,6 @@ public class GUI{
         editUserPanel.add(mailTextField);
 
         editUserPanel.setLayout(new BoxLayout(editUserPanel, BoxLayout.Y_AXIS));
-
         Button editUserButton = new Button("Edit my data");
         Label prompt = new Label("Please before pressing the button, check the correctness of the data");
         editUserPanel.add(prompt);
@@ -1120,8 +1245,7 @@ public class GUI{
                     prompt.setText("The edition was a success");
                 } else
                     prompt.setText("There is no such user in the database (Editing is forbidden)");
-            }
-            catch(Exception exception){
+            } catch(Exception exception){
                 System.out.println("Problem has arisen during editing profile");
             }
             finally {
@@ -1145,7 +1269,6 @@ public class GUI{
      */
     public void myProfilePatient(){
         frame.removeAll();
-
         Panel editUserPanel = new Panel();
         Label info = new Label("If u wish to edit your credentials, please change them and enter the button below");
         editUserPanel.add(info);
@@ -1176,7 +1299,6 @@ public class GUI{
         editUserPanel.add(mailTextField);
 
         editUserPanel.setLayout(new BoxLayout(editUserPanel, BoxLayout.Y_AXIS));
-
         Button editUserButton = new Button("Edit my data");
         Label prompt = new Label("Please before pressing the button, check the correctness of the data");
         editUserPanel.add(editUserButton);
@@ -1200,8 +1322,7 @@ public class GUI{
                     prompt.setText("The edition was a success");
                 } else
                     prompt.setText("There is no such user in the database (Editing is forbidden)");
-            }
-            catch(Exception exception){
+            } catch(Exception exception){
                 System.out.println("Problem has arisen during editing profile");
             }
             finally {
@@ -1256,7 +1377,6 @@ public class GUI{
         editUserPanel.add(mailTextField);
 
         editUserPanel.setLayout(new BoxLayout(editUserPanel, BoxLayout.Y_AXIS));
-
         Button editUserButton = new Button("Edit my data");
         Label prompt = new Label("Please before pressing the button, check the correctness of the data");
         editUserPanel.add(editUserButton);
@@ -1279,8 +1399,7 @@ public class GUI{
                     prompt.setText("The edition was a success");
                 } else
                     prompt.setText("There is no such user in the database (Editing is forbidden)");
-            }
-            catch(Exception exception){
+            } catch(Exception exception){
                 System.out.println("Problem has arisen during editing profile");
             }
             finally {
@@ -1333,8 +1452,7 @@ public class GUI{
 
             });
 
-        }
-        else {
+        } else {
             System.err.println("There were problems logging in the correct user");
         }
 
@@ -1398,8 +1516,12 @@ public class GUI{
         Label loginStatement = new Label("Please enter your credentials", Label.CENTER);
         Label welcomeLabel = new Label("Patient Service System - Orthodontic office");
 
-        TextField usernameField = new TextField(20);
-        TextField passwordField = new TextField(20);
+        JTextField usernameField = new JTextField();
+        Dimension dimension = new Dimension();
+        dimension.setSize(usernameField.getWidth(),usernameField.getHeight());
+        JPasswordField passwordField = new JPasswordField();
+        passwordField.setSize(dimension);
+        usernameField.setNextFocusableComponent(passwordField);
 
         Button loginButton = new Button("Login");
 
@@ -1407,7 +1529,7 @@ public class GUI{
             Connection connection = DataBaseHandlingClass.StartConnectionWithDB();
             try {
                 enteredUsername = usernameField.getText();
-                enteredPassword = passwordField.getText();
+                enteredPassword = String.valueOf(passwordField.getPassword());
                 numberOfAttempts++;
                 User user = DataBaseHandlingClass.LogInUser(connection, enteredUsername, enteredPassword);
                 assert user != null;
@@ -1450,6 +1572,7 @@ public class GUI{
                 }
             }
             catch(Exception exception){
+                loginStatement.setBackground(Color.red);
                 loginStatement.setText("Your input is wrong (Attempt: " + numberOfAttempts + ")");
             }
             finally {
@@ -1475,12 +1598,10 @@ public class GUI{
         loginPanel.add(passwordField);
         loginPanel.setLayout(new BoxLayout(loginPanel, BoxLayout.Y_AXIS));
         loginPanel.add(loginButton);
-
         loginPanelMessage.add(loginStatement, BorderLayout.NORTH);
         loginPanelMessage.setVisible(true);
-
         loginFrame.setIconImage(icon);
-        loginFrame.add(loginPanel, BorderLayout.CENTER);
+        loginFrame.add(loginPanel);
         loginFrame.add(loginPanelMessage, BorderLayout.SOUTH);
         loginFrame.add(welcomePanel,BorderLayout.NORTH);
         loginFrame.setSize((int)(screenWidth/1.7),(screenHeight/3));
@@ -1496,8 +1617,8 @@ public class GUI{
                 if (user == null)
                     System.exit(0);
             }
-
         });
+        usernameField.requestFocus();
     }
 
     /**
@@ -1510,7 +1631,7 @@ public class GUI{
         frame.setIconImage(icon);
         switch (SCREEN_RES) {
             case 0:
-                frame.setSize(screenWidth,screenHeight);
+                frame.setSize(screenWidth,screenHeight); // default size
                 break;
             case 1:
                 frame.setSize((int)(screenWidth*1.3),(int)(screenHeight*1.3));
@@ -1522,9 +1643,13 @@ public class GUI{
         frame.setMenuBar(menu);
         frame.setResizable(false);
         centralPanel.removeAll();
-        centralPanel.setLayout(new BoxLayout(centralPanel, BoxLayout.Y_AXIS));
-        for(int i=0;i<5;i++)
+        for(int i=0;i<5;i++) {
+            centralPanel.add(Box.createRigidArea(new Dimension(0, frame.getHeight()/22)));
+            buttons[i].setMaximumSize(new Dimension((int)(frame.getWidth()/1.5), frame.getHeight()/9));
             centralPanel.add(buttons[i]);
+        }
+        centralPanel.add(Box.createRigidArea(new Dimension(0, frame.getHeight()/22)));
+        centralPanel.setLayout(new BoxLayout(centralPanel, BoxLayout.Y_AXIS));
         frame.setLocationRelativeTo(null);
     }
 
@@ -1538,7 +1663,7 @@ public class GUI{
         frame.setIconImage(icon);
         switch (SCREEN_RES) {
             case 0:
-                frame.setSize(screenWidth,screenHeight);
+                frame.setSize(screenWidth,screenHeight); // default size
                 break;
             case 1:
                 frame.setSize((int)(screenWidth*1.3),(int)(screenHeight*1.3));
@@ -1550,9 +1675,13 @@ public class GUI{
         frame.setMenuBar(menu);
         frame.setResizable(false);
         centralPanel.removeAll();
-        centralPanel.setLayout(new BoxLayout(centralPanel, BoxLayout.Y_AXIS));
-        for(int i=0;i<5;i++)
+        for(int i=0;i<5;i++) {
+            centralPanel.add(Box.createRigidArea(new Dimension(0, frame.getHeight()/22)));
+            buttons[i].setMaximumSize(new Dimension((int)(frame.getWidth()/1.5), frame.getHeight()/9));
             centralPanel.add(buttons[i]);
+        }
+        centralPanel.add(Box.createRigidArea(new Dimension(0, frame.getHeight()/22)));
+        centralPanel.setLayout(new BoxLayout(centralPanel, BoxLayout.Y_AXIS));
         frame.setLocationRelativeTo(null);
     }
 
@@ -1578,9 +1707,13 @@ public class GUI{
         frame.setMenuBar(menu);
         frame.setResizable(false);
         centralPanel.removeAll();
-        centralPanel.setLayout(new BoxLayout(centralPanel, BoxLayout.Y_AXIS));
-        for(int i=0;i<7;i++)
+        for(int i=0;i<7;i++) {
+            centralPanel.add(Box.createRigidArea(new Dimension(0, frame.getHeight()/22)));
+            buttons[i].setMaximumSize(new Dimension((int)(frame.getWidth()/1.5), frame.getHeight()/9));
             centralPanel.add(buttons[i]);
+        }
+        centralPanel.add(Box.createRigidArea(new Dimension(0, frame.getHeight()/22)));
+        centralPanel.setLayout(new BoxLayout(centralPanel, BoxLayout.Y_AXIS));
         frame.setLocationRelativeTo(null);
     }
 }

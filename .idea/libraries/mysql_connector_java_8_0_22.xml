@@ -4,6 +4,7 @@
       <root url="jar://$USER_HOME$/mysql-connector-java-8.0.22/mysql-connector-java-8.0.22.jar!/" />
       <root url="jar://$PROJECT_DIR$/../pjava_external/mysql-connector-java-8.0.22.jar!/" />
       <root url="jar://$PROJECT_DIR$/../old_saves/mysql-connector-java-8.0.22.jar!/" />
+      <root url="jar://$PROJECT_DIR$/resources/javax.mail.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

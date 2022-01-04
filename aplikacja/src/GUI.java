@@ -6,7 +6,7 @@ import java.sql.*;
 import java.util.List;
 
 /**
- * The main class which represents graphical user interface
+ * The main class which represents graphical user interface - GUI
  */
 public class GUI{
     Frame frame;
@@ -16,21 +16,21 @@ public class GUI{
     Button[] buttons = new Button[10];
     static String enteredUsername;
     static String enteredPassword;
-    Dimension screenDimension = Toolkit.getDefaultToolkit().getScreenSize();
-    int screenWidth = (int)(screenDimension.width * 0.7);
-    int screenHeight = (int)(screenDimension.height * 0.7);
     Image icon = Toolkit.getDefaultToolkit().getImage(".//resources//icon.JPG");
     User user = new User();
     User loggedUser = new User();
     User userToEdit = new User();
     int numberOfAttempts = 0;
     int SCREEN_RES = 0;
+    Dimension screenDimension = Toolkit.getDefaultToolkit().getScreenSize();
+    int screenWidth = (int)(screenDimension.width * 0.7);
+    int screenHeight = (int)(screenDimension.height * 0.7);
     Color colorForOrthodontist = Color.getHSBColor(178.8f,102.2f,85.1f);
     Color colorForPatient = Color.getHSBColor(137.4f,101.1f,85.1f);
     Color colorForDeveloper = Color.darkGray.brighter().brighter();
 
     /**
-     * The basic Constructor which creates basic frame of Main menu.
+     * The Constructor which creates basic frame of main menu.
      */
     public GUI() {
         frame = new Frame("Patient Service System - Orthodontic office");
@@ -50,7 +50,7 @@ public class GUI{
     }
 
     /**
-     * The method which creates Buttons in main frame for Orthodontist
+     * The method which creates Buttons in main frame for Orthodontist and determines their actions
      */
     private void createButtonsOrthodontist(){
         buttons[0] = new Button("My visits");
@@ -90,7 +90,7 @@ public class GUI{
     }
 
     /**
-     * The method which creates Buttons in main frame for Patient
+     * The method which creates Buttons in main frame for Patient and determines their actions
      */
     private void createButtonsPatient(){
         buttons[0] = new Button("My visits");
@@ -130,7 +130,7 @@ public class GUI{
     }
 
     /**
-     * The method which creates Buttons in main frame for Developer
+     * The method which creates Buttons in main frame for Developer and determines their actions
      */
     private void createButtonsDeveloper(){
         buttons[0] = new Button("Find user in database");
@@ -184,7 +184,7 @@ public class GUI{
     }
 
     /**
-     * The method which configures Menu Bars in main frame
+     * The method which adds and configures Menu Bars in main frame
      */
     public void configureMenuBars(){
         fileMenu = new Menu("File");
@@ -499,7 +499,7 @@ public class GUI{
     }
 
     /**
-     * The method which adds Panels in main frame
+     * The method which adds and edits Panels in main frame
      */
     private void addPanels(){
         frame.add(centralPanel);
@@ -507,7 +507,8 @@ public class GUI{
     }
 
     /**
-     * The method which is responsible for adding exit button for developer to GUI
+     * The method which is responsible for adding exit button for developer to GUI. Pressing the button
+     * causes return to main menu
      */
     public void addExitButtonDeveloper(){
         numberOfAttempts = 0;
@@ -524,7 +525,8 @@ public class GUI{
     }
 
     /**
-     * The method which is responsible for adding exit button for orthodontist to GUI
+     * The method which is responsible for adding exit button for orthodontist to GUI. Pressing the button
+     * causes return to main menu
      */
     public void addExitButtonOrthodontist(){
         numberOfAttempts = 0;
@@ -541,7 +543,8 @@ public class GUI{
     }
 
     /**
-     * The method which is responsible for adding exit button for patient to GUI
+     * The method which is responsible for adding exit button for patient to GUI. Pressing the button
+     * causes return to main menu
      */
     public void addExitButtonPatient(){
         numberOfAttempts = 0;
@@ -558,7 +561,8 @@ public class GUI{
     }
 
     /**
-     * The method which is responsible for finding the user by e-mail address
+     * The method which is responsible for finding the user by e-mail address. It works by connecting to a
+     * database and calling appropriate methods of DataBaseHandlingClass class to find the data.
      */
     public void findUser(){
         enteredUsername = "null";
@@ -640,7 +644,8 @@ public class GUI{
     }
 
     /**
-     * The method which is responsible for adding new user to the database
+     * The method which is responsible for adding new user to the database. It works by connecting to a
+     * database and calling appropriate methods of DataBaseHandlingClass class to change the data.
      */
     public void addUser(){
         frame.removeAll();
@@ -767,7 +772,8 @@ public class GUI{
     }
 
     /**
-     * The method which is responsible for adding user from the database
+     * The method which is responsible for deleting users from the database. It works by connecting to a
+     * database and calling appropriate methods of DataBaseHandlingClass class to change the data.
      */
     public void deleteUser(){
         enteredUsername = "null";
@@ -894,7 +900,8 @@ public class GUI{
     }
 
     /**
-     * The method which is responsible for editing the user's credentials
+     * The method which is responsible for editing the user's credentials. It works by connecting to a
+     * database and calling appropriate methods of DataBaseHandlingClass class to change the data.
      */
     public void editUsers() {
         frame.removeAll();
@@ -965,7 +972,6 @@ public class GUI{
             }
         };
 
-
         loginButton.addActionListener(action);
         findUserPanel.add(usernameLabel);
         findUserPanel.add(userToSelect);
@@ -1025,7 +1031,8 @@ public class GUI{
     }
 
     /**
-     * The method which is responsible for patient's mailbox
+     * The method which is responsible for patient's mailbox. It allows the user to send an e-mail to an external
+     * address of his Orthodontist and Administrator. It uses MailHandlingClass class methods.
      */
     public void myMailboxPatient(){
         if(loggedUser.getUserPermissionsLevel()==0) {
@@ -1039,9 +1046,9 @@ public class GUI{
             User orthodontistOfPatient = DataBaseHandlingClass.SearchForOrthodontistOfPatient(connection, loggedUser);
             if (orthodontistOfPatient != null) {
                 selectionList.add(orthodontistOfPatient.getUserName() + " " + orthodontistOfPatient.getUserSurname() + ", " + orthodontistOfPatient.getUserEmail());
-                selectionList.add("Dev (Please contact us only if you have any problems with the application)");
+                selectionList.add("Administration (Please contact us only if you have any problems with the application)");
             } else{
-                selectionList.add("Dev (Please contact us only if you have any problems with the application)");
+                selectionList.add("Administration (Please contact us only if you have any problems with the application)");
             }
 
             frame.add(infoList);
@@ -1102,7 +1109,8 @@ public class GUI{
     }
 
     /**
-     * The method which is responsible for orthodontist's mailbox
+     * The method which is responsible for orthodontist's mailbox. It allows the user to send an e-mail to an external
+     * address. It uses MailHandlingClass class methods.
      */
     public void myMailboxOrthodontist(){
         if(loggedUser.getUserPermissionsLevel()==1) {
@@ -1117,9 +1125,9 @@ public class GUI{
             if (listOfPatients != null) {
                 for (User patient : listOfPatients)
                     selectionList.add(patient.getUserName() + " " + patient.getUserSurname() + ", " + patient.getUserEmail());
-                selectionList.add("Dev (Please contact us only if you have any problems with the application)");
+                selectionList.add("Administration (Please contact us only if you have any problems with the application)");
             } else
-                selectionList.add("Dev (Please contact us only if you have any problems with the application)");
+                selectionList.add("Administration (Please contact us only if you have any problems with the application)");
 
             frame.add(infoList);
             frame.add(selectionList);
@@ -1188,7 +1196,8 @@ public class GUI{
     }
 
     /**
-     * The method which is responsible for viewing and editing developer's credentials
+     * The method which is responsible for viewing and editing developer's credentials It works by connecting to a
+     * database and calling appropriate methods of DataBaseHandlingClass class to change the data.
      */
     public void myProfileDeveloper(){
         frame.removeAll();
@@ -1265,7 +1274,8 @@ public class GUI{
     }
 
     /**
-     * The method which is responsible for viewing and editing patient's credentials
+     * The method which is responsible for viewing and editing patient's credentials It works by connecting to a
+     * database and calling appropriate methods of DataBaseHandlingClass class to change the data.
      */
     public void myProfilePatient(){
         frame.removeAll();
@@ -1342,7 +1352,8 @@ public class GUI{
     }
 
     /**
-     * The method which is responsible for viewing and editing orthodontist's credentials
+     * The method which is responsible for viewing and editing orthodontist's credentials. It works by connecting to a
+     * database and calling appropriate methods of DataBaseHandlingClass class to change the data.
      */
     public void myProfileOrthodontist(){
         frame.removeAll();
@@ -1500,7 +1511,9 @@ public class GUI{
     }
 
     /**
-     * The method which is responsible for login screen
+     * The method which is responsible for login screen. This method logs the user in by retrieving data from the
+     * database and checking their correctness. If the user provides wrong data, an appropriate message will be
+     * displayed.
      */
     public void loginScreen() {
         enteredUsername = "null";
@@ -1622,7 +1635,8 @@ public class GUI{
     }
 
     /**
-     * The method which is responsible for running main frame of GUI for Orthodontist
+     * The method which is responsible for running main frame of GUI for Orthodontist, sets the appropriate buttons and the color of the interface.
+     * It also takes care of ensuring that the Orthodontist would not be able to use the options of other users.
      */
     public void runGUIOrthodontist() {
         frame.removeAll();
@@ -1654,7 +1668,8 @@ public class GUI{
     }
 
     /**
-     * The method which is responsible for running main frame of GUI for Patient
+     * The method which is responsible for running main frame of GUI for Patient, sets the appropriate buttons and the color of the interface.
+     * It also takes care of ensuring that the patient would not be able to use the options of other users.
      */
     public void runGUIPatient() {
         frame.removeAll();
@@ -1686,7 +1701,8 @@ public class GUI{
     }
 
     /**
-     * The method which is responsible for running main frame of GUI for Developer
+     * The method which is responsible for running main frame of GUI for Developer, sets the appropriate buttons and the color of the interface.
+     * It also takes care of ensuring that the Developer would not be able to use the options of other users.
      */
     public void runGUIDeveloper() {
         frame.removeAll();

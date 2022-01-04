@@ -2,7 +2,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DataBaseHandlingClass {
+public class DataBaseHandling {
 
     /**
      * The method which establishes the connection with the database.

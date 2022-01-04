@@ -566,10 +566,10 @@ public class GUI{
      */
     public void findUser(){
         enteredUsername = "null";
-        Connection connection = DataBaseHandlingClass.StartConnectionWithDB();
-        User user2 = DataBaseHandlingClass.LogInUser(connection, "admin", "admin");
+        Connection connection = DataBaseHandling.StartConnectionWithDB();
+        User user2 = DataBaseHandling.LogInUser(connection, "admin", "admin");
         assert user2 != null;
-        List<User> list = DataBaseHandlingClass.SearchForAllUsers(connection, user2);
+        List<User> list = DataBaseHandling.SearchForAllUsers(connection, user2);
 
         Panel welcomePanel = new Panel();
         Panel findPanelMessage = new Panel();
@@ -595,7 +595,7 @@ public class GUI{
                     }
                 }
                 if(userFound && userToEdit.getUserPermissionsLevel()==0){
-                    List<Visit> visitsToView = DataBaseHandlingClass.SearchForVisitsOfPatient(connection, userToEdit);
+                    List<Visit> visitsToView = DataBaseHandling.SearchForVisitsOfPatient(connection, userToEdit);
                     if(visitsToView!=null) {
                         StringBuilder messageToView = new StringBuilder("You have found user: " + userToEdit.getUserName() + " " + userToEdit.getUserSurname() + ", with DB id: " + userToEdit.getUserId()
                                 + ", this user has: " + visitsToView.size() + " visits, which took place on: ");
@@ -672,8 +672,8 @@ public class GUI{
         Label optionalOrthodontist = new Label("OPTIONAL [select only when adding a patient] Patient's Orthodontist: ");
         Choice orthodontistToSelect = new Choice();
 
-        Connection connectionList = DataBaseHandlingClass.StartConnectionWithDB();
-        List<User> listOfOrthodontist = DataBaseHandlingClass.SearchForAllOrthodontists(connectionList, loggedUser);
+        Connection connectionList = DataBaseHandling.StartConnectionWithDB();
+        List<User> listOfOrthodontist = DataBaseHandling.SearchForAllOrthodontists(connectionList, loggedUser);
         if (listOfOrthodontist != null)
             for (User userToAdd : listOfOrthodontist) {
                 orthodontistToSelect.add(userToAdd.getUserLogin());
@@ -713,7 +713,7 @@ public class GUI{
         editUserButton.addActionListener(e -> {
             prompt.setBackground(null);
             try {
-                Connection connection = DataBaseHandlingClass.StartConnectionWithDB();
+                Connection connection = DataBaseHandling.StartConnectionWithDB();
                 User orthodontistSelected = new User();
                 if(listOfOrthodontist != null){
                     for(User userToFind: listOfOrthodontist){
@@ -728,7 +728,7 @@ public class GUI{
 
                 if (!levelTextField.getText().isEmpty() && !mailTextField.getText().isEmpty() && !mobileNumberTextField.getText().isEmpty() && !surnameTextField.getText().isEmpty() &&
                         !nameTextField.getText().isEmpty() && !passwordTextField.getText().isEmpty() && !usernameTextField.getText().isEmpty() && !addressTextField.getText().isEmpty()) {
-                    List<User> list = DataBaseHandlingClass.SearchForAllUsers(connection, loggedUser);
+                    List<User> list = DataBaseHandling.SearchForAllUsers(connection, loggedUser);
                     if(list!=null){
                         for(User userToCheck: list) {
                             if(usernameTextField.getText().equals(userToCheck.getUserLogin()))
@@ -748,11 +748,11 @@ public class GUI{
                     userToAdd.setUserTelephoneNumber(mobileNumberTextField.getText());
 
                     if (levelTextField.getText().equals("0")) {
-                        DataBaseHandlingClass.AddNewPatientToDB(connection, loggedUser, userToAdd, orthodontistSelected);
+                        DataBaseHandling.AddNewPatientToDB(connection, loggedUser, userToAdd, orthodontistSelected);
                     } else if (levelTextField.getText().equals("1")) {
-                        DataBaseHandlingClass.AddNewOrthodontistToDB(connection, loggedUser, userToAdd);
+                        DataBaseHandling.AddNewOrthodontistToDB(connection, loggedUser, userToAdd);
                     } else if (levelTextField.getText().equals("2")) {
-                        DataBaseHandlingClass.AddNewAdministratorToDB(connection, loggedUser, userToAdd);
+                        DataBaseHandling.AddNewAdministratorToDB(connection, loggedUser, userToAdd);
                     }
                     prompt.setText("The user: " + userToAdd.getUserLogin() + ", has been successfully added to the database");
                 } else
@@ -777,8 +777,8 @@ public class GUI{
      */
     public void deleteUser(){
         enteredUsername = "null";
-        Connection connectionList = DataBaseHandlingClass.StartConnectionWithDB();
-        List<User> list = DataBaseHandlingClass.SearchForAllUsers(connectionList, loggedUser);
+        Connection connectionList = DataBaseHandling.StartConnectionWithDB();
+        List<User> list = DataBaseHandling.SearchForAllUsers(connectionList, loggedUser);
         try {
             if (connectionList != null) {
                 connectionList.close();
@@ -843,18 +843,18 @@ public class GUI{
 
         deleteButton.addActionListener(e -> {
             try {
-                Connection connection = DataBaseHandlingClass.StartConnectionWithDB();
+                Connection connection = DataBaseHandling.StartConnectionWithDB();
                 deleteInfo.setBackground(null);
                 if (userToEdit.getUserPermissionsLevel() == 0) {
-                    DataBaseHandlingClass.RemovePatientFromDB(connection, loggedUser, userToEdit);
+                    DataBaseHandling.RemovePatientFromDB(connection, loggedUser, userToEdit);
                     deleteInfo.setText("Deletion of patient: " + userToEdit.getUserLogin() + ", was successful");
                 } else if (userToEdit.getUserPermissionsLevel() == 1) {
                     deleteInfo.setText("Deletion of orthodontist: " + userToEdit.getUserLogin() + ", was successful");
-                    User adminOrthodontist = DataBaseHandlingClass.LogInUser(connection, "adminOrthodontist", "admin");
-                    DataBaseHandlingClass.RemoveOrthodontistFromDB(connection, loggedUser, userToEdit, adminOrthodontist);
+                    User adminOrthodontist = DataBaseHandling.LogInUser(connection, "adminOrthodontist", "admin");
+                    DataBaseHandling.RemoveOrthodontistFromDB(connection, loggedUser, userToEdit, adminOrthodontist);
                 } else if (userToEdit.getUserPermissionsLevel() == 2) {
                     try {
-                        DataBaseHandlingClass.RemoveAdministratorFromDB(connection, loggedUser, userToEdit);
+                        DataBaseHandling.RemoveAdministratorFromDB(connection, loggedUser, userToEdit);
                         deleteInfo.setText("Deletion of developer: " + userToEdit.getUserLogin() + ", was successful");
                     } catch (Exception exception) {
                         System.out.println("Exception caught! a problem has arisen while deleting user from the database");
@@ -865,8 +865,8 @@ public class GUI{
                 deleteInfo.setBackground(Color.red);
                 System.out.println("Exception caught! " + exception.getMessage());
             } finally{
-                Connection connection = DataBaseHandlingClass.StartConnectionWithDB();
-                List <User> listUpdate = DataBaseHandlingClass.SearchForAllUsers(connection, loggedUser);
+                Connection connection = DataBaseHandling.StartConnectionWithDB();
+                List <User> listUpdate = DataBaseHandling.SearchForAllUsers(connection, loggedUser);
                 if (listUpdate != null) {
                     for (User userToAdd : listUpdate) {
                         if (!userToAdd.getUserLogin().equals(loggedUser.getUserLogin()))
@@ -908,10 +908,10 @@ public class GUI{
         userToEdit = null;
         enteredUsername = "null";
 
-        Connection connectionFindList = DataBaseHandlingClass.StartConnectionWithDB();
-        User user = DataBaseHandlingClass.LogInUser(connectionFindList, "admin", "admin");
+        Connection connectionFindList = DataBaseHandling.StartConnectionWithDB();
+        User user = DataBaseHandling.LogInUser(connectionFindList, "admin", "admin");
         assert user != null;
-        List<User> list = DataBaseHandlingClass.SearchForAllUsers(connectionFindList, user);
+        List<User> list = DataBaseHandling.SearchForAllUsers(connectionFindList, user);
         try {
             if (connectionFindList != null) {
                 connectionFindList.close();
@@ -1000,7 +1000,7 @@ public class GUI{
 
         editUserButton.addActionListener(e -> {
             try {
-                Connection connection = DataBaseHandlingClass.StartConnectionWithDB();
+                Connection connection = DataBaseHandling.StartConnectionWithDB();
                 if (userToEdit != null) {
                     User userToAdd = new User();
                     userToAdd.setUserName(nameTextField.getText());
@@ -1011,7 +1011,7 @@ public class GUI{
                     userToAdd.setUserTelephoneNumber(mobileNumberTextField.getText());
                     userToAdd.setUserId(userToEdit.getUserId());
                     userToAdd.setUserAddress(addressTextField.getText());
-                    DataBaseHandlingClass.EditUserInfoInDB(connection, userToEdit, userToAdd);
+                    DataBaseHandling.EditUserInfoInDB(connection, userToEdit, userToAdd);
                     prompt.setText("The edition was a success");
                 } else
                     prompt.setText("There is no such user in the database (Editing is forbidden)");
@@ -1042,8 +1042,8 @@ public class GUI{
             infoList.setMaximumSize(maxDimensionWidth);
             Choice selectionList = new Choice();
             selectionList.setMaximumSize(maxDimensionWidth);
-            Connection connection = DataBaseHandlingClass.StartConnectionWithDB();
-            User orthodontistOfPatient = DataBaseHandlingClass.SearchForOrthodontistOfPatient(connection, loggedUser);
+            Connection connection = DataBaseHandling.StartConnectionWithDB();
+            User orthodontistOfPatient = DataBaseHandling.SearchForOrthodontistOfPatient(connection, loggedUser);
             if (orthodontistOfPatient != null) {
                 selectionList.add(orthodontistOfPatient.getUserName() + " " + orthodontistOfPatient.getUserSurname() + ", " + orthodontistOfPatient.getUserEmail());
                 selectionList.add("Administration (Please contact us only if you have any problems with the application)");
@@ -1120,8 +1120,8 @@ public class GUI{
             infoList.setMaximumSize(maxDimensionWidth);
             Choice selectionList = new Choice();
             selectionList.setMaximumSize(maxDimensionWidth);
-            Connection connection = DataBaseHandlingClass.StartConnectionWithDB();
-            List<User> listOfPatients = DataBaseHandlingClass.SearchForPatientsOfOrthodontist(connection, loggedUser);
+            Connection connection = DataBaseHandling.StartConnectionWithDB();
+            List<User> listOfPatients = DataBaseHandling.SearchForPatientsOfOrthodontist(connection, loggedUser);
             if (listOfPatients != null) {
                 for (User patient : listOfPatients)
                     selectionList.add(patient.getUserName() + " " + patient.getUserSurname() + ", " + patient.getUserEmail());
@@ -1237,9 +1237,9 @@ public class GUI{
         editUserPanel.add(editUserButton);
 
         editUserButton.addActionListener(e -> {
-            Connection connection = DataBaseHandlingClass.StartConnectionWithDB();
+            Connection connection = DataBaseHandling.StartConnectionWithDB();
             try {
-                loggedUser = DataBaseHandlingClass.LogInUser(connection, loggedUser.getUserLogin(), loggedUser.getUserPassword());
+                loggedUser = DataBaseHandling.LogInUser(connection, loggedUser.getUserLogin(), loggedUser.getUserPassword());
                 if (loggedUser != null) {
                     User userToAdd = new User(loggedUser);
                     userToAdd.setUserName(nameTextField.getText());
@@ -1249,7 +1249,7 @@ public class GUI{
                     userToAdd.setUserEmail(mailTextField.getText());
                     userToAdd.setUserTelephoneNumber(mobileNumberTextField.getText());
                     userToAdd.setUserId(loggedUser.getUserId());
-                    DataBaseHandlingClass.EditUserInfoInDB(connection, loggedUser, userToAdd);
+                    DataBaseHandling.EditUserInfoInDB(connection, loggedUser, userToAdd);
                     loggedUser = userToAdd;
                     prompt.setText("The edition was a success");
                 } else
@@ -1315,9 +1315,9 @@ public class GUI{
         editUserPanel.add(prompt);
 
         editUserButton.addActionListener(e -> {
-            Connection connection = DataBaseHandlingClass.StartConnectionWithDB();
+            Connection connection = DataBaseHandling.StartConnectionWithDB();
             try {
-                loggedUser = DataBaseHandlingClass.LogInUser(connection, loggedUser.getUserLogin(), loggedUser.getUserPassword());
+                loggedUser = DataBaseHandling.LogInUser(connection, loggedUser.getUserLogin(), loggedUser.getUserPassword());
                 if (loggedUser != null) {
                     User userToAdd = new User(loggedUser);
                     userToAdd.setUserName(nameTextField.getText());
@@ -1327,7 +1327,7 @@ public class GUI{
                     userToAdd.setUserEmail(mailTextField.getText());
                     userToAdd.setUserTelephoneNumber(mobileNumberTextField.getText());
                     userToAdd.setUserId(loggedUser.getUserId());
-                    DataBaseHandlingClass.EditUserInfoInDB(connection, loggedUser, userToAdd);
+                    DataBaseHandling.EditUserInfoInDB(connection, loggedUser, userToAdd);
                     loggedUser = userToAdd;
                     prompt.setText("The edition was a success");
                 } else
@@ -1357,7 +1357,7 @@ public class GUI{
      */
     public void myProfileOrthodontist(){
         frame.removeAll();
-        Connection connection = DataBaseHandlingClass.StartConnectionWithDB();
+        Connection connection = DataBaseHandling.StartConnectionWithDB();
         Panel editUserPanel = new Panel();
         Label info = new Label("If u wish to edit your credentials, please change them and enter the button below");
         editUserPanel.add(info);
@@ -1395,7 +1395,7 @@ public class GUI{
 
         editUserButton.addActionListener(e -> {
             try {
-                loggedUser = DataBaseHandlingClass.LogInUser(connection, loggedUser.getUserLogin(), loggedUser.getUserPassword());
+                loggedUser = DataBaseHandling.LogInUser(connection, loggedUser.getUserLogin(), loggedUser.getUserPassword());
                 if (loggedUser != null) {
                     User userToAdd = new User(loggedUser);
                     userToAdd.setUserName(nameTextField.getText());
@@ -1405,7 +1405,7 @@ public class GUI{
                     userToAdd.setUserEmail(mailTextField.getText());
                     userToAdd.setUserTelephoneNumber(mobileNumberTextField.getText());
                     userToAdd.setUserId(loggedUser.getUserId());
-                    DataBaseHandlingClass.EditUserInfoInDB(connection, loggedUser, userToAdd);
+                    DataBaseHandling.EditUserInfoInDB(connection, loggedUser, userToAdd);
                     loggedUser = userToAdd;
                     prompt.setText("The edition was a success");
                 } else
@@ -1438,8 +1438,8 @@ public class GUI{
             Dimension maxDimensionWidth = new Dimension(frame.getWidth(), frame.getHeight()/15);
             Choice visitSelection = new Choice();
             visitSelection.setMaximumSize(maxDimensionWidth);
-            Connection connection = DataBaseHandlingClass.StartConnectionWithDB();
-            List<Visit> listOfVisits = DataBaseHandlingClass.SearchForVisitsOfPatient(connection, loggedUser);
+            Connection connection = DataBaseHandling.StartConnectionWithDB();
+            List<Visit> listOfVisits = DataBaseHandling.SearchForVisitsOfPatient(connection, loggedUser);
             if(listOfVisits != null) {
                 for (Visit visit : listOfVisits)
                     visitSelection.add("Date of the visit:  " + visit.getVisitDate());
@@ -1539,16 +1539,16 @@ public class GUI{
         Button loginButton = new Button("Login");
 
         ActionListener action = e -> {
-            Connection connection = DataBaseHandlingClass.StartConnectionWithDB();
+            Connection connection = DataBaseHandling.StartConnectionWithDB();
             try {
                 enteredUsername = usernameField.getText();
                 enteredPassword = String.valueOf(passwordField.getPassword());
                 numberOfAttempts++;
-                User user = DataBaseHandlingClass.LogInUser(connection, enteredUsername, enteredPassword);
+                User user = DataBaseHandling.LogInUser(connection, enteredUsername, enteredPassword);
                 assert user != null;
-                User admin = DataBaseHandlingClass.LogInUser(connection,"admin", "admin");
+                User admin = DataBaseHandling.LogInUser(connection,"admin", "admin");
                 assert admin != null;
-                List<User> list = DataBaseHandlingClass.SearchForAllUsers(connection, admin);
+                List<User> list = DataBaseHandling.SearchForAllUsers(connection, admin);
 
                 assert list != null;
                 for(User userToFind: list) {

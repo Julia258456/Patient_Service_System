@@ -14,16 +14,16 @@ public class JDBC {
       } catch(Exception e){
           e.printStackTrace();
       }*/
-        Connection c = DataBaseHandlingClass.StartConnectionWithDB();
-        User usero = DataBaseHandlingClass.LogInUser(c,"tnowak", "qwerty1");
+        Connection c = DataBaseHandling.StartConnectionWithDB();
+        User usero = DataBaseHandling.LogInUser(c,"tnowak", "qwerty1");
         System.out.println(null == usero);
-        List<User> list = DataBaseHandlingClass.SearchForPatientsOfOrthodontist(c, usero);
-        List<Visit> list1 = DataBaseHandlingClass.SearchForVisitsOfPatient(c, list.get(0));
+        List<User> list = DataBaseHandling.SearchForPatientsOfOrthodontist(c, usero);
+        List<Visit> list1 = DataBaseHandling.SearchForVisitsOfPatient(c, list.get(0));
 
-        User user1a = DataBaseHandlingClass.LogInUser(c,"jkowal", "qwerty");
-        List<User> list2 = DataBaseHandlingClass.SearchForAllOrthodontists(c, user1a);
-        List<User> list3 = DataBaseHandlingClass.SearchForAllUsers(c, user1a);
-        List<User> list4 = DataBaseHandlingClass.SearchForAllPatients(c, user1a);
+        User user1a = DataBaseHandling.LogInUser(c,"jkowal", "qwerty");
+        List<User> list2 = DataBaseHandling.SearchForAllOrthodontists(c, user1a);
+        List<User> list3 = DataBaseHandling.SearchForAllUsers(c, user1a);
+        List<User> list4 = DataBaseHandling.SearchForAllPatients(c, user1a);
 
         //User user2o = DataBaseHandlingClass.LogInUser(c,"jnowic", "qwerty2");
         //System.out.println(DataBaseHandlingClass.RemoveOrthodontistFromDB(c, user1a, user2o, usero));

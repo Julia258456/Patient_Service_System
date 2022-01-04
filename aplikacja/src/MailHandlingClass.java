@@ -2,13 +2,25 @@ import javax.mail.*;
 import javax.mail.internet.*;
 import java.util.*;
 
+/**
+ * The class which is responsible for sending e-mails
+ */
 public class MailHandlingClass {
 
-    public static Message prepareMessage(Session session, String emailLogin, String recepient, String topic, String text){
+    /**
+     * A method which is responsible for preparing a message to be sent, which uses the 'javax.mail' API methods.
+     * @param session The Session class represents a mail session and is not subclassed. It collects together properties and defaults used by the mail API
+     * @param emailLogin sender's address - String provided by the API
+     * @param recipient recipient's address - String provided by the user
+     * @param topic subject of the message to be sent - String provided by the user
+     * @param text the content of the e-mail to be sent - String provided by the user
+     * @return Message (if the message is completed correctly and has the correct recipient) or null (if the message is completed incorrectly and has the wrong recipient)
+     */
+    public static Message prepareMessage(Session session, String emailLogin, String recipient, String topic, String text){
         try {
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(emailLogin));
-            message.setRecipient(Message.RecipientType.TO, new InternetAddress(recepient));
+            message.setRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
             message.setSubject(topic);
             message.setText(text);
             return message;
@@ -18,7 +30,14 @@ public class MailHandlingClass {
         return null;
     }
 
-    public static void sendMail(String recepient, String topic, String text){
+    /**
+     * A method which is responsible for sending e-mails, sets the appropriate settings, and ensures that the message is sent correctly.
+     * [uses the method  prepareMessage(Session, String emailLogin, String recipient, String topic, String text)]
+     * @param recipient recipient's address - String provided by the user
+     * @param topic subject of the message to be sent - String provided by the user
+     * @param text the content of the e-mail to be sent - String provided by the user
+     */
+    public static void sendMail(String recipient, String topic, String text){
         try {
             Properties properties = new Properties();
             properties.put("mail.smtp.host", "smtp.gmail.com");
@@ -38,7 +57,7 @@ public class MailHandlingClass {
 
             session.setDebug(true); // Try to debug set settings
 
-            Message message = prepareMessage(session, emailLogin, recepient, topic, text);
+            Message message = prepareMessage(session, emailLogin, recipient, topic, text);
             try {
                 if (message != null) {
                     Transport.send(message);
@@ -51,7 +70,4 @@ public class MailHandlingClass {
             System.out.println(exception.getMessage());
         }
     }
-
-
-
 }

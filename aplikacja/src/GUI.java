@@ -1648,6 +1648,20 @@ public class GUI{
         frame.setVisible(true);
     }
 
+    public void addExitButtonForMyVisitsOrthodontist(){
+        Panel editUserPanel = new Panel();
+        Button exitButton = new Button("Return to my visits");
+        exitButton.setBackground(Color.yellow);
+        editUserPanel.add(exitButton);
+        frame.add(editUserPanel);
+        exitButton.addActionListener(e1 -> {
+            frame.remove(editUserPanel);
+            myVisitsOrthodontist();
+            frame.setVisible(true);
+        });
+        frame.setVisible(true);
+    }
+
     /**
      * The method is responsible for viewing and editing orthodontist's visits
      */
@@ -1673,31 +1687,27 @@ public class GUI{
         frame.add(panelVisits2);
 
         viewVisits.addActionListener(e -> {
-            // TODO nowe okno pozwalające na podgląd wizyt ortodonty
             frame.removeAll();
-            Panel editUserPanel = new Panel();
-            Button exitButton = new Button("Return to my visits");
-            exitButton.setBackground(Color.yellow);
-            editUserPanel.add(exitButton);
-            frame.add(editUserPanel);
-            exitButton.addActionListener(e1 -> {
-                frame.remove(editUserPanel);
-                myVisitsOrthodontist();
-                frame.setVisible(true);
-            });
-            frame.setVisible(true);
+            // TODO nowe okno pozwalające na podgląd wizyt ortodonty
+            addExitButtonForMyVisitsOrthodontist();
         });
 
         createVisit.addActionListener(e -> {
+            frame.removeAll();
             // TODO TODO nowe okno pozwalające na utworzenie nowej wizyty dla ortodonty (z edycja wszystkich pól)
+            addExitButtonForMyVisitsOrthodontist();
         });
 
         cancelVisit.addActionListener(e -> {
+            frame.removeAll();
             // TODO nowe okno pozwalające na usunięcie wybranej wizyty
+            addExitButtonForMyVisitsOrthodontist();
         });
 
         editVisit.addActionListener(e -> {
+            frame.removeAll();
             // TODO nowa okno pozwalające na edycje wybranej wizyty
+            addExitButtonForMyVisitsOrthodontist();
         });
 
         addExitButtonOrthodontist();

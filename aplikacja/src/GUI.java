@@ -1457,7 +1457,7 @@ public class GUI{
      */
     public void myVisitsPatient(){
         if(loggedUser.getUserPermissionsLevel()==0) {
-            Dimension maxDimension = new Dimension(frame.getWidth()/5,frame.getHeight()/20);
+            Dimension maxDimension = new Dimension(frame.getWidth()/5,frame.getHeight()/13);
             Dimension maxDimensionWidth = new Dimension(frame.getWidth(), frame.getHeight()/15);
             Choice visitSelection = new Choice();
             visitSelection.setMaximumSize(maxDimensionWidth);
@@ -1465,27 +1465,180 @@ public class GUI{
             List<Visit> listOfVisits = DataBaseHandling.SearchForVisitsOfPatient(connection, loggedUser);
             if(listOfVisits != null) {
                 for (Visit visit : listOfVisits)
-                    visitSelection.add("Date of the visit:  " + visit.getVisitDate());
+                    visitSelection.add(visit.getVisitDate().toString());
             }
             frame.add(visitSelection);
             Panel visitInfoPanel = new Panel();
-            visitInfoPanel.setPreferredSize(new Dimension(frame.getWidth(),frame.getHeight()));
+            visitInfoPanel.setPreferredSize(new Dimension(frame.getWidth()/2,frame.getHeight()/2));
             frame.add(visitInfoPanel);
             Button buttonShowDetails = new Button("Show details of the visit");
             buttonShowDetails.setMaximumSize(maxDimension);
             Button generatePDF = new Button("Generate PDF file of the visit");
             generatePDF.setMaximumSize(maxDimension);
+            Button makeVisit = new Button("Make a new visit with your Orthodontist");
+            makeVisit.setMaximumSize(maxDimension);
+            frame.add(makeVisit);
             frame.add(buttonShowDetails);
             frame.add(generatePDF);
 
-            generatePDF.addActionListener(e -> { // TODO
+            generatePDF.addActionListener(e -> {
+                visitInfoPanel.removeAll();
+                boolean generateFileCheck;
+                Label infoConfirmationLabel = new Label();
+                infoConfirmationLabel.setBackground(null);
+                try {
+                    if (visitSelection.getSelectedItem() == null) {
+                        infoConfirmationLabel.setText("Your pdf file have NOT been successfully generated, something went wrong please try again");
+                        infoConfirmationLabel.setBackground(Color.red);
+                    } else {
+                        Visit selectedVisit = new Visit();
+                        if (listOfVisits != null) {
+                            for (Visit visit : listOfVisits) {
+                                if (visitSelection.getSelectedItem().equals(visit.getVisitDate().toString())) {
+                                    selectedVisit.setVisitDate(visit.getVisitDate());
+                                    selectedVisit.setVisitComment(visit.getVisitComment());
+                                    selectedVisit.setVisitId(visit.getVisitId());
+                                    selectedVisit.setPatientId(visit.getPatientId());
+                                    selectedVisit.setOrthodontistId(visit.getOrthodontistId());
+                                    selectedVisit.setUserPatientId(visit.getUserPatientId());
+                                    selectedVisit.setUserOrthodontistId(visit.getUserOrthodontistId());
+                                }
+                            }
 
+                        }
+
+
+                        // TODO funkcja generująca pdf'a z wybranej wizyty
+
+
+                        generateFileCheck = selectedVisit.getVisitId() != 3; // TODO change
+
+                        if (generateFileCheck) {
+                            infoConfirmationLabel.setText("Your pdf file have been successfully generated");
+                        } else {
+                            infoConfirmationLabel.setText("Your pdf file have NOT been successfully generated, something went wrong please try again");
+                            infoConfirmationLabel.setBackground(Color.red);
+                        }
+                    }
+                } catch (Exception exception) {
+                    infoConfirmationLabel.setText("Your pdf file have NOT been successfully generated, something went wrong please try again");
+                    infoConfirmationLabel.setBackground(Color.red);
+                    exception.printStackTrace();
+                } finally {
+                    visitInfoPanel.add(infoConfirmationLabel);
+                    frame.setVisible(true);
+                }
             });
 
             buttonShowDetails.addActionListener(e -> {
+                visitInfoPanel.removeAll();
+                Label infoLabel1 = new Label();
+                infoLabel1.setBackground(null);
+                if (listOfVisits != null) {
+                    if(visitSelection.getItemCount() == 0) {
+                        infoLabel1.setBackground(Color.red);
+                        infoLabel1.setText("Please select a visit before viewing it's details. If you cannot see your visits, please contact the administrator!");
+                        visitInfoPanel.add(infoLabel1);
+                    } else {
+                        Visit selectedVisit = new Visit();
+                        for (Visit visit : listOfVisits) {
+                            if (visitSelection.getSelectedItem().equals(visit.getVisitDate().toString())) {
+                                selectedVisit.setVisitDate(visit.getVisitDate());
+                                selectedVisit.setVisitComment(visit.getVisitComment());
+                                selectedVisit.setVisitId(visit.getVisitId());
+                                selectedVisit.setPatientId(visit.getPatientId());
+                                selectedVisit.setOrthodontistId(visit.getOrthodontistId());
+                                selectedVisit.setUserPatientId(visit.getUserPatientId());
+                                selectedVisit.setUserOrthodontistId(visit.getUserOrthodontistId());
+                            }
+                        }
+
+                        infoLabel1.setText("Visit information from day: " + selectedVisit.getVisitDate() + ", with ID: " + selectedVisit.getVisitId());
+                        Label infoLabel2 = new Label("Orthodontist's comment: " + selectedVisit.getVisitComment());
+                        Label infoLabel3 = new Label();
+                        Button viewPictureButton = new Button("View Pantomography picture from date " + selectedVisit.getVisitDate());
+                        viewPictureButton.addActionListener(e1 -> {
+                            JFrame jFrame = new JFrame("View of Pantomography picture");
+                            jFrame.setResizable(true);
+                            jFrame.setVisible(true);
+                            File file = new File("./resources/icon.JPG");
+                            ImageIcon imageIcon = new ImageIcon(file.getAbsolutePath());
+                            jFrame.setSize((int)(imageIcon.getIconWidth()/1.5),(int)(imageIcon.getIconHeight()/1.5));
+                            Image image = imageIcon.getImage();
+                            Image imageScaled = image.getScaledInstance((int)(imageIcon.getIconWidth()/1.5),(int)(imageIcon.getIconHeight()/1.5), Image.SCALE_SMOOTH);
+                            imageIcon = new ImageIcon(imageScaled);
+                            Panel panel = new Panel();
+                            panel.add(new JLabel(imageIcon));
+                            jFrame.add(panel);
+                            jFrame.setLocationRelativeTo(null);
+                        });
+                        visitInfoPanel.add(infoLabel1);
+                        visitInfoPanel.add(infoLabel2);
+                        visitInfoPanel.add(infoLabel3);
+                        visitInfoPanel.add(viewPictureButton);
+                    }
+                } else {
+                    infoLabel1.setBackground(Color.red);
+                    infoLabel1.setText("If you cannot see your visits, please contact the administrator!");
+                    visitInfoPanel.add(infoLabel1);
+                }
+
+                visitInfoPanel.setLayout(new BoxLayout(visitInfoPanel, BoxLayout.Y_AXIS));
+                frame.setVisible(true);
 
             });
 
+            makeVisit.addActionListener(e -> {
+
+                visitInfoPanel.removeAll();
+                Label labelConfirmation = new Label();
+                labelConfirmation.setBackground(null);
+
+                try {
+                    Label infoLabel = new Label("Please enter information for your orthodontist regarding the new visit." +
+                            " Your orthodontist will be able to plan the visit by himself:");
+                    TextField textField = new TextField();
+                    Button sendButton = new Button("send your inquiry");
+                    visitInfoPanel.add(infoLabel);
+                    visitInfoPanel.add(textField);
+                    visitInfoPanel.add(sendButton);
+                    sendButton.addActionListener(e12 -> {
+                        Visit visitToSend = new Visit();
+                        visitToSend.setVisitComment(textField.getText());
+                        visitToSend.setUserPatientId(1); // TODO POPRAWIC WPROWADZANIE id pacjenta
+                        User orthodontistOfPatient = DataBaseHandling.SearchForOrthodontistOfPatient(connection, loggedUser);
+                        if (orthodontistOfPatient != null) {
+                            visitToSend.setUserOrthodontistId(1); // TODO POPRAWIC WPROWADZANIE id ortodonty
+                        }
+                        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                        visitToSend.setVisitDate(timestamp);
+
+                        boolean visitCheck = DataBaseHandling.AddNewVisitToDB(connection, visitToSend); // TODO skomplikowane wprowadzenie wizyty
+
+                        List<Visit> listOfVisitsUpdate = DataBaseHandling.SearchForVisitsOfPatient(connection, loggedUser);
+                        if (listOfVisitsUpdate != null) {
+                            for (Visit visit : listOfVisitsUpdate)
+                                visitSelection.add(visit.getVisitDate().toString());
+                        }
+                        if (visitCheck)
+                            labelConfirmation.setText("Your inquiry has been successfully sent");
+                        else {
+                            labelConfirmation.setText("Your inquiry has been denied!!!");
+                            labelConfirmation.setBackground(Color.red);
+                        }
+                        visitInfoPanel.add(labelConfirmation);
+                    });
+                } catch(Exception exception){
+                    exception.printStackTrace();
+                    visitInfoPanel.removeAll();
+                    visitInfoPanel.add(labelConfirmation);
+                    labelConfirmation.setText("Your inquiry has been denied!!!");
+                    labelConfirmation.setBackground(Color.red);
+                } finally {
+                    visitInfoPanel.setLayout(new BoxLayout(visitInfoPanel, BoxLayout.Y_AXIS));
+                    frame.setVisible(true);
+                }
+            });
         } else {
             System.err.println("There were problems logging in the correct user");
         }
@@ -1495,37 +1648,66 @@ public class GUI{
         frame.setVisible(true);
     }
 
+    public void addExitButtonForMyVisitsOrthodontist(){
+        Panel editUserPanel = new Panel();
+        Button exitButton = new Button("Return to my visits");
+        exitButton.setBackground(Color.yellow);
+        editUserPanel.add(exitButton);
+        frame.add(editUserPanel);
+        exitButton.addActionListener(e1 -> {
+            frame.remove(editUserPanel);
+            myVisitsOrthodontist();
+            frame.setVisible(true);
+        });
+        frame.setVisible(true);
+    }
+
     /**
      * The method is responsible for viewing and editing orthodontist's visits
      */
     public void myVisitsOrthodontist(){
         Dimension maxDimensionWidth = new Dimension(frame.getWidth(), frame.getHeight()/5);
+        Button viewVisits = new Button("View your visits");
         Button createVisit = new Button("Create a new visit");
         Button cancelVisit = new Button("Cancel a visit");
         Button editVisit = new Button("Edit your visits");
-        createVisit.setMinimumSize(maxDimensionWidth);
-        cancelVisit.setMinimumSize(maxDimensionWidth);
-        editVisit.setMinimumSize(maxDimensionWidth);
+        createVisit.setPreferredSize(maxDimensionWidth);
+        cancelVisit.setPreferredSize(maxDimensionWidth);
+        editVisit.setPreferredSize(maxDimensionWidth);
+        viewVisits.setPreferredSize(maxDimensionWidth);
         Panel panelVisits = new Panel();
         Panel panelVisits2 = new Panel();
-        panelVisits2.setPreferredSize(new Dimension(frame.getWidth(), frame.getHeight()));
-        panelVisits.setPreferredSize(new Dimension(frame.getWidth(), frame.getHeight()));
+        panelVisits2.setMinimumSize(new Dimension(frame.getWidth(), frame.getHeight()));
+        panelVisits.setMinimumSize(new Dimension(frame.getWidth(), frame.getHeight()));
         frame.add(panelVisits);
+        frame.add(viewVisits);
         frame.add(createVisit);
         frame.add(cancelVisit);
         frame.add(editVisit);
         frame.add(panelVisits2);
 
-        createVisit.addActionListener(e -> { // TODO
+        viewVisits.addActionListener(e -> {
+            frame.removeAll();
+            // TODO nowe okno pozwalające na podgląd wizyt ortodonty
+            addExitButtonForMyVisitsOrthodontist();
+        });
 
+        createVisit.addActionListener(e -> {
+            frame.removeAll();
+            // TODO TODO nowe okno pozwalające na utworzenie nowej wizyty dla ortodonty (z edycja wszystkich pól)
+            addExitButtonForMyVisitsOrthodontist();
         });
 
         cancelVisit.addActionListener(e -> {
-
+            frame.removeAll();
+            // TODO nowe okno pozwalające na usunięcie wybranej wizyty
+            addExitButtonForMyVisitsOrthodontist();
         });
 
         editVisit.addActionListener(e -> {
-
+            frame.removeAll();
+            // TODO nowa okno pozwalające na edycje wybranej wizyty
+            addExitButtonForMyVisitsOrthodontist();
         });
 
         addExitButtonOrthodontist();

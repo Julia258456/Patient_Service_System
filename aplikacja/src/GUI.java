@@ -1655,7 +1655,7 @@ public class GUI{
         editUserPanel.add(exitButton);
         frame.add(editUserPanel);
         exitButton.addActionListener(e1 -> {
-            frame.remove(editUserPanel);
+            frame.removeAll();
             myVisitsOrthodontist();
             frame.setVisible(true);
         });
@@ -1689,12 +1689,64 @@ public class GUI{
         viewVisits.addActionListener(e -> {
             frame.removeAll();
             // TODO nowe okno pozwalające na podgląd wizyt ortodonty
+
+            Choice choice = new Choice();
+            Panel panelInfo = new Panel();
+            Button viewDetailsButton = new Button("View visit");
+            Connection connection = DataBaseHandling.StartConnectionWithDB();
+            List<Visit> visitList = DataBaseHandling.SearchForVisitsOfPOrthodontist(connection, loggedUser);
+            if (visitList != null) {
+                for(Visit visit: visitList){
+                    choice.add(visit.getVisitDate().toString());
+                }
+            }
+            viewDetailsButton.addActionListener(e1 -> {
+                panelInfo.removeAll();
+                Visit selectedVisit = new Visit();
+                if (visitList != null) {
+                    for (Visit visit : visitList) {
+                        if (choice.getSelectedItem().equals(visit.getVisitDate().toString())) {
+                            selectedVisit.setVisitDate(visit.getVisitDate());
+                            selectedVisit.setVisitComment(visit.getVisitComment());
+                            selectedVisit.setVisitId(visit.getVisitId());
+                            selectedVisit.setPatientId(visit.getPatientId());
+                            selectedVisit.setOrthodontistId(visit.getOrthodontistId());
+                            selectedVisit.setUserPatientId(visit.getUserPatientId());
+                            selectedVisit.setUserOrthodontistId(visit.getUserOrthodontistId());
+                        }
+                    }
+                }
+                Label info1 = new Label("Details about chosen visit");
+                Label info2 = new Label("Date of visit: " + selectedVisit.getVisitDate() + ", and ID: " + selectedVisit.getVisitId());
+                Label info3 = new Label("Visit comment: " + selectedVisit.getVisitComment());
+                panelInfo.add(info1);
+                panelInfo.add(info2);
+                panelInfo.add(info3);
+            });
+
+            frame.add(choice);
+            panelInfo.setLayout(new BoxLayout(panelInfo, BoxLayout.Y_AXIS));
+            frame.add(panelInfo);
+            frame.add(viewDetailsButton);
             addExitButtonForMyVisitsOrthodontist();
         });
 
         createVisit.addActionListener(e -> {
             frame.removeAll();
             // TODO TODO nowe okno pozwalające na utworzenie nowej wizyty dla ortodonty (z edycja wszystkich pól)
+
+            Label infoLabel = new Label("Please fill all of below fields, before creating a visit:");
+            Label visitComment = new Label("Visit comment: ");
+            TextField textField1 = new TextField();
+            Panel panel = new Panel();
+            panel.add(infoLabel);
+            panel.add(visitComment);
+            panel.add(textField1);
+            //noinspection WriteOnlyObject
+            Visit visitToAdd = new Visit();
+            visitToAdd.setVisitComment(textField1.getText());
+            panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+            frame.add(panel);
             addExitButtonForMyVisitsOrthodontist();
         });
 

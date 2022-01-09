@@ -650,15 +650,23 @@ public class DataBaseHandling {
         try {
             Statement statement = connection.createStatement();
             Statement statement1 = connection.createStatement();
-            statement.executeUpdate("INSERT INTO odbyte_wizyty (pacjent, ortodonta, user_id_pacjenta, user_id_ortodonty, dataWizyty, komentarz) " +
-                    "VALUES (" + visit.getPatientId() + ", " + visit.getOrthodontistId() + ", " + visit.getUserPatientId() + ", "
-                    + visit.getUserOrthodontistId() + ", \"" + visit.getVisitDate() + "\", \"" + visit.getVisitComment() + "\");");
-            ResultSet resultSet1 = statement1.executeQuery("SELECT * FROM odbyte_wizyty WHERE pacjent = " + visit.getPatientId()
-                    + " AND ortodonta = " + visit.getOrthodontistId() + " AND dataWizyty = \"" + visit.getVisitDate() + "\" AND komentarz = \""
-                    + visit.getVisitComment() + "\";");
-            if(resultSet1.next()){
-                visit.setVisitId(resultSet1.getInt("idWizyty"));
-                return true;
+            Statement statement2 = connection.createStatement();
+            Statement statement3 = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM ortodonci WHERE user_id = " + visit.getUserOrthodontistId() + ";");
+            ResultSet resultSet1 = statement1.executeQuery("SELECT * FROM pacjenci WHERE user_id_pacjenta = " + visit.getUserPatientId() + ";");
+            if (resultSet.next() && resultSet1.next()) {
+                visit.setOrthodontistId(resultSet.getInt("idOrtodonty"));
+                visit.setPatientId(resultSet1.getInt("idPacjenta"));
+                statement2.executeUpdate("INSERT INTO odbyte_wizyty (pacjent, ortodonta, user_id_pacjenta, user_id_ortodonty, dataWizyty, komentarz) " +
+                        "VALUES (" + visit.getPatientId() + ", " + visit.getOrthodontistId() + ", " + visit.getUserPatientId() + ", "
+                        + visit.getUserOrthodontistId() + ", \"" + visit.getVisitDate() + "\", \"" + visit.getVisitComment() + "\");");
+                ResultSet resultSet2 = statement3.executeQuery("SELECT * FROM odbyte_wizyty WHERE pacjent = " + visit.getPatientId()
+                        + " AND ortodonta = " + visit.getOrthodontistId() + " AND dataWizyty = \"" + visit.getVisitDate() + "\" AND komentarz = \""
+                        + visit.getVisitComment() + "\";");
+                if (resultSet2.next()) {
+                    visit.setVisitId(resultSet2.getInt("idWizyty"));
+                    return true;
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -676,6 +684,57 @@ public class DataBaseHandling {
         try {
             Statement statement = connection.createStatement();
             statement.executeUpdate("DELETE FROM odbyte_wizyty WHERE idWizyty = " + visit.getVisitId());
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    /**
+     * The method which allows adding new upcoming visit to the database.
+     * @param connection Connection class object necessary to access the database
+     * @param visit Visit object - the visit to be added to the database
+     * @return boolean true (if method was successful) or false (if user provided incorrect input/connection with database failed)
+     */
+    public static boolean AddNewUpcomingVisitToDB(Connection connection, Visit visit) {
+        try {
+            Statement statement = connection.createStatement();
+            Statement statement1 = connection.createStatement();
+            Statement statement2 = connection.createStatement();
+            Statement statement3 = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM ortodonci WHERE user_id = " + visit.getUserOrthodontistId() + ";");
+            ResultSet resultSet1 = statement1.executeQuery("SELECT * FROM pacjenci WHERE user_id_pacjenta = " + visit.getUserPatientId() + ";");
+            if (resultSet.next() && resultSet1.next()) {
+                visit.setOrthodontistId(resultSet.getInt("idOrtodonty"));
+                visit.setPatientId(resultSet1.getInt("idPacjenta"));
+                statement2.executeUpdate("INSERT INTO nadchodzace_wizyty (pacjent, ortodonta, user_id_pacjenta, user_id_ortodonty, dataWizyty, komentarz) " +
+                        "VALUES (" + visit.getPatientId() + ", " + visit.getOrthodontistId() + ", " + visit.getUserPatientId() + ", "
+                        + visit.getUserOrthodontistId() + ", \"" + visit.getVisitDate() + "\", \"" + visit.getVisitComment() + "\");");
+                ResultSet resultSet2 = statement3.executeQuery("SELECT * FROM nadchodzace_wizyty WHERE pacjent = " + visit.getPatientId()
+                        + " AND ortodonta = " + visit.getOrthodontistId() + " AND dataWizyty = \"" + visit.getVisitDate() + "\" AND komentarz = \""
+                        + visit.getVisitComment() + "\";");
+                if (resultSet2.next()) {
+                    visit.setVisitId(resultSet2.getInt("idNadchodzacejWizyty"));
+                    return true;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    /**
+     * The method which allows removing the upcoming visit from the database.
+     * @param connection Connection class object necessary to access the database
+     * @param visit Visit object - the visit to be removed from the database
+     * @return boolean true (if method was successful) or false (if user provided incorrect input/connection with database failed)
+     */
+    public static boolean RemoveUpcomingVisitFromDB(Connection connection, Visit visit){
+        try {
+            Statement statement = connection.createStatement();
+            statement.executeUpdate("DELETE FROM nadchodzace_wizyty WHERE idNadchodzacejWizyty = " + visit.getVisitId());
             return true;
         } catch (Exception e) {
             e.printStackTrace();

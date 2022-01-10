@@ -2,11 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="798ddb25-3dfe-433e-8232-508aa3459add" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/runConfigurations.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/aplikacja/src/DataBaseHandling.java" beforeDir="false" afterPath="$PROJECT_DIR$/aplikacja/src/DataBaseHandling.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/aplikacja/src/GUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/aplikacja/src/GUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aplikacja/src/JDBC.java" beforeDir="false" afterPath="$PROJECT_DIR$/aplikacja/src/JDBC.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/aplikacja/DataBaseHandling.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/aplikacja/DataBaseHandling.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/aplikacja/GUI$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/aplikacja/GUI$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/aplikacja/GUI$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/aplikacja/GUI$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/aplikacja/GUI$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/aplikacja/GUI$3.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/aplikacja/GUI$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/aplikacja/GUI$4.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/aplikacja/GUI$5.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/aplikacja/GUI$5.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/aplikacja/GUI$6.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/aplikacja/GUI$6.class" afterDir="false" />
@@ -76,7 +78,7 @@
       <recent name="C:\Users\adas1\IdeaProjects\PJAVA\SystemObslugiPacjenta-GabinetOrtodontyczny\resources" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.PatientServiceSystem">
+  <component name="RunManager" selected="Application.JDBC">
     <configuration name="JDBC" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="JDBC" />
       <module name="aplikacja" />
@@ -106,9 +108,9 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.JDBC" />
         <item itemvalue="Application.PatientServiceSystem" />
         <item itemvalue="Application.PatientServiceSystem (1)" />
-        <item itemvalue="Application.JDBC" />
       </list>
     </recent_temporary>
   </component>
@@ -133,6 +135,7 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -141,6 +144,16 @@
           <properties class="java.lang.NullPointerException" package="java.lang" />
           <option name="timeStamp" value="2" />
         </breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/aplikacja/src/JDBC.java</url>
+          <line>30</line>
+          <option name="timeStamp" value="20" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/aplikacja/src/JDBC.java</url>
+          <line>31</line>
+          <option name="timeStamp" value="21" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>

@@ -4,6 +4,7 @@ import java.awt.event.*;
 import java.io.*;
 import java.sql.*;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * The main class which represents graphical user interface - GUI
@@ -370,7 +371,7 @@ public class GUI{
             });
         });
         gettingStartedItem.addActionListener(e -> {
-            Frame gettingStartedFrame = new Frame("Getting Started");
+            JFrame gettingStartedFrame = new JFrame("Getting Started");
             switch (loggedUser.getUserPermissionsLevel()){
                 case 0:
                     gettingStartedFrame.setBackground(colorForPatient);
@@ -384,17 +385,25 @@ public class GUI{
             }
             gettingStartedFrame.setIconImage(icon);
             gettingStartedFrame.setVisible(true);
-            Label message = new Label("For more instructions please read README.md file", Label.CENTER);
-            Label message2 = new Label("!!!This file is located in SystemObslugiPacjenta-GabinetOrtodontyczny directory", Label.CENTER);
-            gettingStartedFrame.add(message);
-            gettingStartedFrame.add(message2);
-            Point location = frame.getLocation();
-            location.x += frame.getWidth()/3;
-            location.y += frame.getHeight()/5;
-            gettingStartedFrame.setLocation(location);
-            gettingStartedFrame.setSize(frame.getWidth()/3,frame.getHeight()/5);
+            gettingStartedFrame.setResizable(true);
             gettingStartedFrame.setVisible(true);
-            gettingStartedFrame.setLayout(new BoxLayout(gettingStartedFrame, BoxLayout.Y_AXIS));
+            File file = new File("./resources/icon.JPG");
+            ImageIcon imageIcon = new ImageIcon(file.getAbsolutePath());
+            Image image = imageIcon.getImage();
+            Image imageScaled = image.getScaledInstance(frame.getWidth()/3,(int)(frame.getHeight()/4.5), Image.SCALE_SMOOTH);
+            imageIcon = new ImageIcon(imageScaled);
+            JPanel panel = new JPanel();
+            JLabel message = new JLabel("For more instructions please read README.md file", SwingConstants.CENTER);
+            JLabel message2 = new JLabel("!!!This file is located in SystemObslugiPacjenta-GabinetOrtodontyczny directory", SwingConstants.CENTER);
+            message.setAlignmentX(JComponent.CENTER_ALIGNMENT);
+            message2.setAlignmentX(JComponent.CENTER_ALIGNMENT);
+            panel.add(message);
+            panel.add(message2);
+            panel.add(new JLabel(imageIcon,SwingConstants.CENTER));
+            gettingStartedFrame.add(panel);
+            gettingStartedFrame.setSize(frame.getWidth()/2,frame.getHeight()/3);
+            gettingStartedFrame.setResizable(false);
+            gettingStartedFrame.setLocationRelativeTo(null);
             gettingStartedFrame.addWindowListener(new WindowAdapter(){
                 @Override
                 public void windowClosing(WindowEvent e) {
@@ -707,6 +716,7 @@ public class GUI{
         editUserPanel.setLayout(new BoxLayout(editUserPanel, BoxLayout.Y_AXIS));
         Button editUserButton = new Button("Add new user to database");
         Label prompt = new Label("Please before pressing the button, check the correctness of the data");
+        prompt.setBackground(null);
         editUserPanel.add(prompt);
         editUserPanel.add(editUserButton);
 
@@ -755,8 +765,11 @@ public class GUI{
                         DataBaseHandling.AddNewAdministratorToDB(connection, loggedUser, userToAdd);
                     }
                     prompt.setText("The user: " + userToAdd.getUserLogin() + ", has been successfully added to the database");
-                } else
+                    prompt.setBackground(Color.green);
+                } else {
                     prompt.setText("There was an error adding the user, please check the entered data and try again...");
+                    prompt.setBackground(Color.red);
+                }
 
             } catch (Exception exception){
                 prompt.setText("You can't create a user with this credentials, please fill them again");
@@ -875,12 +888,15 @@ public class GUI{
                     }
                     DataBaseHandling.RemoveOrthodontistFromDB(connection, loggedUser, userToEdit, adminOrthodontist);
                     deleteInfo.setText("Deletion of orthodontist: " + userToEdit.getUserLogin() + ", was successful");
+                    deleteInfo.setBackground(Color.green);
                 } else if (userToEdit.getUserPermissionsLevel() == 2) {
                     try {
                         DataBaseHandling.RemoveAdministratorFromDB(connection, loggedUser, userToEdit);
                         deleteInfo.setText("Deletion of developer: " + userToEdit.getUserLogin() + ", was successful");
+                        deleteInfo.setBackground(Color.green);
                     } catch (Exception exception) {
                         System.out.println("Exception caught! a problem has arisen while deleting user from the database");
+                        deleteInfo.setBackground(Color.red);
                     }
                 }
             } catch(Exception exception){
@@ -1113,6 +1129,7 @@ public class GUI{
                         } else
                             MailHandling.sendMail("adampiszczek1904@gmail.com", textFieldTopic.getText(), textField.getText());
                         sendInfo.setText("The message has been sent successfully!");
+                        sendInfo.setBackground(Color.green);
                     } catch (Exception exception){
                         sendInfo.setText("There were problems with sending your e-mail (recipient's address is not vail)");
                         sendInfo.setBackground(Color.red);
@@ -1171,6 +1188,7 @@ public class GUI{
             frame.add(textField);
 
             Label sendInfo = new Label("Please check before submitting if a valid user is selected, and the subject and text fields are not empty", Label.CENTER);
+            sendInfo.setBackground(null);
             Button sendButton = new Button("Send");
             sendInfo.setMaximumSize(maxDimensionWidth);
             sendButton.setMaximumSize(maxDimension);
@@ -1201,6 +1219,7 @@ public class GUI{
                         } else
                             MailHandling.sendMail("adampiszczek1904@gmail.com", textFieldTopic.getText(), textField.getText());
                         sendInfo.setText("The message has been sent successfully!");
+                        sendInfo.setBackground(Color.green);
                     } catch (Exception exception){
                         sendInfo.setText("There were problems with sending your e-mail (recipient's address is not vail)");
                         sendInfo.setBackground(Color.red);
@@ -1459,6 +1478,7 @@ public class GUI{
         if(loggedUser.getUserPermissionsLevel()==0) {
             Dimension maxDimension = new Dimension(frame.getWidth()/5,frame.getHeight()/13);
             Dimension maxDimensionWidth = new Dimension(frame.getWidth(), frame.getHeight()/15);
+            Label dateInfo = new Label("Please select the date of your visit:");
             Choice visitSelection = new Choice();
             visitSelection.setMaximumSize(maxDimensionWidth);
             Connection connection = DataBaseHandling.StartConnectionWithDB();
@@ -1467,6 +1487,7 @@ public class GUI{
                 for (Visit visit : listOfVisits)
                     visitSelection.add(visit.getVisitDate().toString());
             }
+            frame.add(dateInfo);
             frame.add(visitSelection);
             Panel visitInfoPanel = new Panel();
             visitInfoPanel.setPreferredSize(new Dimension(frame.getWidth()/2,frame.getHeight()/2));
@@ -1477,9 +1498,12 @@ public class GUI{
             generatePDF.setMaximumSize(maxDimension);
             Button makeVisit = new Button("Make a new visit with your Orthodontist");
             makeVisit.setMaximumSize(maxDimension);
+            Button refreshVisits = new Button("Refresh your visits");
+            refreshVisits.setMaximumSize(maxDimension);
             frame.add(makeVisit);
             frame.add(buttonShowDetails);
             frame.add(generatePDF);
+            frame.add(refreshVisits);
 
             generatePDF.addActionListener(e -> {
                 visitInfoPanel.removeAll();
@@ -1511,10 +1535,11 @@ public class GUI{
                         // TODO funkcja generująca pdf'a z wybranej wizyty
 
 
-                        generateFileCheck = selectedVisit.getVisitId() != 3; // TODO change
+                        generateFileCheck = selectedVisit.getVisitId() != 3; // TODO zmienic sprawdzenie poprawnosci wygnerowania pdfa
 
                         if (generateFileCheck) {
                             infoConfirmationLabel.setText("Your pdf file have been successfully generated");
+                            infoConfirmationLabel.setBackground(Color.green);
                         } else {
                             infoConfirmationLabel.setText("Your pdf file have NOT been successfully generated, something went wrong please try again");
                             infoConfirmationLabel.setBackground(Color.red);
@@ -1596,49 +1621,59 @@ public class GUI{
 
                 try {
                     Label infoLabel = new Label("Please enter information for your orthodontist regarding the new visit." +
-                            " Your orthodontist will be able to plan the visit by himself:");
+                            " Your orthodontist will be able to plan the visit by himself (if the orthodontist confirms the visit, you will see it in the drop-down list):");
                     TextField textField = new TextField();
                     Button sendButton = new Button("send your inquiry");
                     visitInfoPanel.add(infoLabel);
                     visitInfoPanel.add(textField);
                     visitInfoPanel.add(sendButton);
+                    visitInfoPanel.add(labelConfirmation);
+                    visitInfoPanel.setLayout(new BoxLayout(visitInfoPanel, BoxLayout.Y_AXIS));
+                    frame.setVisible(true);
                     sendButton.addActionListener(e12 -> {
                         Visit visitToSend = new Visit();
                         visitToSend.setVisitComment(textField.getText());
-                        visitToSend.setUserPatientId(1); // TODO POPRAWIC WPROWADZANIE id pacjenta
+                        visitToSend.setUserPatientId(loggedUser.getUserId()); // TODO Czy to na pewno poprawnie
                         User orthodontistOfPatient = DataBaseHandling.SearchForOrthodontistOfPatient(connection, loggedUser);
                         if (orthodontistOfPatient != null) {
-                            visitToSend.setUserOrthodontistId(1); // TODO POPRAWIC WPROWADZANIE id ortodonty
+                            visitToSend.setUserOrthodontistId(orthodontistOfPatient.getUserId());
                         }
                         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
                         visitToSend.setVisitDate(timestamp);
 
-                        boolean visitCheck = DataBaseHandling.AddNewVisitToDB(connection, visitToSend); // TODO skomplikowane wprowadzenie wizyty
+                        boolean visitCheck = DataBaseHandling.AddNewUpcomingVisitToDB(connection, visitToSend);
 
                         List<Visit> listOfVisitsUpdate = DataBaseHandling.SearchForVisitsOfPatient(connection, loggedUser);
                         if (listOfVisitsUpdate != null) {
                             for (Visit visit : listOfVisitsUpdate)
                                 visitSelection.add(visit.getVisitDate().toString());
                         }
-                        if (visitCheck)
+
+                        if (visitCheck) {
                             labelConfirmation.setText("Your inquiry has been successfully sent");
-                        else {
+                            labelConfirmation.setBackground(Color.green);
+                        } else {
                             labelConfirmation.setText("Your inquiry has been denied!!!");
                             labelConfirmation.setBackground(Color.red);
                         }
-                        visitInfoPanel.add(labelConfirmation);
                     });
                 } catch(Exception exception){
                     exception.printStackTrace();
-                    visitInfoPanel.removeAll();
-                    visitInfoPanel.add(labelConfirmation);
                     labelConfirmation.setText("Your inquiry has been denied!!!");
                     labelConfirmation.setBackground(Color.red);
-                } finally {
-                    visitInfoPanel.setLayout(new BoxLayout(visitInfoPanel, BoxLayout.Y_AXIS));
-                    frame.setVisible(true);
                 }
             });
+
+            refreshVisits.addActionListener(e -> {
+                List<Visit> listOfVisitsUpdate = DataBaseHandling.SearchForVisitsOfPatient(connection, loggedUser);
+                if (listOfVisits != null && listOfVisitsUpdate != null && listOfVisitsUpdate.size() != listOfVisits.size()) {
+                    listOfVisits.clear();
+                    listOfVisits.addAll(listOfVisitsUpdate);
+                }
+                frame.removeAll();
+                myVisitsPatient();
+            });
+
         } else {
             System.err.println("There were problems logging in the correct user");
         }
@@ -1671,37 +1706,65 @@ public class GUI{
         Button createVisit = new Button("Create a new visit");
         Button cancelVisit = new Button("Cancel a visit");
         Button editVisit = new Button("Edit your visits");
+        Button handleVisits = new Button("Handle upcoming visits");
         createVisit.setPreferredSize(maxDimensionWidth);
         cancelVisit.setPreferredSize(maxDimensionWidth);
         editVisit.setPreferredSize(maxDimensionWidth);
         viewVisits.setPreferredSize(maxDimensionWidth);
+        handleVisits.setPreferredSize(maxDimensionWidth);
         Panel panelVisits = new Panel();
         Panel panelVisits2 = new Panel();
-        panelVisits2.setMinimumSize(new Dimension(frame.getWidth(), frame.getHeight()));
-        panelVisits.setMinimumSize(new Dimension(frame.getWidth(), frame.getHeight()));
         frame.add(panelVisits);
         frame.add(viewVisits);
         frame.add(createVisit);
+        frame.add(handleVisits);
         frame.add(cancelVisit);
         frame.add(editVisit);
         frame.add(panelVisits2);
 
         viewVisits.addActionListener(e -> {
             frame.removeAll();
-            // TODO nowe okno pozwalające na podgląd wizyt ortodonty
-
+            Label dateInfo = new Label("Please select date of visit:");
             Choice choice = new Choice();
             Panel panelInfo = new Panel();
-            Button viewDetailsButton = new Button("View visit");
+            Label info1 = new Label();
+            Label info2 = new Label();
+            Label info3 = new Label();
+            panelInfo.add(info1);
+            panelInfo.add(info2);
+            panelInfo.add(info3);
+            Button viewDetailsButton = new Button("View details of a selected visit");
             Connection connection = DataBaseHandling.StartConnectionWithDB();
             List<Visit> visitList = DataBaseHandling.SearchForVisitsOfPOrthodontist(connection, loggedUser);
+            try {
+                assert connection != null;
+                connection.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
             if (visitList != null) {
                 for(Visit visit: visitList){
                     choice.add(visit.getVisitDate().toString());
                 }
             }
+
+            Button viewPictureButton = new Button("View Pantomography picture");
+            viewPictureButton.addActionListener(e11 -> {
+                JFrame jFrame = new JFrame("View of Pantomography picture");
+                jFrame.setResizable(true);
+                jFrame.setVisible(true);
+                File file = new File("./resources/icon.JPG"); // TODO WYSWIETLANIE ZDJECIA Z BAZY DANYCH
+                ImageIcon imageIcon = new ImageIcon(file.getAbsolutePath());
+                jFrame.setSize((int)(imageIcon.getIconWidth()/1.5),(int)(imageIcon.getIconHeight()/1.5));
+                Image image = imageIcon.getImage();
+                Image imageScaled = image.getScaledInstance((int)(imageIcon.getIconWidth()/1.5),(int)(imageIcon.getIconHeight()/1.5), Image.SCALE_SMOOTH);
+                imageIcon = new ImageIcon(imageScaled);
+                Panel panel = new Panel();
+                panel.add(new JLabel(imageIcon));
+                jFrame.add(panel);
+                jFrame.setLocationRelativeTo(null);
+            });
             viewDetailsButton.addActionListener(e1 -> {
-                panelInfo.removeAll();
                 Visit selectedVisit = new Visit();
                 if (visitList != null) {
                     for (Visit visit : visitList) {
@@ -1716,50 +1779,372 @@ public class GUI{
                         }
                     }
                 }
-                Label info1 = new Label("Details about chosen visit");
-                Label info2 = new Label("Date of visit: " + selectedVisit.getVisitDate() + ", and ID: " + selectedVisit.getVisitId());
-                Label info3 = new Label("Visit comment: " + selectedVisit.getVisitComment());
-                panelInfo.add(info1);
-                panelInfo.add(info2);
-                panelInfo.add(info3);
-            });
+                info1.setText("Details about chosen visit:");
+                info2.setText("Date of visit: " + selectedVisit.getVisitDate() + ", and ID: " + selectedVisit.getVisitId());
+                info3.setText("Visit comment: " + selectedVisit.getVisitComment());
 
+
+            });
+            frame.add(dateInfo);
             frame.add(choice);
             panelInfo.setLayout(new BoxLayout(panelInfo, BoxLayout.Y_AXIS));
             frame.add(panelInfo);
             frame.add(viewDetailsButton);
+            frame.add(viewPictureButton);
             addExitButtonForMyVisitsOrthodontist();
+            frame.setVisible(true);
         });
 
         createVisit.addActionListener(e -> {
             frame.removeAll();
-            // TODO TODO nowe okno pozwalające na utworzenie nowej wizyty dla ortodonty (z edycja wszystkich pól)
-
+            Label userLabel = new Label("Please select user from the list below: ");
+            Choice choice = new Choice();
             Label infoLabel = new Label("Please fill all of below fields, before creating a visit:");
             Label visitComment = new Label("Visit comment: ");
+            Label visitDate = new Label("Visit date (in format [year-month-day hour:minute:second]) remember to fill in correctly:");
             TextField textField1 = new TextField();
+            TextField textField2 = new TextField();
+            Button createButton = new Button("Create a new Visit");
+            Label infoLabel2 = new Label();
+            infoLabel2.setBackground(null);
             Panel panel = new Panel();
+            Connection connection = DataBaseHandling.StartConnectionWithDB();
+            List<User> userList = DataBaseHandling.SearchForPatientsOfOrthodontist(connection, loggedUser);
+            if (userList != null) {
+                for(User user: userList)
+                    choice.add(user.getUserLogin());
+            }
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+            panel.add(userLabel);
+            panel.add(choice);
             panel.add(infoLabel);
+            panel.add(visitDate);
+            panel.add(textField2);
             panel.add(visitComment);
             panel.add(textField1);
-            //noinspection WriteOnlyObject
-            Visit visitToAdd = new Visit();
-            visitToAdd.setVisitComment(textField1.getText());
+            panel.add(createButton);
+            panel.add(infoLabel2);
             panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
             frame.add(panel);
             addExitButtonForMyVisitsOrthodontist();
+
+            createButton.addActionListener(e12 -> {
+                Connection connectionButton = DataBaseHandling.StartConnectionWithDB();
+                Visit visitToAdd = new Visit();
+
+                if (userList != null) {
+                    for(User user: userList){
+                        if(choice.getSelectedItem().equals(user.getUserLogin())){
+                            visitToAdd.setUserPatientId(user.getUserId());
+                        }
+                    }
+                }
+                visitToAdd.setUserOrthodontistId(loggedUser.getUserId());
+                visitToAdd.setVisitComment(textField1.getText());
+                boolean tick = false;
+                int Counter = textField2.getText().toCharArray().length;
+                if(Counter == 19) {
+                    try {
+                        Timestamp timestampFromString = Timestamp.valueOf(textField2.getText());
+                        visitToAdd.setVisitDate(timestampFromString);
+                        tick = DataBaseHandling.AddNewVisitToDB(connectionButton, visitToAdd);
+                    } catch (Exception exception){
+                        infoLabel2.setBackground(Color.red);
+                        infoLabel2.setText("Problems arose when adding a new visit to the base, please try again (check if you entered the date correctly)");
+                    }
+                } else {
+                    infoLabel2.setBackground(Color.red);
+                    infoLabel2.setText("Problems arose when adding a new visit to the base, please try again (check if you entered the date correctly)");
+                }
+
+                if(tick){
+                    infoLabel2.setBackground(Color.green);
+                    infoLabel2.setText("New visit has been added to the database successfully");
+                }
+                else{
+                    infoLabel2.setBackground(Color.red);
+                    infoLabel2.setText("Problems arose when adding a new visit to the base, please try again (check if you entered the date correctly)");
+                }
+
+                try {
+                    if (connectionButton != null) {
+                        connectionButton.close();
+                    }
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+
+            });
+        });
+
+        handleVisits.addActionListener(e -> {
+            frame.removeAll();
+            Label userLabel = new Label("Please select a new upcoming visit from your patients: ");
+            Choice choice = new Choice();
+            Label infoLabel = new Label("Please fill all of below fields, before creating a visit:");
+            Label visitComment = new Label("Visit comment: ");
+            Label visitDate = new Label("Visit date (in format [year-month-day hour:minute:second]) remember to fill in correctly:");
+            TextField textField1 = new TextField();
+            TextField textField2 = new TextField();
+            Button createButton = new Button("Create a new Visit");
+            Label infoLabel2 = new Label();
+            infoLabel2.setBackground(null);
+            Panel panel = new Panel();
+            Connection connection = DataBaseHandling.StartConnectionWithDB();
+            List<Visit> visitList = DataBaseHandling.SearchForVisitsOfPOrthodontist(connection, loggedUser); // TODO FUNKCJA ZWRACAJACA NADCHODZACE WIZYTY
+            if (visitList != null) {
+                for(Visit visit: visitList)
+                    choice.add(visit.getVisitDate().toString() + ", of a patient: " + visit.getUserPatientId());
+            }
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+            panel.add(userLabel);
+            panel.add(choice);
+            panel.add(infoLabel);
+            panel.add(visitDate);
+            panel.add(textField2);
+            panel.add(visitComment);
+            panel.add(textField1);
+            panel.add(createButton);
+            panel.add(infoLabel2);
+            panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+            frame.add(panel);
+            addExitButtonForMyVisitsOrthodontist();
+            createButton.addActionListener(e12 -> {
+                Connection connectionButton = DataBaseHandling.StartConnectionWithDB();
+                Visit visitToAdd = new Visit();
+                if (visitList != null) {
+                    for(Visit visit: visitList){
+                        if(choice.getSelectedItem().equals(visit.getVisitDate().toString() + ", of a patient: " + visit.getUserPatientId())){
+                            visitToAdd.setUserPatientId(user.getUserId());
+                        }
+                    }
+                }
+                visitToAdd.setUserOrthodontistId(loggedUser.getUserId());
+                visitToAdd.setVisitComment(textField1.getText());
+                boolean tick = false;
+                int Counter = textField2.getText().toCharArray().length;
+                if(Counter == 19) {
+                    try {
+                        Timestamp timestampFromString = Timestamp.valueOf(textField2.getText());
+                        visitToAdd.setVisitDate(timestampFromString);
+                        tick = DataBaseHandling.AddNewVisitToDB(connectionButton, visitToAdd);
+                    } catch (Exception exception){
+                        infoLabel2.setBackground(Color.red);
+                        infoLabel2.setText("Problems arose when adding a new visit to the base, please try again (check if you entered the date correctly)");
+                    }
+                } else {
+                    infoLabel2.setBackground(Color.red);
+                    infoLabel2.setText("Problems arose when adding a new visit to the base, please try again (check if you entered the date correctly)");
+                }
+
+                if(tick){
+                    infoLabel2.setBackground(Color.green);
+                    infoLabel2.setText("New visit has been added to the database successfully");
+                }
+                else{
+                    infoLabel2.setBackground(Color.red);
+                    infoLabel2.setText("Problems arose when adding a new visit to the base, please try again (check if you entered the date correctly)");
+                }
+
+                try {
+                    if (connectionButton != null) {
+                        connectionButton.close();
+                    }
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+
+            });
         });
 
         cancelVisit.addActionListener(e -> {
             frame.removeAll();
-            // TODO nowe okno pozwalające na usunięcie wybranej wizyty
+            Label userLabel = new Label("Please select a visit from the list below: ");
+            Choice choice = new Choice();
+            Button deleteButton = new Button("Delete visit");
+            Label infoLabel = new Label();
+            infoLabel.setBackground(null);
+            Connection connection = DataBaseHandling.StartConnectionWithDB();
+            List<Visit> visitList = DataBaseHandling.SearchForVisitsOfPOrthodontist(connection, loggedUser);
+            if (visitList != null) {
+                for(Visit visit: visitList){
+                    choice.add(visit.getVisitDate().toString());
+                }
+            }
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+
+            frame.add(userLabel);
+            frame.add(choice);
+            frame.add(infoLabel );
+            frame.add(deleteButton);
+
+            deleteButton.addActionListener(e13 -> {
+                Connection connectionButton = DataBaseHandling.StartConnectionWithDB();
+                Visit visitToDelete = new Visit();
+                if (visitList != null) {
+                    for(Visit visit: visitList){
+                        if(choice.getSelectedItem().equals(visit.getVisitDate().toString())){
+                            visitToDelete = visit;
+                            visitList.remove(visit);
+                            choice.remove(visit.getVisitDate().toString());
+                        }
+                    }
+                }
+
+                boolean tick = DataBaseHandling.RemoveVisitFromDB(connectionButton, visitToDelete);
+                if(tick){
+                    infoLabel.setBackground(Color.green);
+                    infoLabel.setText("The visit was successfully deleted");
+                }
+                else{
+                    infoLabel.setBackground(Color.red);
+                    infoLabel.setText("There was a problem while deleting the visit, please try again");
+                }
+                try {
+                    if (connectionButton != null) {
+                        connectionButton.close();
+                    }
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            });
             addExitButtonForMyVisitsOrthodontist();
         });
 
         editVisit.addActionListener(e -> {
             frame.removeAll();
-            // TODO nowa okno pozwalające na edycje wybranej wizyty
+            Label dateInfo = new Label("Select a visit date and click View details button, to edit the appointment details:");
+            Label editInfo = new Label();
+            editInfo.setBackground(null);
+            Choice choice = new Choice();
+            Panel panelInfo = new Panel();
+            Label info = new Label("Details about chosen visit:");
+            Label info1 = new Label("Visit date (in format [year-month-day hour:minute:second]) remember to fill in correctly: ");
+            TextField textField1 = new TextField("null");
+            Label info2 = new Label("Visit comment: ");
+            TextField textField2 = new TextField("null");
+            Label info3 = new Label("Visit patient id: ");
+            TextField textField3 = new TextField("null");
+            Label info4 = new Label("Visit orthodontist id: ");
+            TextField textField4 = new TextField("null");
+
+            panelInfo.add(info);
+            panelInfo.add(info1);
+            panelInfo.add(textField1);
+            panelInfo.add(info2);
+            panelInfo.add(textField2);
+            panelInfo.add(info3);
+            panelInfo.add(textField3);
+            panelInfo.add(info4);
+            panelInfo.add(textField4);
+
+            Button downloadDetailsButton = new Button("Download details of a selected visit");
+            Button editDetailsButton = new Button("Edit details of a selected visit");
+            Connection connection = DataBaseHandling.StartConnectionWithDB();
+            List<Visit> visitList = DataBaseHandling.SearchForVisitsOfPOrthodontist(connection, loggedUser);
+            try {
+                assert connection != null;
+                connection.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+            if (visitList != null) {
+                for(Visit visit: visitList){
+                    choice.add(visit.getVisitDate().toString());
+                }
+            }
+
+            downloadDetailsButton.addActionListener(e1 -> {
+                Visit selectedVisit = new Visit();
+                if (visitList != null) {
+                    for (Visit visit : visitList) {
+                        if (choice.getSelectedItem().equals(visit.getVisitDate().toString())) {
+                            textField1.setText(selectedVisit.getVisitDate().toString());
+                            textField2.setText(selectedVisit.getVisitComment());
+                            textField3.setText(String.valueOf(selectedVisit.getUserPatientId()));
+                            textField4.setText(String.valueOf(selectedVisit.getUserOrthodontistId()));
+                        }
+                    }
+                }
+            });
+
+            editDetailsButton.addActionListener(e1 -> {
+                Visit selectedVisit = new Visit();
+                if (visitList != null) {
+                    for (Visit visit : visitList) {
+                        if (choice.getSelectedItem().equals(visit.getVisitDate().toString())) {
+                            selectedVisit.setVisitDate(visit.getVisitDate());
+                            selectedVisit.setVisitComment(visit.getVisitComment());
+                            selectedVisit.setVisitId(visit.getVisitId());
+                            selectedVisit.setPatientId(visit.getPatientId());
+                            selectedVisit.setOrthodontistId(visit.getOrthodontistId());
+                            selectedVisit.setUserPatientId(visit.getUserPatientId());
+                            selectedVisit.setUserOrthodontistId(visit.getUserOrthodontistId());
+                        }
+                    }
+                }
+                Connection connectionButton = DataBaseHandling.StartConnectionWithDB();
+                boolean tick = false;
+                int Counter = textField1.getText().toCharArray().length;
+                if(Counter == 19) {
+                    try {
+                        Timestamp timestampFromString = Timestamp.valueOf(textField2.getText());
+                        selectedVisit.setVisitDate(timestampFromString);
+                        if(Objects.equals(textField2.getText(), "!!!")) // TODO FUNKCJA EDYTUJACA WIZYTE
+                            tick = true;// TODO FUNKCJA EDYTUJACA WIZYTE
+                    } catch (Exception exception){
+                        editInfo.setBackground(Color.red);
+                        editInfo.setText("Problems arose while changing details of the visit, please try again (check if you entered the date correctly)");
+                    }
+                } else {
+                    editInfo.setBackground(Color.red);
+                    editInfo.setText("Problems arose while changing details of the visit, please try again (check if you entered the date correctly)");
+                }
+
+                if(tick){
+                    editInfo.setBackground(Color.green);
+                    editInfo.setText("Visit with ID: " + selectedVisit.getVisitId() + ", has been successfully edited");
+                }
+                else{
+                    editInfo.setBackground(Color.red);
+                    editInfo.setText("Problems arose while changing details of the visit, please try again (check if you entered the date correctly)");
+                }
+                try {
+                    if (connectionButton != null) {
+                        connectionButton.close();
+                    }
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            });
+
+            frame.add(dateInfo);
+            frame.add(choice);
+            panelInfo.setLayout(new BoxLayout(panelInfo, BoxLayout.Y_AXIS));
+            frame.add(panelInfo);
+            frame.add(downloadDetailsButton);
+            frame.add(editDetailsButton);
+            frame.add(editInfo);
             addExitButtonForMyVisitsOrthodontist();
+            frame.setVisible(true);
         });
 
         addExitButtonOrthodontist();

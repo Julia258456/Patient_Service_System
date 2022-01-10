@@ -687,8 +687,8 @@ public class DataBaseHandling {
             return true;
         } catch (Exception e) {
             e.printStackTrace();
+            return false;
         }
-        return false;
     }
 
     /**
@@ -721,8 +721,9 @@ public class DataBaseHandling {
             }
         } catch (Exception e) {
             e.printStackTrace();
+            return false;
         }
-        return false;
+        return true;
     }
 
     /**

@@ -25,11 +25,11 @@ public class JDBC {
         List<User> list3 = DataBaseHandling.SearchForAllUsers(c, user1a);
         List<User> list4 = DataBaseHandling.SearchForAllPatients(c, user1a);
 
-        Visit visit = new Visit(list1.get(0));
-        visit.setVisitId(1);
-        boolean addVisit = DataBaseHandling.AddNewVisitToDB(c, visit);
-        boolean remVisit = DataBaseHandling.RemoveVisitFromDB(c, visit);
-        System.out.println(remVisit);
+//        Visit visit = new Visit(list1.get(0));
+//        visit.setVisitId(1);
+//        boolean addVisit = DataBaseHandling.AddNewVisitToDB(c, visit);
+//        boolean remVisit = DataBaseHandling.RemoveVisitFromDB(c, visit);
+//        System.out.println(remVisit);
 
         //User user2o = DataBaseHandlingClass.LogInUser(c,"jnowic", "qwerty2");
         //System.out.println(DataBaseHandlingClass.RemoveOrthodontistFromDB(c, user1a, user2o, usero));

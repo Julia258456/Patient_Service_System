@@ -5,8 +5,20 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Date;
 
+/**
+ * Class responsible for generating pdf files
+ */
 public class PDFGenerator {
 
+    /**
+     * A static method that generates an appropriate pdf file using the parameters provided on the input
+     * @param author - a value representing the author of the pdf
+     * @param pathToFile - a value representing the path to file to save
+     * @param date - a value representing the date of the visit as Timestamp
+     * @param comment - a value representing orthodontist comment of visit
+     * @param personalData - a value representing personal data of the patient
+     * @param pathToImage - a value representing the path to image
+     */
     public static void createPdf(String author, String pathToFile, String date, String comment, String personalData, String pathToImage){
         Document document = new Document();
         FileOutputStream file = null;

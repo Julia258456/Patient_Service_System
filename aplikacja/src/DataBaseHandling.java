@@ -687,8 +687,8 @@ public class DataBaseHandling {
             return true;
         } catch (Exception e) {
             e.printStackTrace();
-            return false;
         }
+        return false;
     }
 
     /**
@@ -721,9 +721,8 @@ public class DataBaseHandling {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return false;
         }
-        return true;
+        return false;
     }
 
     /**
@@ -741,6 +740,30 @@ public class DataBaseHandling {
             e.printStackTrace();
         }
         return false;
+    }
+
+    /**
+     * The method which allows to change the data about a specific visit in the database.
+     * @param connection Connection class object necessary to access the database
+     * @param visitOldData Visit object - the old data which should be changed
+     * @param visitNewData Visit object - the new data which should be saved in the database
+     * @return Visit object (if method was successful) or null (if user provided incorrect input/connection with database failed)
+     */
+    public static Visit EditVisitInfoInDB(Connection connection, Visit visitOldData, Visit visitNewData){
+        if ( visitOldData.getVisitId() != visitNewData.getVisitId()){
+            return null;
+        }
+        try {
+            Statement statement = connection.createStatement();
+            statement.executeUpdate("UPDATE odbyte_wizyty SET pacjent = " + visitNewData.getPatientId() + " , ortodonta = "
+                    + visitNewData.getOrthodontistId() + ", user_id_pacjenta = " + visitNewData.getUserPatientId() + ", dataWizyty = \""
+                    + visitNewData.getVisitDate() + "\", komentarz = \"" + visitNewData.getVisitComment() + "\" WHERE idWizyty = "
+                    + visitNewData.getVisitId() + ";");
+            return visitNewData;
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+        return null;
     }
 
     // jeszcze nie działa

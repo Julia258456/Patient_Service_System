@@ -1,13 +1,10 @@
-import com.sun.scenario.effect.ImageData;
-
-import javax.swing.*;
-import java.awt.*;
-import java.io.File;
-
+/**
+ * the main class that runs the program
+ */
 public class PatientServiceSystem {
 
     /**
-     * The main method
+     * The main static method
      * @param args are not being used
      */
     public static void main(String [] args){

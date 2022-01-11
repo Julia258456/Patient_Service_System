@@ -579,6 +579,9 @@ public class GUI{
         frame.add(editUserPanel);
     }
 
+    /**
+     * The method which is responsible for displaying all patients from the database
+     */
     public void myPatients(){
         frame.removeAll();
         Label infoLabel = new Label("Please select your patient to view his details: ");
@@ -1619,7 +1622,7 @@ public class GUI{
                         if(response == JFileChooser.APPROVE_OPTION){
                             String personalData = loggedUser.getUserName() + " " + loggedUser.getUserSurname() + ", +48 " + loggedUser.getUserTelephoneNumber();
                             // TODO WCZYTYWANIE ZDJECIA Z BAZY DANYCH
-                            PDFGenerator.createPdf("Adam",fileChooser.getSelectedFile().getAbsoluteFile().toString(),selectedVisit.getVisitDate().toString(),selectedVisit.getVisitComment(), personalData, "./resources/icon.JPG");
+                            PDFGenerator.createPdf(loggedUser.getUserName() + " " + loggedUser.getUserSurname(),fileChooser.getSelectedFile().getAbsoluteFile().toString(),selectedVisit.getVisitDate().toString(),selectedVisit.getVisitComment(), personalData, "./resources/icon.JPG");
                             infoConfirmationLabel.setText("Your pdf file have been successfully generated");
                             infoConfirmationLabel.setBackground(Color.green);
                         } else {
@@ -1765,6 +1768,9 @@ public class GUI{
         frame.setVisible(true);
     }
 
+    /**
+     * The method which is responsible for creating a return button to myVisitsOrthodontist()
+     */
     public void addExitButtonForMyVisitsOrthodontist(){
         Panel editUserPanel = new Panel();
         Button exitButton = new Button("Return to my visits");
@@ -1891,7 +1897,7 @@ public class GUI{
                 if(response == JFileChooser.APPROVE_OPTION && selectedVisit.getVisitDate() != null){
                     String personalData = patient.getUserName() + " " + patient.getUserSurname() + ", +48 " + patient.getUserTelephoneNumber();
                     // TODO WCZYTYWANIE ZDJECIA Z BAZY DANYCH
-                    PDFGenerator.createPdf("Adam",fileChooser.getSelectedFile().getAbsoluteFile().toString(),selectedVisit.getVisitDate().toString(),selectedVisit.getVisitComment(), personalData, "./resources/icon.JPG");
+                    PDFGenerator.createPdf(loggedUser.getUserName() + " " + loggedUser.getUserSurname(),fileChooser.getSelectedFile().getAbsoluteFile().toString(),selectedVisit.getVisitDate().toString(),selectedVisit.getVisitComment(), personalData, "./resources/icon.JPG");
                     infoConfirmationLabel.setText("Your pdf file have been successfully generated");
                     infoConfirmationLabel.setBackground(Color.green);
                 } else {

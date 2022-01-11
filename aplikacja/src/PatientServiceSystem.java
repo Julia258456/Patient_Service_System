@@ -1,3 +1,9 @@
+import com.sun.scenario.effect.ImageData;
+
+import javax.swing.*;
+import java.awt.*;
+import java.io.File;
+
 public class PatientServiceSystem {
 
     /**
@@ -9,5 +15,6 @@ public class PatientServiceSystem {
         GUI gui = new GUI();
         gui.configureMenuBars();
         gui.loginScreen();
+
     }
 }

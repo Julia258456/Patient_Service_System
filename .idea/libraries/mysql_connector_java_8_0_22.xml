@@ -3,6 +3,7 @@
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/resources/javax.mail.jar!/" />
       <root url="jar://$PROJECT_DIR$/resources/mysql-connector-java-8.0.22.jar!/" />
+      <root url="jar://$PROJECT_DIR$/resources/itextpdf-5.4.0.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

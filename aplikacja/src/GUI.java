@@ -1588,7 +1588,6 @@ public class GUI{
 
             generatePDF.addActionListener(e -> {
                 visitInfoPanel.removeAll();
-                boolean generateFileCheck;
                 Label infoConfirmationLabel = new Label();
                 infoConfirmationLabel.setBackground(null);
                 try {
@@ -1612,13 +1611,15 @@ public class GUI{
 
                         }
 
+                        JFileChooser fileChooser = new JFileChooser();
+                        fileChooser.setDialogTitle("Specify directory and the name of the file to save ---(nameOfTheFile.pdf) (IN PDF FORMAT)");
+                        fileChooser.setCurrentDirectory(new java.io.File("."));
 
-                        // TODO funkcja generująca pdf'a z wybranej wizyty
-
-
-                        generateFileCheck = selectedVisit.getVisitId() != 3; // TODO zmienic sprawdzenie poprawnosci wygnerowania pdfa
-
-                        if (generateFileCheck) {
+                        int response = fileChooser.showSaveDialog(null);
+                        if(response == JFileChooser.APPROVE_OPTION){
+                            String personalData = loggedUser.getUserName() + " " + loggedUser.getUserSurname() + ", +48 " + loggedUser.getUserTelephoneNumber();
+                            // TODO WCZYTYWANIE ZDJECIA Z BAZY DANYCH
+                            PDFGenerator.createPdf("Adam",fileChooser.getSelectedFile().getAbsoluteFile().toString(),selectedVisit.getVisitDate().toString(),selectedVisit.getVisitComment(), personalData, "./resources/icon.JPG");
                             infoConfirmationLabel.setText("Your pdf file have been successfully generated");
                             infoConfirmationLabel.setBackground(Color.green);
                         } else {
@@ -1714,7 +1715,7 @@ public class GUI{
                     sendButton.addActionListener(e12 -> {
                         Visit visitToSend = new Visit();
                         visitToSend.setVisitComment(textField.getText());
-                        visitToSend.setUserPatientId(loggedUser.getUserId()); // TODO Czy to na pewno poprawnie
+                        visitToSend.setUserPatientId(loggedUser.getUserId());
                         User orthodontistOfPatient = DataBaseHandling.SearchForOrthodontistOfPatient(connection, loggedUser);
                         if (orthodontistOfPatient != null) {
                             visitToSend.setUserOrthodontistId(orthodontistOfPatient.getUserId());
@@ -1805,7 +1806,7 @@ public class GUI{
 
         viewVisits.addActionListener(e -> {
             frame.removeAll();
-            Label dateInfo = new Label("Please select date of visit:");
+            Label dateInfo = new Label("Please select date of visit (Remember to download the data using the \"View details of a selected visit\" button, before generating the pdf file):");
             Choice choice = new Choice();
             Panel panelInfo = new Panel();
             Label info1 = new Label();
@@ -1815,8 +1816,13 @@ public class GUI{
             panelInfo.add(info2);
             panelInfo.add(info3);
             Button viewDetailsButton = new Button("View details of a selected visit");
+            Button generatePdfFile = new Button("Generate PDF file");
+            Label infoConfirmationLabel = new Label();
+            infoConfirmationLabel.setBackground(null);
+            User patient = new User();
             Connection connection = DataBaseHandling.StartConnectionWithDB();
             List<Visit> visitList = DataBaseHandling.SearchForVisitsOfPOrthodontist(connection, loggedUser);
+            Visit selectedVisit = new Visit();
             try {
                 assert connection != null;
                 connection.close();
@@ -1846,7 +1852,6 @@ public class GUI{
                 jFrame.setLocationRelativeTo(null);
             });
             viewDetailsButton.addActionListener(e1 -> {
-                Visit selectedVisit = new Visit();
                 if (visitList != null) {
                     for (Visit visit : visitList) {
                         if (choice.getSelectedItem().equals(visit.getVisitDate().toString())) {
@@ -1864,15 +1869,45 @@ public class GUI{
                 info2.setText("Date of visit: " + selectedVisit.getVisitDate() + ", and ID: " + selectedVisit.getVisitId());
                 info3.setText("Visit comment: " + selectedVisit.getVisitComment());
 
+                Connection connectionUser = DataBaseHandling.StartConnectionWithDB();
+                List<User> userList = DataBaseHandling.SearchForPatientsOfOrthodontist(connectionUser, loggedUser);
+                if (userList != null) {
+                    for(User user: userList){
+                        if(selectedVisit.getUserPatientId() == user.getUserId()){
+                            patient.setUserName(user.getUserName());
+                            patient.setUserSurname(user.getUserSurname());
+                            patient.setUserTelephoneNumber(user.getUserTelephoneNumber());
+                        }
+                    }
+                }
+            });
 
+            generatePdfFile.addActionListener(e14 -> {
+                JFileChooser fileChooser = new JFileChooser();
+                fileChooser.setDialogTitle("Specify directory and the name of the file to save ---(nameOfTheFile.pdf) (IN PDF FORMAT)");
+                fileChooser.setCurrentDirectory(new java.io.File("."));
+
+                int response = fileChooser.showSaveDialog(null);
+                if(response == JFileChooser.APPROVE_OPTION && selectedVisit.getVisitDate() != null){
+                    String personalData = patient.getUserName() + " " + patient.getUserSurname() + ", +48 " + patient.getUserTelephoneNumber();
+                    // TODO WCZYTYWANIE ZDJECIA Z BAZY DANYCH
+                    PDFGenerator.createPdf("Adam",fileChooser.getSelectedFile().getAbsoluteFile().toString(),selectedVisit.getVisitDate().toString(),selectedVisit.getVisitComment(), personalData, "./resources/icon.JPG");
+                    infoConfirmationLabel.setText("Your pdf file have been successfully generated");
+                    infoConfirmationLabel.setBackground(Color.green);
+                } else {
+                    infoConfirmationLabel.setText("Your pdf file have NOT been successfully generated, something went wrong please try again (please first download the data by \"View details of a selected visit\" button)");
+                    infoConfirmationLabel.setBackground(Color.red);
+                }
             });
             frame.add(dateInfo);
             frame.add(choice);
             panelInfo.setLayout(new BoxLayout(panelInfo, BoxLayout.Y_AXIS));
             frame.add(panelInfo);
             frame.add(viewDetailsButton);
+            frame.add(generatePdfFile);
             frame.add(viewPictureButton);
             addExitButtonForMyVisitsOrthodontist();
+            frame.add(infoConfirmationLabel);
             frame.setVisible(true);
         });
 

@@ -912,7 +912,12 @@ public class GUI{
         findUserPanel.add(infoChoice);
         findUserPanel.add(choice);
         Connection connectionOrthodontist = DataBaseHandling.StartConnectionWithDB();
-        List<User> listOfOrthodontist = DataBaseHandling.SearchForAllUsers(connectionOrthodontist, loggedUser);
+        List<User> listOfOrthodontist = DataBaseHandling.SearchForAllOrthodontists(connectionOrthodontist, loggedUser);
+        if(listOfOrthodontist != null){
+            for(User orthodontist: listOfOrthodontist){
+                choice.add(orthodontist.getUserLogin());
+            }
+        }
         try {
             if (connectionOrthodontist != null) {
                 connectionOrthodontist.close();
@@ -920,11 +925,7 @@ public class GUI{
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        if(listOfOrthodontist != null){
-            for(User orthodontist: listOfOrthodontist){
-                choice.add(orthodontist.getUserLogin());
-            }
-        }
+
         findUserPanel.setLayout(new BoxLayout(findUserPanel, BoxLayout.Y_AXIS));
         findUserPanel.add(downloadInfoButton);
 
@@ -976,6 +977,8 @@ public class GUI{
                     deleteInfo.setBackground(Color.green);
                 } else if (userToEdit.getUserPermissionsLevel() == 2) {
                     try {
+                        if(userToEdit.getUserLogin().equals(loggedUser.getUserLogin()))
+                            throw new Exception("Can not delete logged user");
                         DataBaseHandling.RemoveAdministratorFromDB(connection, loggedUser, userToEdit);
                         deleteInfo.setText("Deletion of developer: " + userToEdit.getUserLogin() + ", was successful");
                         deleteInfo.setBackground(Color.green);
@@ -991,6 +994,7 @@ public class GUI{
             } finally{
                 Connection connection = DataBaseHandling.StartConnectionWithDB();
                 List <User> listUpdate = DataBaseHandling.SearchForAllUsers(connection, loggedUser);
+                userToSelect.removeAll();
                 if (listUpdate != null) {
                     for (User userToAdd : listUpdate) {
                         if (!userToAdd.getUserLogin().equals(loggedUser.getUserLogin()))
@@ -1004,6 +1008,21 @@ public class GUI{
                     connection.close();
                 } catch (SQLException ex) {
                     ex.printStackTrace();
+                }
+                Connection connectionOrthodontistUpdate = DataBaseHandling.StartConnectionWithDB();
+                List<User> listOfOrthodontistUpdate = DataBaseHandling.SearchForAllOrthodontists(connectionOrthodontistUpdate, loggedUser);
+                choice.removeAll();
+                if(listOfOrthodontistUpdate != null){
+                    for(User orthodontist: listOfOrthodontistUpdate){
+                        choice.add(orthodontist.getUserLogin());
+                    }
+                }
+                try {
+                    if (connectionOrthodontistUpdate != null) {
+                        connectionOrthodontistUpdate.close();
+                    }
+                } catch (SQLException exception2) {
+                    exception2.printStackTrace();
                 }
             }
 

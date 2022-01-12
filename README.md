@@ -8,6 +8,14 @@ Project for JAVA Programming in the winter semester 2021/2022, simulating a pati
 
 Before the first run you need to make sure that all .jar files are included in the project. You'll find them in the resources folder (in your `./resources`)
 
+## How to Run
+
+```sh
+> cd aplikacja/src/
+> javac *.java
+> java PatientServiceSystem
+```
+
 ## Dependiencies 
 
 The application uses three .jar files, which are successively uploaded to the API into the environment:

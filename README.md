@@ -1,7 +1,8 @@
-![Patient Service System- Orthodontic Office](https://github.com/Adam1904/SystemObslugiPacjenta-GabinetOrtodontyczny/blob/main/resources/icon.JPG)
 # Patient Service System- Orthodontic Office
 
 Project for JAVA Programming in the winter semester 2021/2022, simulating a patient service system in an orthodontic office
+
+![Patient Service System- Orthodontic Office](https://github.com/Adam1904/SystemObslugiPacjenta-GabinetOrtodontyczny/blob/main/resources/icon.JPG)
 
 ## Setup
 

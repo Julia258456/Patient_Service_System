@@ -26,6 +26,13 @@ public class JDBC {
         List<User> list4 = DataBaseHandling.SearchForAllPatients(c, user1a);
 
 //        Visit visit = new Visit(list1.get(0));
+//        Visit visit1 = new Visit(visit);
+//        File file = new File("C:\\Users\\julia\\IdeaProjects\\SystemObslugiPacjenta-GabinetOrtodontyczny\\resources\\icon.JPG");
+//        Visit visit2 = DataBaseHandling.EditVisitInfoWithPictureInDB(c, visit1, visit, file);
+//
+//        Image image = DataBaseHandling.RetrievePictureFromDB(c, visit);
+//        ImageIcon imageIcon = new ImageIcon(image);
+
 //        visit.setVisitId(1);
 //        boolean addVisit = DataBaseHandling.AddNewVisitToDB(c, visit);
 //        boolean remVisit = DataBaseHandling.RemoveVisitFromDB(c, visit);

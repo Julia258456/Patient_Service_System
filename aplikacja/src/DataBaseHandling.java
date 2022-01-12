@@ -1,3 +1,7 @@
+import java.awt.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -766,26 +770,173 @@ public class DataBaseHandling {
         return null;
     }
 
-    // jeszcze nie działa
-    /*public static boolean AddNewVisitToDB(Connection connection, User orthodontist, User patient) {
-        if (orthodontist.getUserPermissionsLevel() != 1) {
-            return false;
-        }
+    /**
+     * The method which allows changing a visit from upcoming to endured in the database.
+     * @param connection Connection class object necessary to access the database
+     * @param visit Visit object - the upcoming visit to be added to the endured visits in the database
+     * @return boolean true (if method was successful) or false (if user provided incorrect input/connection with database failed)
+     */
+    public static boolean AddUpcomingVisitToVisits(Connection connection, Visit visit) {
         try {
-            Statement statement = connection.createStatement();
-            Statement statement1 = connection.createStatement();
             Statement statement2 = connection.createStatement();
             Statement statement3 = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM ortodonci WHERE user_id = " + orthodontist.getUserId() + ";");
-            ResultSet resultSet1 = statement1.executeQuery("SELECT * FROM pacjenci WHERE user_id_pacjenta = " + patient.getUserId() + ";");
-            if(resultSet.next() && resultSet1.next()){
-                statement2.executeUpdate("INSERT INTO odbyte_wizyty (pacjent, ortodonta, user_id_pacjenta, user_id_ortodonty, dataWizyty, komentarz) " +
-                        "VALUES (" + resultSet1.getInt("idPacjenta") + ");");
+            Statement statement4 = connection.createStatement();
+            statement2.executeUpdate("INSERT INTO odbyte_wizyty (pacjent, ortodonta, user_id_pacjenta, user_id_ortodonty, dataWizyty, komentarz) " +
+                    "VALUES (" + visit.getPatientId() + ", " + visit.getOrthodontistId() + ", " + visit.getUserPatientId() + ", "
+                    + visit.getUserOrthodontistId() + ", \"" + visit.getVisitDate() + "\", \"" + visit.getVisitComment() + "\");");
+            ResultSet resultSet2 = statement3.executeQuery("SELECT * FROM odbyte_wizyty WHERE pacjent = " + visit.getPatientId()
+                    + " AND ortodonta = " + visit.getOrthodontistId() + " AND dataWizyty = \"" + visit.getVisitDate() + "\" AND komentarz = \""
+                    + visit.getVisitComment() + "\";");
+            if (resultSet2.next()) {
+                statement4.executeUpdate("DELETE FROM nadchodzace_wizyty WHERE idWizyty = " + visit.getVisitId());
+                visit.setVisitId(resultSet2.getInt("idWizyty"));
                 return true;
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return false;
-    }*/
+    }
+
+
+    /**
+     * The method which allows the user to get the list of his/his patient's upcoming visits from the database.
+     * @param connection Connection class object necessary to access the database
+     * @param patient User object - the patient whose upcoming visits the method is supposed to return
+     * @return List<Wizyta> object (if method was successful) or null (if user provided incorrect input/connection with database failed)
+     */
+    public static List<Visit> SearchForUpcomingVisitsOfPatient(Connection connection, User patient){
+        if (patient.getUserPermissionsLevel() != 0){
+            return null;
+        }
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM nadchodzace_wizyty WHERE user_id_pacjenta = " + patient.getUserId());
+            List<Visit> visitList = new ArrayList();
+            while (resultSet.next()) {
+                Visit visit = new Visit(resultSet.getInt("idNadchodzacejWizyty"),
+                        resultSet.getInt("pacjent"),
+                        resultSet.getInt("ortodonta"),
+                        resultSet.getInt("user_id_pacjenta"),
+                        resultSet.getInt("user_id_ortodonty"),
+                        resultSet.getTimestamp("dataWizyty"),
+                        resultSet.getString("komentarz"));
+                visitList.add(visit);
+            }
+            return visitList;
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * The method which allows the orthodontist to get the list of all his upcoming visits from the database.
+     * @param connection Connection class object necessary to access the database
+     * @param orthodontist User object - the orthodontist whose upcoming visits the method is supposed to return
+     * @return List<Wizyta> object (if method was successful) or null (if user provided incorrect input/connection with database failed)
+     */
+    public static List<Visit> SearchForUpcomingVisitsOfPOrthodontist(Connection connection, User orthodontist){
+        if (orthodontist.getUserPermissionsLevel() != 1){
+            return null;
+        }
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM nadchodzace_wizyty WHERE user_id_ortodonty = " + orthodontist.getUserId());
+            List<Visit> visitList = new ArrayList();
+            while (resultSet.next()) {
+                Visit visit = new Visit(resultSet.getInt("idNadchodzacejWizyty"),
+                        resultSet.getInt("pacjent"),
+                        resultSet.getInt("ortodonta"),
+                        resultSet.getInt("user_id_pacjenta"),
+                        resultSet.getInt("user_id_ortodonty"),
+                        resultSet.getTimestamp("dataWizyty"),
+                        resultSet.getString("komentarz"));
+                visitList.add(visit);
+            }
+            return visitList;
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * The method which allows adding a file and changing the data about a specific visit in the database.
+     * @param connection Connection class object necessary to access the database
+     * @param visitOldData Visit object - the old data which should be changed
+     * @param visitNewData Visit object - the new data which should be saved in the database
+     * @param file File object to be saved in the database
+     * @return Visit object (if method was successful) or null (if user provided incorrect input/connection with database failed)
+     */
+    public static Visit EditVisitInfoWithPictureInDB(Connection connection, Visit visitOldData, Visit visitNewData, File file){
+        if ( visitOldData.getVisitId() != visitNewData.getVisitId()){
+            return null;
+        }
+        try {
+            Statement statement = connection.createStatement();
+            statement.executeUpdate("UPDATE odbyte_wizyty SET pacjent = " + visitNewData.getPatientId() + " , ortodonta = "
+                    + visitNewData.getOrthodontistId() + ", user_id_pacjenta = " + visitNewData.getUserPatientId() + ", dataWizyty = \""
+                    + visitNewData.getVisitDate() + "\", komentarz = \"" + visitNewData.getVisitComment() + "\" WHERE idWizyty = "
+                    + visitNewData.getVisitId() + ";");
+            FileInputStream fileInputStream = new FileInputStream(file);
+            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO zdjecia (idWizyty, zdjecie) " +
+                    "VALUES (" + visitNewData.getVisitId() + ", ? );");
+            preparedStatement.setBinaryStream(1, (InputStream) fileInputStream, (int) file.length());
+            preparedStatement.execute();
+            fileInputStream.close();
+            preparedStatement.close();
+            return visitNewData;
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * The method which allows retrieving images assigned to the visit from the database.
+     * @param connection Connection class object necessary to access the database
+     * @param visit Visit class object which specifies which images the method is supposed to return from the database
+     * @return List<Image> object (if method was successful) or null (if user provided incorrect input/connection with database failed)
+     */
+    public static List<Image> RetrievePicturesFromDB(Connection connection, Visit visit){
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT zdjecie FROM zdjecia WHERE idWizyty = " + visit.getVisitId());
+            byte[] bytes = null;
+            List<Image> imageList = new ArrayList();
+            while (resultSet.next()){
+                bytes = resultSet.getBytes("zdjecie");
+                Image image = Toolkit.getDefaultToolkit().createImage(bytes);
+                imageList.add(image);
+            }
+            return imageList;
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * The method which allows retrieving one image assigned to the visit from the database.
+     * @param connection Connection class object necessary to access the database
+     * @param visit Visit class object which specifies which images the method is supposed to return from the database
+     * @return Image object (if method was successful) or null (if user provided incorrect input/connection with database failed)
+     */
+    public static Image RetrievePictureFromDB(Connection connection, Visit visit){
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT zdjecie FROM zdjecia WHERE idWizyty = " + visit.getVisitId() + " LIMIT 1;");
+            byte[] bytes = null;
+            while (resultSet.next()) {
+                bytes = resultSet.getBytes("zdjecie");
+                Image image = Toolkit.getDefaultToolkit().createImage(bytes);
+                return image;
+            }
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }

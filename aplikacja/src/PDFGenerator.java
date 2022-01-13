@@ -17,9 +17,9 @@ public class PDFGenerator {
      * @param date - a value representing the date of the visit as Timestamp
      * @param comment - a value representing orthodontist comment of visit
      * @param personalData - a value representing personal data of the patient
-     * @param pathToImage - a value representing the path to image
+     * @param image - an image that will be inserted into the PDF document
      */
-    public static void createPdf(String author, String pathToFile, String date, String comment, String personalData, String pathToImage){
+    public static void createPdf(String author, String pathToFile, String date, String comment, String personalData, Image image){
         Document document = new Document();
         FileOutputStream file = null;
         try {
@@ -63,9 +63,9 @@ public class PDFGenerator {
             e.printStackTrace();
         }
         try {
-            Image image = Image.getInstance(pathToImage);
-            image.scaleAbsolute(document.getPageSize().getWidth()/1.1f, document.getPageSize().getHeight()/3);
-            document.add(image);
+            Image imageConverted = Image.getInstance(image);
+            imageConverted.scaleAbsolute(document.getPageSize().getWidth()/1.1f, document.getPageSize().getHeight()/3);
+            document.add(imageConverted);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -1,3 +1,4 @@
+import com.itextpdf.text.BadElementException;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -1607,10 +1608,10 @@ public class GUI{
             frame.add(buttonShowDetails);
             frame.add(generatePDF);
             frame.add(refreshVisits);
+            Label infoConfirmationLabel = new Label();
 
             generatePDF.addActionListener(e -> {
                 visitInfoPanel.removeAll();
-                Label infoConfirmationLabel = new Label();
                 infoConfirmationLabel.setBackground(null);
                 try {
                     if (visitSelection.getSelectedItem() == null) {
@@ -1640,8 +1641,16 @@ public class GUI{
                         int response = fileChooser.showSaveDialog(null);
                         if(response == JFileChooser.APPROVE_OPTION){
                             String personalData = loggedUser.getUserName() + " " + loggedUser.getUserSurname() + ", +48 " + loggedUser.getUserTelephoneNumber();
-                            // TODO WCZYTYWANIE ZDJECIA Z BAZY DANYCH
-                            PDFGenerator.createPdf(loggedUser.getUserName() + " " + loggedUser.getUserSurname(),fileChooser.getSelectedFile().getAbsoluteFile().toString(),selectedVisit.getVisitDate().toString(),selectedVisit.getVisitComment(), personalData, "./resources/icon.JPG");
+                            Connection connectionImage = DataBaseHandling.StartConnectionWithDB();
+                            Image image = DataBaseHandling.RetrievePictureFromDB(connectionImage, selectedVisit);
+                            if (connectionImage != null) {
+                                connectionImage.close();
+                            }
+                            com.itextpdf.text.Image convertedImage = null;
+                            if (image != null) {
+                                convertedImage = com.itextpdf.text.Image.getInstance(image, null);
+                            }
+                            PDFGenerator.createPdf(loggedUser.getUserName() + " " + loggedUser.getUserSurname(),fileChooser.getSelectedFile().getAbsoluteFile().toString(),selectedVisit.getVisitDate().toString(),selectedVisit.getVisitComment(), personalData, convertedImage);
                             infoConfirmationLabel.setText("Your pdf file have been successfully generated");
                             infoConfirmationLabel.setBackground(Color.green);
                         } else {
@@ -1690,12 +1699,33 @@ public class GUI{
                             JFrame jFrame = new JFrame("View of Pantomography picture");
                             jFrame.setResizable(true);
                             jFrame.setVisible(true);
-                            File file = new File("./resources/icon.JPG");
-                            ImageIcon imageIcon = new ImageIcon(file.getAbsolutePath());
-                            jFrame.setSize((int)(imageIcon.getIconWidth()/1.5),(int)(imageIcon.getIconHeight()/1.5));
-                            Image image = imageIcon.getImage();
-                            Image imageScaled = image.getScaledInstance((int)(imageIcon.getIconWidth()/1.5),(int)(imageIcon.getIconHeight()/1.5), Image.SCALE_SMOOTH);
-                            imageIcon = new ImageIcon(imageScaled);
+                            Connection connectionDownloadImage = DataBaseHandling.StartConnectionWithDB();
+                            Image file = DataBaseHandling.RetrievePictureFromDB(connectionDownloadImage, selectedVisit);
+                            try {
+                                if (connectionDownloadImage != null) {
+                                    connectionDownloadImage.close();
+                                }
+                            } catch (SQLException ex) {
+                                ex.printStackTrace();
+                            }
+                            ImageIcon imageIcon = null;
+                            if (file != null) {
+                                imageIcon = new ImageIcon(file);
+                            }
+                            if (imageIcon != null) {
+                                jFrame.setSize((int)(imageIcon.getIconWidth()/1.5),(int)(imageIcon.getIconHeight()/1.5));
+                            }
+                            Image image = null;
+                            if (imageIcon != null) {
+                                image = imageIcon.getImage();
+                            }
+                            Image imageScaled = null;
+                            if (image != null) {
+                                imageScaled = image.getScaledInstance((int)(imageIcon.getIconWidth()/1.5),(int)(imageIcon.getIconHeight()/1.5), Image.SCALE_SMOOTH);
+                            }
+                            if (imageScaled != null) {
+                                imageIcon = new ImageIcon(imageScaled);
+                            }
                             Panel panel = new Panel();
                             panel.add(new JLabel(imageIcon));
                             jFrame.add(panel);
@@ -1865,12 +1895,33 @@ public class GUI{
                 JFrame jFrame = new JFrame("View of Pantomography picture");
                 jFrame.setResizable(true);
                 jFrame.setVisible(true);
-                File file = new File("./resources/icon.JPG"); // TODO WYSWIETLANIE ZDJECIA Z BAZY DANYCH
-                ImageIcon imageIcon = new ImageIcon(file.getAbsolutePath());
-                jFrame.setSize((int)(imageIcon.getIconWidth()/1.5),(int)(imageIcon.getIconHeight()/1.5));
-                Image image = imageIcon.getImage();
-                Image imageScaled = image.getScaledInstance((int)(imageIcon.getIconWidth()/1.5),(int)(imageIcon.getIconHeight()/1.5), Image.SCALE_SMOOTH);
-                imageIcon = new ImageIcon(imageScaled);
+                Connection connectionDownloadImage = DataBaseHandling.StartConnectionWithDB();
+                Image downloadImage = DataBaseHandling.RetrievePictureFromDB(connectionDownloadImage, selectedVisit);
+                if (connectionDownloadImage != null) {
+                    try {
+                        connectionDownloadImage.close();
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+                ImageIcon imageIcon = null;
+                if (downloadImage != null) {
+                    imageIcon = new ImageIcon(downloadImage);
+                }
+                if (imageIcon != null) {
+                    jFrame.setSize((int)(imageIcon.getIconWidth()/1.5),(int)(imageIcon.getIconHeight()/1.5));
+                }
+                Image image = null;
+                if (imageIcon != null) {
+                    image = imageIcon.getImage();
+                }
+                Image imageScaled = null;
+                if (image != null) {
+                    imageScaled = image.getScaledInstance((int)(imageIcon.getIconWidth()/1.5),(int)(imageIcon.getIconHeight()/1.5), Image.SCALE_SMOOTH);
+                }
+                if (imageScaled != null) {
+                    imageIcon = new ImageIcon(imageScaled);
+                }
                 Panel panel = new Panel();
                 panel.add(new JLabel(imageIcon));
                 jFrame.add(panel);
@@ -1915,8 +1966,24 @@ public class GUI{
                 int response = fileChooser.showSaveDialog(null);
                 if(response == JFileChooser.APPROVE_OPTION && selectedVisit.getVisitDate() != null){
                     String personalData = patient.getUserName() + " " + patient.getUserSurname() + ", +48 " + patient.getUserTelephoneNumber();
-                    // TODO WCZYTYWANIE ZDJECIA Z BAZY DANYCH
-                    PDFGenerator.createPdf(loggedUser.getUserName() + " " + loggedUser.getUserSurname(),fileChooser.getSelectedFile().getAbsoluteFile().toString(),selectedVisit.getVisitDate().toString(),selectedVisit.getVisitComment(), personalData, "./resources/icon.JPG");
+                    Connection connectionImage = DataBaseHandling.StartConnectionWithDB();
+                    Image image = DataBaseHandling.RetrievePictureFromDB(connectionImage,selectedVisit);
+                    try {
+                        if (connectionImage != null) {
+                            connectionImage.close();
+                        }
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                    }
+                    com.itextpdf.text.Image imageConverted = null;
+                    try {
+                        if (image != null) {
+                            imageConverted = com.itextpdf.text.Image.getInstance(image,null);
+                        }
+                    } catch (BadElementException | IOException ex) {
+                        ex.printStackTrace();
+                    }
+                    PDFGenerator.createPdf(loggedUser.getUserName() + " " + loggedUser.getUserSurname(),fileChooser.getSelectedFile().getAbsoluteFile().toString(),selectedVisit.getVisitDate().toString(),selectedVisit.getVisitComment(), personalData, imageConverted);
                     infoConfirmationLabel.setText("Your pdf file have been successfully generated");
                     infoConfirmationLabel.setBackground(Color.green);
                 } else {
@@ -2026,6 +2093,7 @@ public class GUI{
 
         handleVisits.addActionListener(e -> {
             frame.removeAll();
+            Visit visitToAdd = new Visit();
             Label userLabel = new Label("Please select a new upcoming visit from your patients: ");
             Choice choice = new Choice();
             Label infoLabel = new Label("Please fill all of below fields, before creating a visit:");
@@ -2038,7 +2106,7 @@ public class GUI{
             infoLabel2.setBackground(null);
             Panel panel = new Panel();
             Connection connection = DataBaseHandling.StartConnectionWithDB();
-            List<Visit> visitList = DataBaseHandling.SearchForVisitsOfPOrthodontist(connection, loggedUser); // TODO FUNKCJA ZWRACAJACA NADCHODZACE WIZYTY
+            List<Visit> visitList = DataBaseHandling.SearchForUpcomingVisitsOfPOrthodontist(connection, loggedUser);
             if (visitList != null) {
                 for(Visit visit: visitList)
                     choice.add(visit.getVisitDate().toString() + ", of a patient: " + visit.getUserPatientId());
@@ -2064,23 +2132,30 @@ public class GUI{
             addExitButtonForMyVisitsOrthodontist();
             createButton.addActionListener(e12 -> {
                 Connection connectionButton = DataBaseHandling.StartConnectionWithDB();
-                Visit visitToAdd = new Visit();
                 if (visitList != null) {
                     for(Visit visit: visitList){
                         if(choice.getSelectedItem().equals(visit.getVisitDate().toString() + ", of a patient: " + visit.getUserPatientId())){
-                            visitToAdd.setUserPatientId(user.getUserId());
+                            visitToAdd.setUserPatientId(visit.getUserPatientId());
+                            visitToAdd.setVisitDate(visit.getVisitDate());
+                            visitToAdd.setVisitComment(visit.getVisitComment());
+                            visitToAdd.setUserOrthodontistId(visit.getUserOrthodontistId());
+                            visitToAdd.setOrthodontistId(visit.getOrthodontistId());
+                            visitToAdd.setVisitId(visit.getVisitId());
                         }
                     }
                 }
                 visitToAdd.setUserOrthodontistId(loggedUser.getUserId());
                 visitToAdd.setVisitComment(textField1.getText());
-                boolean tick = false;
                 int Counter = textField2.getText().toCharArray().length;
+                boolean ifAdded = false;
+                boolean ifRemoved = false;
                 if(Counter == 19) {
                     try {
                         Timestamp timestampFromString = Timestamp.valueOf(textField2.getText());
                         visitToAdd.setVisitDate(timestampFromString);
-                        tick = DataBaseHandling.AddNewVisitToDB(connectionButton, visitToAdd);
+                        ifAdded = DataBaseHandling.AddNewVisitToDB(connectionButton, visitToAdd);
+                        ifRemoved = DataBaseHandling.RemoveUpcomingVisitFromDB(connectionButton, visitToAdd);
+
                     } catch (Exception exception){
                         infoLabel2.setBackground(Color.red);
                         infoLabel2.setText("Problems arose when adding a new visit to the base, please try again (check if you entered the date correctly)");
@@ -2090,9 +2165,24 @@ public class GUI{
                     infoLabel2.setText("Problems arose when adding a new visit to the base, please try again (check if you entered the date correctly)");
                 }
 
-                if(tick){
+                if(ifAdded && ifRemoved){
                     infoLabel2.setBackground(Color.green);
                     infoLabel2.setText("New visit has been added to the database successfully");
+
+                    Connection connectionListUpdate = DataBaseHandling.StartConnectionWithDB();
+                    List<Visit> visitListUpdate = DataBaseHandling.SearchForUpcomingVisitsOfPOrthodontist(connectionListUpdate, loggedUser);
+                    choice.removeAll();
+                    if (visitListUpdate != null) {
+                        for(Visit visit: visitListUpdate)
+                            choice.add(visit.getVisitDate().toString() + ", of a patient: " + visit.getUserPatientId());
+                    }
+                    try {
+                        if (connectionListUpdate != null) {
+                            connectionListUpdate.close();
+                        }
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                    }
                 }
                 else{
                     infoLabel2.setBackground(Color.red);
@@ -2144,11 +2234,13 @@ public class GUI{
                     for(Visit visit: visitList){
                         if(choice.getSelectedItem().equals(visit.getVisitDate().toString())){
                             visitToDelete = visit;
-                            visitList.remove(visit);
-                            choice.remove(visit.getVisitDate().toString());
                         }
                     }
                 }
+                if (visitList != null) {
+                    visitList.remove(visitToDelete);
+                }
+                choice.remove(visitToDelete.getVisitDate().toString());
 
                 boolean tick = DataBaseHandling.RemoveVisitFromDB(connectionButton, visitToDelete);
                 if(tick){
@@ -2199,8 +2291,10 @@ public class GUI{
 
             Button downloadDetailsButton = new Button("Download details of a selected visit");
             Button editDetailsButton = new Button("Edit details of a selected visit");
+            Button updatePicture = new Button("Upload a pantomography picture");
             Connection connection = DataBaseHandling.StartConnectionWithDB();
             List<Visit> visitList = DataBaseHandling.SearchForVisitsOfPOrthodontist(connection, loggedUser);
+            Visit selectedVisit = new Visit();
             try {
                 assert connection != null;
                 connection.close();
@@ -2214,27 +2308,27 @@ public class GUI{
             }
 
             downloadDetailsButton.addActionListener(e1 -> {
-                Visit selectedVisit = new Visit();
                 if (visitList != null) {
                     for (Visit visit : visitList) {
                         if (choice.getSelectedItem().equals(visit.getVisitDate().toString())) {
-                            textField1.setText(selectedVisit.getVisitDate().toString());
-                            textField2.setText(selectedVisit.getVisitComment());
-                            textField3.setText(String.valueOf(selectedVisit.getUserPatientId()));
-                            textField4.setText(String.valueOf(selectedVisit.getUserOrthodontistId()));
+                            textField1.setText(visit.getVisitDate().toString());
+                            textField2.setText(visit.getVisitComment());
+                            textField3.setText(String.valueOf(visit.getUserPatientId()));
+                            textField4.setText(String.valueOf(visit.getUserOrthodontistId()));
                         }
                     }
                 }
             });
 
+            Visit editedVisit = new Visit();
             editDetailsButton.addActionListener(e1 -> {
+
                 boolean tick = true;
                 if(textField1.getText().equals("null") || textField2.getText().equals("null") || textField3.getText().equals("null") || textField4.getText().equals("null")){
                     tick = false;
                     editInfo.setBackground(Color.red);
-                    editInfo.setText("Problems arose while changing details of the visit, please try again (check if you entered the date correctly)");
+                    editInfo.setText("Problems arose while changing details of the visit, please try again (check if you entered all of the data)");
                 }
-                Visit selectedVisit = new Visit();
                 if (visitList != null) {
                     for (Visit visit : visitList) {
                         if (choice.getSelectedItem().equals(visit.getVisitDate().toString())) {
@@ -2245,14 +2339,22 @@ public class GUI{
                             selectedVisit.setOrthodontistId(visit.getOrthodontistId());
                             selectedVisit.setUserPatientId(visit.getUserPatientId());
                             selectedVisit.setUserOrthodontistId(visit.getUserOrthodontistId());
+
+                            editedVisit.setVisitDate(Timestamp.valueOf(textField1.getText()));
+                            editedVisit.setVisitComment(textField2.getText());
+                            editedVisit.setVisitId(visit.getVisitId());
+                            editedVisit.setPatientId(visit.getPatientId());
+                            editedVisit.setOrthodontistId(visit.getOrthodontistId());
+                            editedVisit.setUserPatientId(visit.getUserPatientId());
+                            editedVisit.setUserOrthodontistId(visit.getUserOrthodontistId());
                         }
                     }
                 }
+
                 Connection connectionButton = DataBaseHandling.StartConnectionWithDB();
+                Visit test =  DataBaseHandling.EditVisitInfoInDB(connectionButton, selectedVisit, editedVisit);
 
-                // TODO FUNKCJA EDYTUJACA WIZYTE
-
-                if(tick){
+                if(test!=null && tick){
                     editInfo.setBackground(Color.green);
                     editInfo.setText("Visit with ID: " + selectedVisit.getVisitId() + ", has been successfully edited");
                 }
@@ -2269,12 +2371,40 @@ public class GUI{
                 }
             });
 
+            updatePicture.addActionListener(e2 -> {
+                JFileChooser fileChooser = new JFileChooser();
+                fileChooser.setDialogTitle("Please select the picture file you want to play (preferably in JPG format)");
+                fileChooser.setCurrentDirectory(new java.io.File("."));
+
+                int response = fileChooser.showOpenDialog(null);
+                if(response == JFileChooser.APPROVE_OPTION){
+                    File file = new File(String.valueOf(fileChooser.getSelectedFile().getAbsoluteFile()));
+                    Connection connectionImage = DataBaseHandling.StartConnectionWithDB();
+                    Visit visit = DataBaseHandling.EditVisitInfoWithPictureInDB(connectionImage, selectedVisit, editedVisit, file);
+                    try {
+                        if (connectionImage != null) {
+                            connectionImage.close();
+                        }
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                    }
+                    if(visit != null){
+                            editInfo.setBackground(Color.green);
+                            editInfo.setText("File: \"" + file.getName() + ", has been successfully added to the visit with id: " + selectedVisit.getVisitId());
+                    } else{
+                            editInfo.setBackground(Color.red);
+                            editInfo.setText("Problems arose while adding a new picture, please try again (check that you have downloaded the details of the visit first)");
+                    }
+                }
+            });
+
             frame.add(dateInfo);
             frame.add(choice);
             panelInfo.setLayout(new BoxLayout(panelInfo, BoxLayout.Y_AXIS));
             frame.add(panelInfo);
             frame.add(downloadDetailsButton);
             frame.add(editDetailsButton);
+            frame.add(updatePicture);
             frame.add(editInfo);
             addExitButtonForMyVisitsOrthodontist();
             frame.setVisible(true);

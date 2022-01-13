@@ -4,14 +4,11 @@
     <list default="true" id="798ddb25-3dfe-433e-8232-508aa3459add" name="Changes" comment="commit">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/aplikacja/src/DataBaseHandling.java" beforeDir="false" afterPath="$PROJECT_DIR$/aplikacja/src/DataBaseHandling.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/aplikacja/src/JDBC.java" beforeDir="false" afterPath="$PROJECT_DIR$/aplikacja/src/JDBC.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/aplikacja/DataBaseHandling.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/aplikacja/DataBaseHandling.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/aplikacja/GUI$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/aplikacja/GUI$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aplikacja/src/GUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/aplikacja/src/GUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aplikacja/src/PDFGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/aplikacja/src/PDFGenerator.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/aplikacja/GUI$7.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/aplikacja/GUI$7.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/aplikacja/GUI.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/aplikacja/GUI.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/aplikacja/JDBC.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/aplikacja/JDBC.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/aplikacja/PDFGenerator.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/aplikacja/PDFGenerator.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/aplikacja/PatientServiceSystem.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/aplikacja/PatientServiceSystem.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,7 +60,7 @@
       <recent name="C:\Users\adas1\IdeaProjects\PJAVA\SystemObslugiPacjenta-GabinetOrtodontyczny" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.JDBC">
+  <component name="RunManager" selected="Application.PatientServiceSystem">
     <configuration name="JDBC" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="JDBC" />
       <module name="aplikacja" />
@@ -80,8 +77,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.JDBC" />
         <item itemvalue="Application.PatientServiceSystem" />
+        <item itemvalue="Application.JDBC" />
       </list>
     </recent_temporary>
   </component>
@@ -106,7 +103,6 @@
         </entry>
       </map>
     </option>
-    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="commit" />

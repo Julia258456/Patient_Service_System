@@ -737,6 +737,7 @@ public class DataBaseHandling {
      */
     public static boolean RemoveUpcomingVisitFromDB(Connection connection, Visit visit){
         try {
+            System.out.println(visit.getVisitId());
             Statement statement = connection.createStatement();
             statement.executeUpdate("DELETE FROM nadchodzace_wizyty WHERE idNadchodzacejWizyty = " + visit.getVisitId());
             return true;

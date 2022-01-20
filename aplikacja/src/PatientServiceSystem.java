@@ -4,6 +4,8 @@
 public class PatientServiceSystem {
 
     /**
+     * @author Julia Pietraszek, Adam Piszczek
+     *
      * The main static method
      * @param args are not being used
      */

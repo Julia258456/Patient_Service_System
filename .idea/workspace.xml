@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="798ddb25-3dfe-433e-8232-508aa3459add" name="Changes" comment="Zdjęcia w bazie danych">
+    <list default="true" id="99d0041e-b8e1-46ff-9b8c-e4eac59cd6b6" name="Changes" comment="commit">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/aplikacja/src/DataBaseHandling.java" beforeDir="false" afterPath="$PROJECT_DIR$/aplikacja/src/DataBaseHandling.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/aplikacja/DataBaseHandling.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/aplikacja/DataBaseHandling.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aplikacja/src/GUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/aplikacja/src/GUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aplikacja/src/PatientServiceSystem.java" beforeDir="false" afterPath="$PROJECT_DIR$/aplikacja/src/PatientServiceSystem.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -113,7 +114,6 @@
         </entry>
       </map>
     </option>
-    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="commit" />

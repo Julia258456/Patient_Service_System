@@ -1893,7 +1893,10 @@ public class GUI{
             Button viewPictureButton = new Button("View Pantomography picture");
             viewPictureButton.addActionListener(e11 -> {
                 JFrame jFrame = new JFrame("View of Pantomography picture");
-                jFrame.setResizable(true);
+                Panel panel = new Panel();
+                jFrame.setResizable(false);
+                Label infoImageLabel = new Label("",Label.CENTER);
+                infoImageLabel.setBackground(null);
                 jFrame.setVisible(true);
                 Connection connectionDownloadImage = DataBaseHandling.StartConnectionWithDB();
                 Image downloadImage = DataBaseHandling.RetrievePictureFromDB(connectionDownloadImage, selectedVisit);
@@ -1907,6 +1910,12 @@ public class GUI{
                 ImageIcon imageIcon = null;
                 if (downloadImage != null) {
                     imageIcon = new ImageIcon(downloadImage);
+                } else {
+                    infoImageLabel.setText("There is no photo from this visit in the database");
+                    infoImageLabel.setBackground(Color.red);
+                    panel.add(infoImageLabel);
+                    panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+                    jFrame.setSize(frame.getWidth()/3,frame.getHeight()/3);
                 }
                 if (imageIcon != null) {
                     jFrame.setSize((int)(imageIcon.getIconWidth()/1.5),(int)(imageIcon.getIconHeight()/1.5));
@@ -1922,7 +1931,6 @@ public class GUI{
                 if (imageScaled != null) {
                     imageIcon = new ImageIcon(imageScaled);
                 }
-                Panel panel = new Panel();
                 panel.add(new JLabel(imageIcon));
                 jFrame.add(panel);
                 jFrame.setLocationRelativeTo(null);
@@ -2131,10 +2139,12 @@ public class GUI{
             frame.add(panel);
             addExitButtonForMyVisitsOrthodontist();
             createButton.addActionListener(e12 -> {
+                Visit visitToRemove = new Visit();
                 Connection connectionButton = DataBaseHandling.StartConnectionWithDB();
                 if (visitList != null) {
                     for(Visit visit: visitList){
                         if(choice.getSelectedItem().equals(visit.getVisitDate().toString() + ", of a patient: " + visit.getUserPatientId())){
+                            visitToRemove = visit;
                             visitToAdd.setUserPatientId(visit.getUserPatientId());
                             visitToAdd.setVisitDate(visit.getVisitDate());
                             visitToAdd.setVisitComment(visit.getVisitComment());
@@ -2154,7 +2164,7 @@ public class GUI{
                         Timestamp timestampFromString = Timestamp.valueOf(textField2.getText());
                         visitToAdd.setVisitDate(timestampFromString);
                         ifAdded = DataBaseHandling.AddNewVisitToDB(connectionButton, visitToAdd);
-                        ifRemoved = DataBaseHandling.RemoveUpcomingVisitFromDB(connectionButton, visitToAdd);
+                        ifRemoved = DataBaseHandling.RemoveUpcomingVisitFromDB(connectionButton, visitToRemove);
 
                     } catch (Exception exception){
                         infoLabel2.setBackground(Color.red);

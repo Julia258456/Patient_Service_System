@@ -1,4 +1,4 @@
-# Patient Service System- Orthodontic Office
+# Patient Service System - Orthodontic Office
 
 Project for JAVA Programming in the winter semester 2021/2022, simulating a patient service system in an orthodontic office
 

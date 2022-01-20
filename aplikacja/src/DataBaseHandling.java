@@ -786,7 +786,7 @@ public class DataBaseHandling {
                     "VALUES (" + visit.getPatientId() + ", " + visit.getOrthodontistId() + ", " + visit.getUserPatientId() + ", "
                     + visit.getUserOrthodontistId() + ", \"" + visit.getVisitDate() + "\", \"" + visit.getVisitComment() + "\");");
             ResultSet resultSet2 = statement3.executeQuery("SELECT * FROM odbyte_wizyty WHERE pacjent = " + visit.getPatientId()
-                    + " AND ortodonta = " + visit.getOrthodontistId() + " AND dataWizyty = \"" + visit.getVisitDate() + "\" AND komentarz = \""
+                    + " AND ortodonta = " + visit.getOrthodontistId() + " AND komentarz = \""
                     + visit.getVisitComment() + "\";");
             if (resultSet2.next()) {
                 statement4.executeUpdate("DELETE FROM nadchodzace_wizyty WHERE idWizyty = " + visit.getVisitId());

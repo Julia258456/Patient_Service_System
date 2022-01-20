@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="798ddb25-3dfe-433e-8232-508aa3459add" name="Changes" comment="commit">
+    <list default="true" id="798ddb25-3dfe-433e-8232-508aa3459add" name="Changes" comment="Zdjęcia w bazie danych">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/aplikacja/src/DataBaseHandling.java" beforeDir="false" afterPath="$PROJECT_DIR$/aplikacja/src/DataBaseHandling.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/aplikacja/src/GUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/aplikacja/src/GUI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/aplikacja/src/PDFGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/aplikacja/src/PDFGenerator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/aplikacja/GUI$7.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/aplikacja/GUI$7.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/aplikacja/GUI.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/aplikacja/GUI.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/aplikacja/JDBC.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/aplikacja/JDBC.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/aplikacja/DataBaseHandling.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/aplikacja/DataBaseHandling.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CodeStyleSettingsInfer">
+    <option name="done" value="true" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -36,6 +35,9 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
+  <component name="ProjectCodeStyleSettingsMigration">
+    <option name="version" value="2" />
+  </component>
   <component name="ProjectId" id="21Xz0m0vhuA8WzvihQWo2KSnnsV" />
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="1" id="Add" />
@@ -50,7 +52,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="ToolWindowRun.ShowToolbar" value="false" />
     <property name="jdk.selected.JAVA_MODULE" value="corretto-1.8" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../OPA_lab_1" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -91,6 +93,14 @@
       <option name="presentableId" value="Default" />
       <updated>1638102002229</updated>
     </task>
+    <task id="LOCAL-00001" summary="Zdjęcia w bazie danych">
+      <created>1642018831509</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1642018831509</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -103,18 +113,66 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="commit" />
-    <option name="LAST_COMMIT_MESSAGE" value="commit" />
+    <MESSAGE value="Zdjęcia w bazie danych" />
+    <option name="LAST_COMMIT_MESSAGE" value="Zdjęcia w bazie danych" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
-        <breakpoint enabled="true" type="java-exception">
-          <properties class="java.lang.NullPointerException" package="java.lang" />
-          <option name="timeStamp" value="2" />
-        </breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/aplikacja/src/DataBaseHandling.java</url>
+          <line>717</line>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/aplikacja/src/DataBaseHandling.java</url>
+          <line>720</line>
+          <option name="timeStamp" value="7" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/aplikacja/src/DataBaseHandling.java</url>
+          <line>714</line>
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/aplikacja/src/DataBaseHandling.java</url>
+          <line>711</line>
+          <option name="timeStamp" value="9" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/aplikacja/src/DataBaseHandling.java</url>
+          <line>709</line>
+          <option name="timeStamp" value="10" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/aplikacja/src/DataBaseHandling.java</url>
+          <line>710</line>
+          <option name="timeStamp" value="11" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/aplikacja/src/DataBaseHandling.java</url>
+          <line>721</line>
+          <option name="timeStamp" value="12" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/aplikacja/src/DataBaseHandling.java</url>
+          <line>722</line>
+          <option name="timeStamp" value="13" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/aplikacja/src/DataBaseHandling.java</url>
+          <line>728</line>
+          <option name="timeStamp" value="14" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/aplikacja/src/GUI.java</url>
+          <line>1794</line>
+          <option name="timeStamp" value="15" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
     <watches-manager>

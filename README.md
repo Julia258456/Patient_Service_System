@@ -13,7 +13,7 @@ Before the first run you need to make sure that all .jar files are included in t
 ```sh
 > cd aplikacja/src/
 > javac *.java
-> java PatientServiceSystem
+> java PatientServiceSystem.java
 ```
 
 ## Dependiencies 
@@ -22,6 +22,10 @@ The application uses three .jar files, which are successively uploaded to the AP
 - `itextpdf-5.4.0.jar` - iText is a library for creating and manipulating PDF files in Java 
 - `javax.mail.jar` - The JavaMail API provides a platform-independent and protocol-independent framework to build mail and messaging applications. The JavaMail API is available as an optional package for use with the Java SE platform and is also included in the Java EE platform.
 - `mysql-connector-java-8.0.22.jar` - MySQL Connector is the official JDBC driver for MySQL. This file enables communication between the database located in the cloud
+
+## UML diagram
+
+![UML diagram](https://github.com/Adam1904/SystemObslugiPacjenta-GabinetOrtodontyczny/blob/main/documentation/UML.png)
 
 ## Design
 

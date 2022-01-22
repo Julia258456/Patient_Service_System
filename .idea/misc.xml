@@ -7,4 +7,12 @@
   <component name="ProjectRootManager">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
+  <component name="ScaladocSettings">
+    <option name="outputDir" value="C:\Users\julia\IdeaProjects\SystemObslugiPacjenta-GabinetOrtodontyczny\documentation" />
+    <option name="additionalFlags" value="" />
+    <option name="maxHeapSize" value="" />
+    <option name="docTitle" value="SystemObslugiPacjenta-GabinetOrtodontyczny documentation" />
+    <option name="verbose" value="false" />
+    <option name="openInBrowser" value="true" />
+  </component>
 </project>

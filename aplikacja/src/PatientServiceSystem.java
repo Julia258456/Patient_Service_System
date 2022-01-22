@@ -1,5 +1,5 @@
 /**
- * the main class that runs the program
+ * The main class that runs the program.
  */
 public class PatientServiceSystem {
 

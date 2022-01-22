@@ -2,68 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="798ddb25-3dfe-433e-8232-508aa3459add" name="Changes" comment="Dodana poprawna dokumentacja">
-      <change afterPath="$PROJECT_DIR$/.idea/runConfigurations.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/documentation/DataBaseHandling.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/documentation/GUI.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/documentation/MailHandling.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/documentation/PDFGenerator.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/documentation/PatientServiceSystem.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/documentation/User.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/documentation/Visit.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/documentation/allclasses-index.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/documentation/allpackages-index.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/documentation/element-list" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/documentation/help-doc.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/documentation/index-files/index-1.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/documentation/index-files/index-10.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/documentation/index-files/index-11.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/documentation/index-files/index-12.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/documentation/index-files/index-13.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/documentation/index-files/index-2.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/documentation/index-files/index-3.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/documentation/index-files/index-4.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/documentation/index-files/index-5.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/documentation/index-files/index-6.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/documentation/index-files/index-7.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/documentation/index-files/index-8.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/documentation/index-files/index-9.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/documentation/index.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/documentation/jquery-ui.overrides.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/documentation/legal/COPYRIGHT" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/documentation/legal/LICENSE" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/documentation/legal/jquery.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/documentation/legal/jqueryUI.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/documentation/member-search-index.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/documentation/module-search-index.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/documentation/overview-tree.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/documentation/package-search-index.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/documentation/package-summary.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/documentation/package-tree.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/documentation/resources/glass.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/documentation/resources/x.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/documentation/script-dir/images/ui-bg_glass_55_fbf9ee_1x400.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/documentation/script-dir/images/ui-bg_glass_65_dadada_1x400.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/documentation/script-dir/images/ui-bg_glass_75_dadada_1x400.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/documentation/script-dir/images/ui-bg_glass_75_e6e6e6_1x400.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/documentation/script-dir/images/ui-bg_glass_95_fef1ec_1x400.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/documentation/script-dir/images/ui-bg_highlight-soft_75_cccccc_1x100.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/documentation/script-dir/images/ui-icons_222222_256x240.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/documentation/script-dir/images/ui-icons_2e83ff_256x240.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/documentation/script-dir/images/ui-icons_454545_256x240.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/documentation/script-dir/images/ui-icons_888888_256x240.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/documentation/script-dir/images/ui-icons_cd0a0a_256x240.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/documentation/script-dir/jquery-3.5.1.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/documentation/script-dir/jquery-ui.min.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/documentation/script-dir/jquery-ui.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/documentation/script-dir/jquery-ui.structure.min.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/documentation/script.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/documentation/search.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/documentation/stylesheet.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/documentation/tag-search-index.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/documentation/type-search-index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/aplikacja/src/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/aplikacja/src/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/aplikacja/src/Visit.java" beforeDir="false" afterPath="$PROJECT_DIR$/aplikacja/src/Visit.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/runConfigurations.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pdf_test_folder/orthodontist_test.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pdf_test_folder/patient_test.pdf" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -118,6 +59,7 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\adas1\IdeaProjects\PJAVA\SystemObslugiPacjenta-GabinetOrtodontyczny\documentation" />
       <recent name="C:\Users\adas1\IdeaProjects\PJAVA\SystemObslugiPacjenta-GabinetOrtodontyczny" />
     </key>
   </component>
@@ -193,7 +135,6 @@
         </entry>
       </map>
     </option>
-    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Zdjęcia w bazie danych" />

@@ -1,19 +1,134 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="bcbfdd34-0342-4e11-9df5-12722cbfa57c" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="798ddb25-3dfe-433e-8232-508aa3459add" name="Changes" comment="Dodana poprawna dokumentacja">
+      <change afterPath="$PROJECT_DIR$/.idea/runConfigurations.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/documentation/DataBaseHandling.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/documentation/GUI.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/documentation/MailHandling.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/documentation/PDFGenerator.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/documentation/PatientServiceSystem.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/documentation/User.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/documentation/Visit.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/documentation/allclasses-index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/documentation/allpackages-index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/documentation/element-list" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/documentation/help-doc.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/documentation/index-files/index-1.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/documentation/index-files/index-10.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/documentation/index-files/index-11.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/documentation/index-files/index-12.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/documentation/index-files/index-13.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/documentation/index-files/index-2.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/documentation/index-files/index-3.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/documentation/index-files/index-4.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/documentation/index-files/index-5.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/documentation/index-files/index-6.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/documentation/index-files/index-7.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/documentation/index-files/index-8.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/documentation/index-files/index-9.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/documentation/index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/documentation/jquery-ui.overrides.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/documentation/legal/COPYRIGHT" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/documentation/legal/LICENSE" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/documentation/legal/jquery.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/documentation/legal/jqueryUI.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/documentation/member-search-index.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/documentation/module-search-index.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/documentation/overview-tree.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/documentation/package-search-index.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/documentation/package-summary.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/documentation/package-tree.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/documentation/resources/glass.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/documentation/resources/x.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/documentation/script-dir/images/ui-bg_glass_55_fbf9ee_1x400.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/documentation/script-dir/images/ui-bg_glass_65_dadada_1x400.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/documentation/script-dir/images/ui-bg_glass_75_dadada_1x400.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/documentation/script-dir/images/ui-bg_glass_75_e6e6e6_1x400.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/documentation/script-dir/images/ui-bg_glass_95_fef1ec_1x400.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/documentation/script-dir/images/ui-bg_highlight-soft_75_cccccc_1x100.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/documentation/script-dir/images/ui-icons_222222_256x240.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/documentation/script-dir/images/ui-icons_2e83ff_256x240.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/documentation/script-dir/images/ui-icons_454545_256x240.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/documentation/script-dir/images/ui-icons_888888_256x240.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/documentation/script-dir/images/ui-icons_cd0a0a_256x240.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/documentation/script-dir/jquery-3.5.1.min.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/documentation/script-dir/jquery-ui.min.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/documentation/script-dir/jquery-ui.min.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/documentation/script-dir/jquery-ui.structure.min.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/documentation/script.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/documentation/search.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/documentation/stylesheet.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/documentation/tag-search-index.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/documentation/type-search-index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aplikacja/src/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/aplikacja/src/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aplikacja/src/Visit.java" beforeDir="false" afterPath="$PROJECT_DIR$/aplikacja/src/Visit.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="CodeStyleSettingsInfer">
+    <option name="done" value="true" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectCodeStyleSettingsMigration">
+    <option name="version" value="2" />
+  </component>
+  <component name="ProjectId" id="21Xz0m0vhuA8WzvihQWo2KSnnsV" />
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="1" id="Add" />
   </component>
-  <component name="RunManager">
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="ToolWindowRun.ShowToolbar" value="false" />
+    <property name="jdk.selected.JAVA_MODULE" value="corretto-1.8" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/documentation" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.2" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\adas1\IdeaProjects\PJAVA\SystemObslugiPacjenta-GabinetOrtodontyczny" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.PatientServiceSystem">
+    <configuration name="JDBC" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="JDBC" />
+      <module name="aplikacja" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="PatientServiceSystem" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="PatientServiceSystem" />
       <module name="aplikacja" />
@@ -24,11 +139,76 @@
     <recent_temporary>
       <list>
         <item itemvalue="Application.PatientServiceSystem" />
+        <item itemvalue="Application.JDBC" />
       </list>
     </recent_temporary>
   </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="798ddb25-3dfe-433e-8232-508aa3459add" name="Changes" comment="" />
+      <created>1638102002229</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1638102002229</updated>
+    </task>
+    <task id="LOCAL-00001" summary="Zdjęcia w bazie danych">
+      <created>1642018831509</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1642018831509</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Poprawa działania nowych wizyt">
+      <created>1642674093188</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1642674093188</updated>
+    </task>
+    <task id="LOCAL-00003" summary="commit">
+      <created>1642678023747</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1642678023747</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Komentarze do klas visit, user, usunięta JDBC i niekompletna dokumentacja">
+      <created>1642813218768</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1642813218768</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Zdjęcia w bazie danych" />
+    <MESSAGE value="Poprawa działania nowych wizyt" />
+    <MESSAGE value="commit" />
+    <MESSAGE value="Komentarze do klas visit, user, usunięta JDBC i niekompletna dokumentacja" />
+    <MESSAGE value="Dodana poprawna dokumentacja" />
+    <option name="LAST_COMMIT_MESSAGE" value="Dodana poprawna dokumentacja" />
+  </component>
+  <component name="XDebuggerManager">
+    <watches-manager>
+      <configuration name="Application">
+        <watch expression="visit1" />
+      </configuration>
+    </watches-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/SystemObslugiPacjenta_GabinetOrtodontyczny$PatientServiceSystem.ic" NAME="PatientServiceSystem Coverage Results" MODIFIED="1641203232713" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />

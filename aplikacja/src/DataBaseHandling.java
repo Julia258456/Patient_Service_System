@@ -6,6 +6,9 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The class which contains the methods that handle the connection and data flow between the application and MYSQL database.
+ */
 public class DataBaseHandling {
 
     /**
